@@ -66,20 +66,6 @@ public class Login
    public SaleAgent login(final SaleAgent user)
    {
       performLogin(user);
-      IdentityQuery<User> query =  identityManager.createIdentityQuery(User.class);
-      query.setParameter(IdentityType.ATTRIBUTE.byName("status"), new Object[] { "PTO" });
-      
-      System.out.println("RESULT " + query.getResultList().size());
-      
-      User user2  = identityManager.getUser("bob");
-      Attribute attribute = user2.getAttribute("status");
-      attribute.setValue("STANDBY");
-      identityManager.update(user2);
-      
-      IdentityQuery<User> query1 =  identityManager.createIdentityQuery(User.class);
-      query1.setParameter(IdentityType.ATTRIBUTE.byName("status"), new Object[] { "PTO" });
-      
-      System.out.println("RESULT after update " + query.getResultList().size());
       return user;
    }
 

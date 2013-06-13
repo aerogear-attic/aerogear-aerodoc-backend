@@ -19,10 +19,10 @@
         </thead>
         <tbody id="search-results-body">
         <tr ng-repeat="result in searchResults | filter:filterSearchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
-                    <td><a href="#/Leads/edit/{{result.id}}">{{result.name}}</a></td>
-                    <td><a href="#/Leads/edit/{{result.id}}">{{result.location}}</a></td>
-                    <td><a href="#/Leads/edit/{{result.id}}">{{result.phoneNumber}}</a></td>
-                    <td><a href="#/Leads/edit/{{result.id}}">{{result.saleAgent.id}}</a></td>
+                    <td><a href="#/Leads/show/{{result.id}}">{{result.name}}</a></td>
+                    <td><a href="#/Leads/show/{{result.id}}">{{result.location}}</a></td>
+                    <td><a href="#/Leads/show/{{result.id}}">{{result.phoneNumber}}</a></td>
+                    <td><a href="#/Leads/show/{{result.id}}">{{result.saleAgent.id}}</a></td>
         </tr>
         </tbody>
     </table>

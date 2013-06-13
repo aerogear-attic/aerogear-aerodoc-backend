@@ -20,6 +20,13 @@ prodoctor.factory("dataService", function() {
 			}
 		}).pipes.leads,
 
+		searchAgents : AeroGear.Pipeline({
+			name : "searchAgents",
+			settings : {
+				authenticator : this.restAuth
+			}
+		}).pipes.searchAgents,
+
 		leadStore : AeroGear.DataManager({
 			name : "Lead",
 			type : "SessionLocal",

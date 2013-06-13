@@ -69,7 +69,7 @@ public class PicketLinkDefaultUsers {
 		SaleAgent jake = new SaleAgent();
 		jake.setLocation("Boston");
 		jake.setStatus("STANDBY");
-		jake.setLoginName("maria");
+		jake.setLoginName("jake");
 		
 		
 		/*

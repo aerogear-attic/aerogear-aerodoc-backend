@@ -92,7 +92,7 @@ public class SaleAgent extends SimpleUser implements Serializable {
 	}
 
 	public void setStatus(final String status) {
-		this.setAttribute(new Attribute("status", location));
+		this.setAttribute(new Attribute("status", status));
 	}
 
 	public String getLocation() {

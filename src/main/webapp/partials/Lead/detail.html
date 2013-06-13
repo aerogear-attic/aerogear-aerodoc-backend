@@ -33,18 +33,7 @@
                            placeholder="Enter the Lead phoneNumber"></input>
             </div>
     </div>
-    <div class="control-group">
-            <label for="saleAgent" class="control-label">SaleAgent</label>
-
-            <div class="controls">
-                    <select id="saleAgent" name="saleAgent"
-                            ng-model="lead.saleAgent"
-                            ng-options="s as s.id for s in saleAgentList">
-                        <option value="">Choose a SaleAgent</option>
-                    </select>
-            </div>
-    </div>
-    <div class="control-group">
+     <div class="control-group">
         <div class="controls">
             <button id="saveLead" name="saveLead" class="btn btn-primary"
                     ng-disabled="isClean() || newLead.$invalid" ng-click="save()"><i

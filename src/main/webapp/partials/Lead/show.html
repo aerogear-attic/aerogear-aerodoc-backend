@@ -1,0 +1,54 @@
+
+<div class="control-group"></div>
+<div class="control-group"></div>
+<div class="control-group">
+	<label for="name" class="control-label">Name</label> {{lead.name}}
+</div>
+<div class="control-group">
+	<label for="location" class="control-label">Location</label>
+
+	{{lead.location}}
+</div>
+<div class="control-group">
+	<label for="phoneNumber" class="control-label">PhoneNumber</label>
+	{{lead.phoneNumber}}
+</div>
+
+
+<div class="control-group">
+	<div class="controls">
+
+		<div class="controls">
+			<input id="status" name="status" type="text" ng-model="status"
+				placeholder="Status"></input> <input id="location" name="location"
+				type="text" ng-model="location" placeholder="location"></input>
+			<button id="searchAgent" name="searchAgent" class="btn"
+				ng-click="searchAgents()">Search Agents</button>
+		</div>
+
+	</div>
+</div>
+<div class="control-group">
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Status</th>
+				<th>Location</th>
+			</tr>
+		</thead>
+		<tbody id="search-results-body">
+			<tr ng-repeat="result in saleAgentFilteredList">
+				<td>{{result.loginName}}</td>
+				<td>{{result.status}}</td>
+				<td>{{result.location}}</td>
+				<td><input type="checkbox" ng-model="result.checked"
+					value="{{result.loginName}}"></td>
+			</tr>
+		</tbody>
+
+	</table>
+	<button id="sendLeads" name="sendLeads" class="btn"
+		ng-click="sendLeads()">Send Leads</button>
+</div>
