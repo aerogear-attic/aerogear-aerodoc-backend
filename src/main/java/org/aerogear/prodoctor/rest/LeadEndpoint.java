@@ -17,6 +17,8 @@
 
 package org.aerogear.prodoctor.rest;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -32,6 +34,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import org.aerogear.prodoctor.model.Lead;
 import org.aerogear.prodoctor.service.LeadSender;
+import org.picketlink.idm.model.User;
 
 /**
  * 
@@ -99,13 +102,19 @@ public class LeadEndpoint {
 		return Response.noContent().build();
 	}
 
-	public void sendLead(Long id, List agents) {
+	public void sendLead(Long id, List<LinkedHashMap> agents) {
 		TypedQuery<Lead> findByIdQuery = em
 				.createQuery(
 						"SELECT l FROM Lead l LEFT JOIN FETCH l.saleAgent WHERE l.id = :entityId",
 						Lead.class);
 		findByIdQuery.setParameter("entityId", id);
 		Lead entity = findByIdQuery.getSingleResult();
-		leadSender.sendLeads(agents, entity);
+		System.out.println("LIST" +agents);
+		List<String> aliases = new ArrayList<String>();
+		for(LinkedHashMap hashMap : agents){
+			aliases.add(hashMap.get("loginName").toString());
+			
+		}
+		leadSender.sendLeads(aliases, entity);
 	}
 }

@@ -120,7 +120,7 @@ public class SaleAgentEndpoint {
 					new Object[] { location });
 		}
 		List<User> users = query.getResultList();
-		System.out.println("SIZE " + users);
+		//System.out.println("SIZE " + users.get(0).C);
 		List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
 		for (User user : users) {
 			SaleAgent agent = new SaleAgent();
