@@ -98,6 +98,49 @@ Use the form to create a new Lead
 
 The native clients can access the following REST based services :
 
-``` GET  /leads ``` : Obtain a list of leads
- TODO
- 
+## ``` POST /login ``` 
+Login service, mandatory for all further request.
+
+``` 
+curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json"
+-X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/prodoctor/login 
+```
+
+It will return the user :
+
+```
+ {"id":"cb3c05aa-3fdd-4b4e-9b90-386fc7e5671a","enabled":true,"createdDate":1371215851063,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"status":"PTO","password":"123","location":"New York"}
+```
+
+## ``` POST /logout ``` 
+Logout service.
+
+``` 
+curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json"
+-X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/prodoctor/logout 
+```
+
+returns no data
+
+## ``` GET  /leads ```
+Obtain a list of leads.
+
+```
+ curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" 
+-X GET -d '{"loginName": "john", "password":"123"}' http://localhost:8080/prodoctor/leads 
+```
+
+You will get a list of leads :
+
+```
+[{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"0612412121"}]
+```
+
+## ``` PUT /saleagents/{id} ```
+ update a SaleAgent, the service will only update the status and the location for now.
+
+```
+ curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":"13bbaea3-9271-43f7-80aa-fb21360ff684","enabled":true,"createdDate":1371213256827,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"version":0,"status":"CHANGED","password":"123","location":"New York"}' http://localhost:8080/prodoctor/saleagents/13bbaea3-9271-43f7-80aa-fb21360ff684
+```
+
+returns no data

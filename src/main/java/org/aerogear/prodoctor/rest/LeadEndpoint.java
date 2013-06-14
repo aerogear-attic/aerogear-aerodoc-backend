@@ -79,7 +79,7 @@ public class LeadEndpoint {
 	public Response findById(@PathParam("id") Long id) {
 		TypedQuery<Lead> findByIdQuery = em
 				.createQuery(
-						"SELECT l FROM Lead l LEFT JOIN FETCH l.saleAgent WHERE l.id = :entityId",
+						"SELECT l FROM Lead l WHERE l.id = :entityId",
 						Lead.class);
 		findByIdQuery.setParameter("entityId", id);
 		Lead entity = findByIdQuery.getSingleResult();
@@ -93,7 +93,7 @@ public class LeadEndpoint {
 	@Produces("application/json")
 	public List<Lead> listAll() {
 		final List<Lead> results = em.createQuery(
-				"SELECT l FROM Lead l LEFT JOIN FETCH l.saleAgent", Lead.class)
+				"SELECT l FROM Lead l", Lead.class)
 				.getResultList();
 		return results;
 	}
@@ -110,7 +110,7 @@ public class LeadEndpoint {
 	public void sendLead(Long id, List<LinkedHashMap> agents) {
 		TypedQuery<Lead> findByIdQuery = em
 				.createQuery(
-						"SELECT l FROM Lead l LEFT JOIN FETCH l.saleAgent WHERE l.id = :entityId",
+						"SELECT l FROM Lead l WHERE l.id = :entityId",
 						Lead.class);
 		findByIdQuery.setParameter("entityId", id);
 		Lead entity = findByIdQuery.getSingleResult();
