@@ -1,0 +1,103 @@
+aerogear-push-quickstart-backend
+================================
+
+This backend application is a showcase / quickstart part of Aerogear's Unified Push facilities.
+This Application shows how a business specific App can interact with [aerogear-unified-push-server](https://github.com/aerogear/aerogear-unified-push-server) . IT shows how it can use the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) to send Unified Messages to the push server.
+
+# Description of the Application
+
+Prodoctor is a company in the health care industry, selling a revolutionary tensiometer. Their clients are doctors. Prodoctor has several sales agents all over the United States. At the headquarters, they have their "first line" sales departement, doing cold calls all along the day. As soon they have a concrete lead, they use their Prodoctor Admin app to filter out available sales Agents available in the lead area. They can then send them a push notification.
+
+The sales agent receives the notification on their mobile device that a new lead is available. The agent will handle the lead by "accepting" the notifcation, informing the other agents that the lead has been processed.
+
+In this highly competitive market of the tensiometers, be able to process a lead directly is for sure a competitve advantage.
+
+## The client app
+
+1. The client consist of a list of leads : a lead can be "open" or "in process", leads "in process" of other sales are not visible.
+
+* optional : when the client tap a lead it appears on  a map
+
+2. The client has a status that he can set: STANDBY | WITH_CLIENT |PTO 
+3. The client has a location
+4. The client has an alias
+
+## Prodoctor Admin client
+
+1. The admin client can create a new lead :
+
+* A lead consist of a name and a location
+
+2. The admin client can query for Sales Agents based on :
+
+* Status
+* Location
+
+3. The admin client can assign a lead to a selection (1..n) of sales agents, this will send out the nofitications.
+
+4. The admin client manage the Sales Agents DB.
+
+# Installation
+
+## Prerequisites
+
+## aerogear-unified-push-server
+
+Be sure to have a running instance of a Push Server. Intructions can be found [here](https://github.com/aerogear/aerogear-unified-push-server).
+
+## aerogear-unified-push-java-client 
+
+Prodoctor uses the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
+
+
+## Native clients
+
+TODO
+
+### Available aliases
+When registring the device on the Push Server make sure to use one of the existing aliases (or you should create a new user on the Prodoctor Admin Page) :
+
+* john
+* jake
+* maria
+* bob
+
+For all these aliases the password is ``` 123 ```
+
+# Setting the PushApplicationId and the Push Server URL
+
+Before building and deploying the app be sure to change the values in ``` org.aerogear.prodoctor.service.LeadSender ``` :
+
+* ``` pushApplicationId ``` : See intructions [here](https://github.com/aerogear/aerogear-unified-push-server#register-push-app) to obtain one.
+
+* ``` serverURL ``` : enters here the server location of your Push Server (if you are using a local one you can keep the default value).
+
+
+# Deploying the app
+
+``` mvn clean install jboss-as:deploy ```
+
+# Prodoctor Admin Application
+
+Browse to ``` localhost:8080/prodoctor ```
+
+You should log in with john/123 , he has admin rights and create leads and send notification.
+
+## Creating a lead
+
+Use the form to create a new Lead
+
+## Send a lead to Sale Agents
+
+* Select a lead from the lead's list
+* If needed enter the 2 available criterias ``` status ``` and/or ``` location ``` (you can also search without criteria).
+* Select the agents you want to send the lead to.
+* Push the button ``` Send Lead ```
+
+# Prodoctor API
+
+The native clients can access the following REST based services :
+
+``` GET  /leads ``` : Obtain a list of leads
+ TODO
+ 
