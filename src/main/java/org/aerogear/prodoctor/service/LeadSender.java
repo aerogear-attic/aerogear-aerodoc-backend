@@ -35,6 +35,7 @@ public class LeadSender {
 			serverURL, new RestEasyClient());
 
 	public void sendLeads(List<String> users, Lead lead) {
+		
 		Map json = new HashMap();
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());

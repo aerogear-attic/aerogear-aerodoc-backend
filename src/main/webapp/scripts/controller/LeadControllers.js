@@ -22,6 +22,11 @@ function SearchLeadController($scope, $filter, dataService) {
 		statusCode : {
 			401 : function(jqXHR) {
 				$("#auth-error-box").modal();
+				var restAuth = dataService.restAuth;
+				restAuth.logout();
+				sessionStorage.removeItem("username");
+				sessionStorage.removeItem("access");
+				$scope.$apply();
 			}
 		}
 	});
@@ -40,6 +45,11 @@ function SearchLeadController($scope, $filter, dataService) {
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -100,6 +110,11 @@ function NewLeadController($scope, $location, dataService) {
 		statusCode : {
 			401 : function(jqXHR) {
 				$("#auth-error-box").modal();
+				var restAuth = dataService.restAuth;
+				restAuth.logout();
+				sessionStorage.removeItem("username");
+				sessionStorage.removeItem("access");
+				$scope.$apply();
 			}
 		}
 	});
@@ -113,6 +128,11 @@ function NewLeadController($scope, $location, dataService) {
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -153,6 +173,11 @@ function EditLeadController($scope, $routeParams, $location, dataService) {
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -171,6 +196,11 @@ function EditLeadController($scope, $routeParams, $location, dataService) {
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -189,6 +219,11 @@ function EditLeadController($scope, $routeParams, $location, dataService) {
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -235,6 +270,11 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -253,6 +293,11 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});
@@ -271,6 +316,11 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 			statusCode : {
 				401 : function(jqXHR) {
 					$("#auth-error-box").modal();
+					var restAuth = dataService.restAuth;
+					restAuth.logout();
+					sessionStorage.removeItem("username");
+					sessionStorage.removeItem("access");
+					$scope.$apply();
 				}
 			}
 		});

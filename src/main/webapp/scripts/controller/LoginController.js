@@ -11,7 +11,7 @@ function LoginController($scope, $routeParams, $location, dataService) {
 		restAuth.login(user, {
 			success : function(data) {
 				var role = $.inArray("admin", data.roles) >= 0 ? 1 : 0;
-				sessionStorage.setItem("username", data.username);
+				sessionStorage.setItem("username", data.loginName);
 				sessionStorage.setItem("access", role);
 				$scope.$apply();
 			},
@@ -28,7 +28,7 @@ function LoginController($scope, $routeParams, $location, dataService) {
 		restAuth.enroll(user, {
 			success : function(data) {
 				var role = $.inArray("admin", data.roles) >= 0 ? 1 : 0;
-				sessionStorage.setItem("username", data.username);
+				sessionStorage.setItem("username", data.loginName);
 				sessionStorage.setItem("access", role);
 				$scope.$apply();
 			},

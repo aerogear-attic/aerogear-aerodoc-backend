@@ -78,6 +78,10 @@ public class Login
    private void performLogin(SaleAgent saleAgent)
    {
       authenticationManager.login(saleAgent,saleAgent.getPassword());
+      //workaround to load the extra attributes, maybe a bug ??
+      User user  =  identityManager.getUser(saleAgent.getLoginName());
+      saleAgent.setLocation(user.getAttribute("location").getValue().toString());
+      saleAgent.setStatus(user.getAttribute("status").getValue().toString());
    }
 
  
