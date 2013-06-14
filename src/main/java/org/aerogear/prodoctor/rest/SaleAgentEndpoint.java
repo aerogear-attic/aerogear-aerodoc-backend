@@ -37,6 +37,7 @@ import org.aerogear.prodoctor.model.SaleAgent;
 import org.aerogear.prodoctor.service.LeadSender;
 import org.aerogear.prodoctor.utility.SaleAgentCriteria;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.model.User;
 import org.picketlink.idm.query.IdentityQuery;
@@ -100,9 +101,13 @@ public class SaleAgentEndpoint {
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(@PathParam("id") Long id, SaleAgent entity) {
-		entity.setId(id);
-		entity = em.merge(entity);
+	public Response update(@PathParam("id") String id, SaleAgent entity) {
+		User user = identityManager.getUser(entity.getLoginName());
+		Attribute<String> attributeStatus = user.getAttribute("status");
+		attributeStatus.setValue(entity.getStatus());
+		Attribute<String> attributeLocation = user.getAttribute("location");
+		attributeLocation.setValue(entity.getLocation());
+		identityManager.update(user);
 		return Response.noContent().build();
 	}
 
@@ -120,7 +125,6 @@ public class SaleAgentEndpoint {
 					new Object[] { location });
 		}
 		List<User> users = query.getResultList();
-		//System.out.println("SIZE " + users.get(0).C);
 		List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
 		for (User user : users) {
 			SaleAgent agent = new SaleAgent();
@@ -133,5 +137,4 @@ public class SaleAgentEndpoint {
 
 	}
 
-	
 }

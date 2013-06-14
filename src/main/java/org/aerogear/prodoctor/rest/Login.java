@@ -82,6 +82,7 @@ public class Login
       User user  =  identityManager.getUser(saleAgent.getLoginName());
       saleAgent.setLocation(user.getAttribute("location").getValue().toString());
       saleAgent.setStatus(user.getAttribute("status").getValue().toString());
+      saleAgent.setId(user.getId());
    }
 
  

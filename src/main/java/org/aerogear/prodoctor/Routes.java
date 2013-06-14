@@ -97,7 +97,7 @@ public class Routes extends AbstractRoutingModule {
 
 		route().from("/saleagents/{id}").roles("simple").on(RequestMethod.PUT)
 				.consumes(JSON).produces(JSON).to(SaleAgentEndpoint.class)
-				.update(param("id", Long.class), param(SaleAgent.class));
+				.update(param("id"), param(SaleAgent.class));
 
 	}
 

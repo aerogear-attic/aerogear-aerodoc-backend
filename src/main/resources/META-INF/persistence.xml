@@ -21,7 +21,6 @@
     <class>org.picketlink.idm.jpa.schema.IdentityObjectAttribute</class>
     <class>org.picketlink.idm.jpa.schema.CredentialObject</class>
     <class>org.picketlink.idm.jpa.schema.CredentialObjectAttribute</class>
-    <class>org.aerogear.prodoctor.model.SaleAgent</class>
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>

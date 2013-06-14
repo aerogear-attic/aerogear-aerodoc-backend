@@ -34,6 +34,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import org.aerogear.prodoctor.model.Lead;
 import org.aerogear.prodoctor.service.LeadSender;
+import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.User;
 
 /**
@@ -42,6 +43,10 @@ import org.picketlink.idm.model.User;
 @Stateless
 @Path("/leads")
 public class LeadEndpoint {
+	
+	@Inject
+	private IdentityManager identityManager;
+	
 	@Inject
 	private LeadSender leadSender;
 
@@ -109,7 +114,6 @@ public class LeadEndpoint {
 						Lead.class);
 		findByIdQuery.setParameter("entityId", id);
 		Lead entity = findByIdQuery.getSingleResult();
-		System.out.println("LIST" +agents);
 		List<String> aliases = new ArrayList<String>();
 		for(LinkedHashMap hashMap : agents){
 			aliases.add(hashMap.get("loginName").toString());
