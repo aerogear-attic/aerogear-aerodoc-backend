@@ -13,23 +13,7 @@ function SearchLeadController($scope, $filter, dataService) {
 	};
 	var leadPipe = dataService.leadPipe;
 	var leadStore = dataService.leadStore;
-	var saleAgentPipe = dataService.saleAgentPipe;
-	saleAgentPipe.read({
-		success : function(data) {
-			$scope.saleAgentList = data;
-			$scope.$apply();
-		},
-		statusCode : {
-			401 : function(jqXHR) {
-				$("#auth-error-box").modal();
-				var restAuth = dataService.restAuth;
-				restAuth.logout();
-				sessionStorage.removeItem("username");
-				sessionStorage.removeItem("access");
-				$scope.$apply();
-			}
-		}
-	});
+
 
 	$scope.performSearch = function() {
 		leadPipe.read({
@@ -101,24 +85,7 @@ function NewLeadController($scope, $location, dataService) {
 	var leadPipe = dataService.leadPipe;
 	$scope.disabled = false;
 
-	var saleAgentPipe = dataService.saleAgentPipe;
-	saleAgentPipe.read({
-		success : function(data) {
-			$scope.saleAgentList = data;
-			$scope.$apply();
-		},
-		statusCode : {
-			401 : function(jqXHR) {
-				$("#auth-error-box").modal();
-				var restAuth = dataService.restAuth;
-				restAuth.logout();
-				sessionStorage.removeItem("username");
-				sessionStorage.removeItem("access");
-				$scope.$apply();
-			}
-		}
-	});
-
+	
 	$scope.save = function() {
 		leadPipe.save($scope.lead, {
 			success : function(data) {
@@ -155,19 +122,6 @@ function EditLeadController($scope, $routeParams, $location, dataService) {
 			success : function(data) {
 				self.original = data.entity;
 				$scope.lead = data.entity;
-				saleAgentPipe.read({
-					success : function(data) {
-						$scope.saleAgentList = data;
-						angular.forEach($scope.saleAgentList, function(datum) {
-							if (angular.equals(datum, $scope.lead.saleAgent)) {
-								$scope.lead.saleAgent = datum;
-								self.original.saleAgent = datum;
-							}
-						});
-						$scope.$apply();
-					}
-				});
-
 				$scope.$apply();
 			},
 			statusCode : {
@@ -252,19 +206,6 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 			success : function(data) {
 				self.original = data.entity;
 				$scope.lead = data.entity;
-				saleAgentPipe.read({
-					success : function(data) {
-						$scope.saleAgentList = data;
-						angular.forEach($scope.saleAgentList, function(datum) {
-							if (angular.equals(datum, $scope.lead.saleAgent)) {
-								$scope.lead.saleAgent = datum;
-								self.original.saleAgent = datum;
-							}
-						});
-						$scope.$apply();
-					}
-				});
-
 				$scope.$apply();
 			},
 			statusCode : {
