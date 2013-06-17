@@ -2,7 +2,7 @@ aerogear-push-quickstart-backend
 ================================
 
 This backend application is a showcase / quickstart part of Aerogear's Unified Push facilities.
-This Application shows how a business specific App can interact with [aerogear-unified-push-server](https://github.com/aerogear/aerogear-unified-push-server) . IT shows how it can use the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) to send Unified Messages to the push server.
+This Application shows how a business specific App can interact with [aerogear-unified-push-server](https://github.com/aerogear/aerogear-unified-push-server) . It shows how it can use the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) to send Unified Messages to the push server.
 
 # Description of the Application
 
@@ -50,9 +50,12 @@ Be sure to have a running instance of a Push Server. Intructions can be found [h
 Prodoctor uses the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
 
 
-## Native clients
+## Clients
 
-TODO
+* [aerogear-push-quickstart-ios](https://github.com/aerogear/aerogear-push-quickstart-ios)
+* [aerogear-push-quickstart-android](https://github.com/aerogear/aerogear-push-quickstart-android)
+* [aerogear-push-quickstart-web](https://github.com/aerogear/aerogear-push-quickstart-web)
+
 
 ### Available aliases
 When registring the device on the Push Server make sure to use one of the existing aliases (or you should create a new user on the Prodoctor Admin Page) :
