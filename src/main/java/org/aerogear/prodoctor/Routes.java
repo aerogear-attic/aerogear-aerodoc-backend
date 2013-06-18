@@ -28,12 +28,11 @@ import org.jboss.aerogear.controller.router.AbstractRoutingModule;
 import org.jboss.aerogear.controller.router.RequestMethod;
 import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 import org.aerogear.prodoctor.exceptions.HttpSecurityException;
-import org.aerogear.prodoctor.config.CustomConsumer;
 import org.aerogear.prodoctor.config.CustomMediaTypeResponder;
 import org.aerogear.prodoctor.rest.Error;
 import org.aerogear.prodoctor.rest.Login;
 import org.aerogear.prodoctor.rest.Register;
-import org.aerogear.prodoctor.config.CustomConsumer;
+
 
 public class Routes extends AbstractRoutingModule {
 
