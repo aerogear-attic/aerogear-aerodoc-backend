@@ -1,4 +1,4 @@
-package org.aerogear.prodoctor.model;
+package org.jboss.aerogear.prodoctor.model;
 
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -8,7 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.Version;
 import java.lang.Override;
-import org.aerogear.prodoctor.model.SaleAgent;
+
+import org.jboss.aerogear.prodoctor.model.SaleAgent;
+
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 

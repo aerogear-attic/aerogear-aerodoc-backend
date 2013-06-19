@@ -15,37 +15,25 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.rest;
+package org.jboss.aerogear.prodoctor.rest;
 
-import org.aerogear.prodoctor.model.SaleAgent;
-import org.jboss.aerogear.security.auth.AuthenticationManager;
-import org.jboss.aerogear.security.authz.IdentityManagement;
+import javax.servlet.http.HttpServletResponse;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import org.jboss.aerogear.controller.router.error.ErrorResponse;
+import org.jboss.aerogear.controller.router.error.JsonErrorResponse;
+import org.jboss.aerogear.controller.router.parameter.MissingRequestParameterException;
+import org.jboss.aerogear.controller.router.rest.pagination.PaginationRequestException;
 
-@Stateless
-public class Register
+public class Error
 {
 
-   public static final String DEFAULT_ROLE = "simple";
-
-   @Inject
-   private IdentityManagement configuration;
-
-   @Inject
-   private AuthenticationManager authenticationManager;
-
-   public void index()
+   public String index(Exception e)
    {
 
+      return "{exception:" + e.getMessage() + "}";
    }
 
-   public SaleAgent register(SaleAgent user)
+   public void alreadyLoggedIn()
    {
-      configuration.create(user,null);
-      configuration.grant(DEFAULT_ROLE).to(user.getLoginName());
-      authenticationManager.login(user,null);
-      return user;
    }
 }

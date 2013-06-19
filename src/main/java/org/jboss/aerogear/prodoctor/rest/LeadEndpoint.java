@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.rest;
+package org.jboss.aerogear.prodoctor.rest;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -32,42 +33,40 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import org.aerogear.prodoctor.model.Lead;
-import org.aerogear.prodoctor.model.SaleAgent;
-import org.aerogear.prodoctor.service.LeadSender;
-import org.aerogear.prodoctor.utility.SaleAgentCriteria;
+import org.jboss.aerogear.prodoctor.model.Lead;
+import org.jboss.aerogear.prodoctor.service.LeadSender;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.model.User;
-import org.picketlink.idm.query.IdentityQuery;
 
 /**
  * 
  */
 @Stateless
-@Path("/saleagents")
-public class SaleAgentEndpoint {
-
+@Path("/leads")
+public class LeadEndpoint {
+	
 	@Inject
 	private IdentityManager identityManager;
+	
+	@Inject
+	private LeadSender leadSender;
 
-	@PersistenceContext(unitName = "picketlink-default")
+	@PersistenceContext(unitName = "forge-default")
 	private EntityManager em;
 
 	@POST
 	@Consumes("application/json")
-	public Response create(SaleAgent entity) {
+	public Response create(Lead entity) {
 		em.persist(entity);
 		return Response.created(
-				UriBuilder.fromResource(SaleAgentEndpoint.class)
+				UriBuilder.fromResource(LeadEndpoint.class)
 						.path(String.valueOf(entity.getId())).build()).build();
 	}
 
 	@DELETE
 	@Path("/{id:[0-9][0-9]*}")
 	public Response deleteById(@PathParam("id") Long id) {
-		SaleAgent entity = em.find(SaleAgent.class, id);
+		Lead entity = em.find(Lead.class, id);
 		if (entity == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
@@ -79,11 +78,12 @@ public class SaleAgentEndpoint {
 	@Path("/{id:[0-9][0-9]*}")
 	@Produces("application/json")
 	public Response findById(@PathParam("id") Long id) {
-		TypedQuery<SaleAgent> findByIdQuery = em.createQuery(
-				"SELECT s FROM SaleAgent s WHERE s.id = :entityId",
-				SaleAgent.class);
+		TypedQuery<Lead> findByIdQuery = em
+				.createQuery(
+						"SELECT l FROM Lead l WHERE l.id = :entityId",
+						Lead.class);
 		findByIdQuery.setParameter("entityId", id);
-		SaleAgent entity = findByIdQuery.getSingleResult();
+		Lead entity = findByIdQuery.getSingleResult();
 		if (entity == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
@@ -92,49 +92,34 @@ public class SaleAgentEndpoint {
 
 	@GET
 	@Produces("application/json")
-	public List<SaleAgent> listAll() {
-		final List<SaleAgent> results = em.createQuery(
-				"SELECT s FROM SaleAgent s", SaleAgent.class).getResultList();
+	public List<Lead> listAll() {
+		final List<Lead> results = em.createQuery(
+				"SELECT l FROM Lead l", Lead.class)
+				.getResultList();
 		return results;
 	}
 
 	@PUT
 	@Path("/{id:[0-9][0-9]*}")
 	@Consumes("application/json")
-	public Response update(@PathParam("id") String id, SaleAgent entity) {
-		User user = identityManager.getUser(entity.getLoginName());
-		Attribute<String> attributeStatus = user.getAttribute("status");
-		attributeStatus.setValue(entity.getStatus());
-		Attribute<String> attributeLocation = user.getAttribute("location");
-		attributeLocation.setValue(entity.getLocation());
-		identityManager.update(user);
+	public Response update(@PathParam("id") Long id, Lead entity) {
+		entity.setId(id);
+		entity = em.merge(entity);
 		return Response.noContent().build();
 	}
 
-	public List<SaleAgent> listByCriteria(String status, String location) {
-
-		IdentityQuery<User> query = identityManager
-				.createIdentityQuery(User.class);
-
-		if (!status.isEmpty()) {
-			query.setParameter(IdentityType.ATTRIBUTE.byName("status"),
-					new Object[] { status });
+	public void sendLead(Long id, List<LinkedHashMap> agents) {
+		TypedQuery<Lead> findByIdQuery = em
+				.createQuery(
+						"SELECT l FROM Lead l WHERE l.id = :entityId",
+						Lead.class);
+		findByIdQuery.setParameter("entityId", id);
+		Lead entity = findByIdQuery.getSingleResult();
+		List<String> aliases = new ArrayList<String>();
+		for(LinkedHashMap hashMap : agents){
+			aliases.add(hashMap.get("loginName").toString());
+			
 		}
-		if (!location.isEmpty()) {
-			query.setParameter(IdentityType.ATTRIBUTE.byName("location"),
-					new Object[] { location });
-		}
-		List<User> users = query.getResultList();
-		List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
-		for (User user : users) {
-			SaleAgent agent = new SaleAgent();
-			agent.setLoginName(user.getLoginName());
-			agent.setAttribute(user.getAttribute("location"));
-			agent.setAttribute(user.getAttribute("status"));
-			saleAgents.add(agent);
-		}
-		return saleAgents;
-
+		leadSender.sendLeads(aliases, entity);
 	}
-
 }

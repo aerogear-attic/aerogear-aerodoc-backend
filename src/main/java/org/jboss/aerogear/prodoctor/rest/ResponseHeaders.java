@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.jboss.aerogear.prodoctor.rest;
 
-package org.aerogear.prodoctor.rest;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.jboss.aerogear.controller.router.error.ErrorResponse;
-import org.jboss.aerogear.controller.router.error.JsonErrorResponse;
-import org.jboss.aerogear.controller.router.parameter.MissingRequestParameterException;
-import org.jboss.aerogear.controller.router.rest.pagination.PaginationRequestException;
-
-public class Error
+public class ResponseHeaders
 {
 
-   public String index(Exception e)
-   {
+   private Map<String, String> headers = new HashMap
+         <String, String>();
 
-      return "{exception:" + e.getMessage() + "}";
+   public ResponseHeaders(final String name, final String value)
+   {
+      headers.put(name, value);
    }
 
-   public void alreadyLoggedIn()
+   public Map
+         <String, String> getHeaders()
    {
+      return Collections.unmodifiableMap(headers);
    }
 }

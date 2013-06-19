@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.model;
+package org.jboss.aerogear.prodoctor.model;
 
 import javax.persistence.Entity;
 import java.io.Serializable;

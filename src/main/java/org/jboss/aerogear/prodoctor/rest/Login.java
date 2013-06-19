@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.rest;
+package org.jboss.aerogear.prodoctor.rest;
 
-import org.aerogear.prodoctor.model.SaleAgent;
-import org.aerogear.prodoctor.rest.ResponseHeaders;
+import org.jboss.aerogear.prodoctor.model.SaleAgent;
+import org.jboss.aerogear.prodoctor.rest.ResponseHeaders;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Attribute;

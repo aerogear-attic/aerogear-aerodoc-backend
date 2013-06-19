@@ -1,4 +1,4 @@
-package org.aerogear.prodoctor.utility;
+package org.jboss.aerogear.prodoctor.utility;
 
 public class SaleAgentCriteria {
 	
