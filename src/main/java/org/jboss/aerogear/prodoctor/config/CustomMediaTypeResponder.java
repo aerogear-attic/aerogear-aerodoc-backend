@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.config;
+package org.jboss.aerogear.prodoctor.config;
 
 import java.util.Map.Entry;
 import java.util.Set;
@@ -23,10 +23,10 @@ import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 
-import org.aerogear.prodoctor.rest.ResponseHeaders;
 import org.jboss.aerogear.controller.router.MediaType;
 import org.jboss.aerogear.controller.router.RouteContext;
 import org.jboss.aerogear.controller.router.rest.JsonResponder;
+import org.jboss.aerogear.prodoctor.rest.ResponseHeaders;
 
 @ApplicationScoped
 public class CustomMediaTypeResponder extends JsonResponder

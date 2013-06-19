@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.exceptions;
+package org.jboss.aerogear.prodoctor.exceptions;
 
 import org.jboss.aerogear.controller.spi.HttpStatusAwareException;
 import org.jboss.aerogear.security.exception.HttpStatus;

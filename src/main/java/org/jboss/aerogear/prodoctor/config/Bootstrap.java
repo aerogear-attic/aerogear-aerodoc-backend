@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.config;
+package org.jboss.aerogear.prodoctor.config;
 
-import org.aerogear.prodoctor.model.SaleAgent;
+import org.jboss.aerogear.prodoctor.model.SaleAgent;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.Attribute;
@@ -36,7 +36,7 @@ import javax.inject.Inject;
 
 @Singleton
 @Startup
-public class PicketLinkDefaultUsers {
+public class Bootstrap {
 
 	@Inject
 	private IdentityManager identityManager;

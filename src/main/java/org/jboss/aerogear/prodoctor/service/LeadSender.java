@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.service;
+package org.jboss.aerogear.prodoctor.service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.aerogear.prodoctor.model.Lead;
 import org.aerogear.unifiedpush.DefaultJavaSender;
 import org.aerogear.unifiedpush.resteasy.RestEasyClient;
+import org.jboss.aerogear.prodoctor.model.Lead;
 
 public class LeadSender {
 

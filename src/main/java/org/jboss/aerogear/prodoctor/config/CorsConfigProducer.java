@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.aerogear.prodoctor.config;
+package org.jboss.aerogear.prodoctor.config;
 
 import org.jboss.aerogear.controller.router.decorators.cors.CorsConfig;
 import org.jboss.aerogear.controller.router.decorators.cors.CorsConfiguration;
