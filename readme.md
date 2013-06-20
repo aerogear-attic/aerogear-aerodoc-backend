@@ -69,7 +69,7 @@ For all these aliases the password is ``` 123 ```
 
 # Setting the PushApplicationId and the Push Server URL
 
-Before building and deploying the app be sure to change the values in ``` org.aerogear.prodoctor.service.LeadSender ``` :
+Before building and deploying the app be sure to change the values in ``` org.jboss.aerogear.prodoctor.service.LeadSender ``` :
 
 * ``` pushApplicationId ``` : See intructions [here](https://github.com/aerogear/aerogear-unified-push-server#register-push-app) to obtain one.
 

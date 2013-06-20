@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.aerogear.unifiedpush.DefaultJavaSender;
-import org.aerogear.unifiedpush.resteasy.RestEasyClient;
+import org.jboss.aerogear.unifiedpush.DefaultJavaSender;
+import org.jboss.aerogear.unifiedpush.resteasy.RestEasyClient;
 import org.jboss.aerogear.prodoctor.model.Lead;
 
 public class LeadSender {
@@ -35,7 +35,7 @@ public class LeadSender {
 			serverURL, new RestEasyClient());
 
 	public void sendLeads(List<String> users, Lead lead) {
-		
+
 		Map json = new HashMap();
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());
