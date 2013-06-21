@@ -94,7 +94,7 @@ public class LeadEndpoint {
 	@Produces("application/json")
 	public List<Lead> listAll() {
 		final List<Lead> results = em.createQuery(
-				"SELECT l FROM Lead l", Lead.class)
+				"SELECT l FROM Lead l where l.saleAgent = null", Lead.class)
 				.getResultList();
 		return results;
 	}
