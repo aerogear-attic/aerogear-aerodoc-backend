@@ -105,6 +105,8 @@ public class LeadEndpoint {
 	public Response update(@PathParam("id") Long id, Lead entity) {
 		entity.setId(id);
 		entity = em.merge(entity);
+		//Broadcast the change to everyone
+		leadSender.sendBroadCast(entity);
 		return Response.noContent().build();
 	}
 

@@ -29,18 +29,35 @@ public class LeadSender {
 
 	private String serverURL = "http://localhost:8080/ag-push";
 
-	private String pushApplicationId = "0ef30a53-1096-43f9-ab1f-95f684551c7e";
+	private String pushApplicationId = "317cce6d-efaf-4ff8-94e3-a45c0a3a688c";
 
 	private DefaultJavaSender defaultJavaSender = new DefaultJavaSender(
 			serverURL, new RestEasyClient());
 
 	public void sendLeads(List<String> users, Lead lead) {
 
+		Map categories = new HashMap();
+		categories.put("lead", "version=1"); ////TODO manage the id
 		Map json = new HashMap();
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
+		json.put("simple-push", categories);
+		json.put("alert" ,"A new lead has been created");
+
 		defaultJavaSender.sendTo(users, json, pushApplicationId);
+	}
+
+	public void sendBroadCast(Lead lead) {
+		Map categories = new HashMap();
+		categories.put("broadcast", "version=1"); //TODO manage the id
+		Map json = new HashMap();
+		json.put("name", lead.getName());
+		json.put("location", lead.getLocation());
+		json.put("phone", lead.getPhoneNumber());
+		json.put("simple-push", categories);
+		json.put("alert" ,"A new lead has been accepted");
+		defaultJavaSender.broadcast(json, pushApplicationId);
 	}
 
 	public String getServerURL() {
