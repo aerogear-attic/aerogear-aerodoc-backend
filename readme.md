@@ -37,6 +37,22 @@ In this highly competitive market of the tensiometers, be able to process a lead
 
 4. The admin client manage the Sales Agents DB.
 
+## General flow 
+
+1. Your are a Sale Agent (SA) and you log yourself
+
+2. First screen displayed a list of all unassigned leads retrieved server side (Rest service by default send only unassigned leads)
+
+3. An admin pushes a new lead to a chosen list of SA (including you)
+
+4. You receive the push notification, alert is displayed
+
+5. Your device refresh the list of unassigned leads (server side call). Potentially retrieving also unassigned leads not directly pushed to you. Nice to have feature: The one pushed to you should be highlighted.
+
+6. You accept the lead. The lead is removed from unassigned list and go in Second tab: your accepted list which is stored locally on you device.
+
+7. On acceptation of your lead, you send an update to server. Server side broadcast to all SA (except yourself) to refresh unassigned leads list.
+
 # Installation
 
 ## Prerequisites
@@ -136,7 +152,7 @@ Obtain a list of leads.
 -X GET http://localhost:8080/prodoctor/leads 
 ```
 
-You will get a list of leads :
+You will get a list of leads **which has not a saleAgent set yet** :
 
 ```
 [{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"0612412121"}]
