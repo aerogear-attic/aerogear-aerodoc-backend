@@ -43,7 +43,7 @@ public class LeadSender {
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
-		json.put("alert" ,"A new lead has been created");
+		json.put("alert" ,"Lead " + lead.getName() + "available");
 
 		defaultJavaSender.sendTo(users, json, pushApplicationId);
 	}
@@ -56,7 +56,7 @@ public class LeadSender {
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
-		json.put("alert" ,"A new lead has been accepted");
+		json.put("alert" ,"lead "+ lead.getName()+"has been accepted");
 		defaultJavaSender.broadcast(json, pushApplicationId);
 	}
 
