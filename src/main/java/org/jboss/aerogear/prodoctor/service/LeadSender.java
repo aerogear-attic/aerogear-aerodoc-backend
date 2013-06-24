@@ -30,6 +30,10 @@ public class LeadSender {
 	private String serverURL = "http://localhost:8080/ag-push";
 
 	private String pushApplicationId = "317cce6d-efaf-4ff8-94e3-a45c0a3a688c";
+	
+	//TODO we don't this
+	private int leadVersion = 0;
+	private int broadcastVersion = 0;
 
 	private DefaultJavaSender defaultJavaSender = new DefaultJavaSender(
 			serverURL, new RestEasyClient());
@@ -37,26 +41,28 @@ public class LeadSender {
 	public void sendLeads(List<String> users, Lead lead) {
 
 		Map categories = new HashMap();
-		categories.put("lead", "version=1"); ////TODO manage the id
+		categories.put("lead", "version="+leadVersion++); ////TODO manage the id
 		Map json = new HashMap();
+		json.put("id", lead.getId());
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
-		json.put("alert" ,"Lead " + lead.getName() + "available");
+		json.put("alert" ,"A new lead has been created");
 
 		defaultJavaSender.sendTo(users, json, pushApplicationId);
 	}
 
 	public void sendBroadCast(Lead lead) {
 		Map categories = new HashMap();
-		categories.put("broadcast", "version=1"); //TODO manage the id
+		categories.put("broadcast", "version="+broadcastVersion++); //TODO manage the id
 		Map json = new HashMap();
+		json.put("id", lead.getId());
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
-		json.put("alert" ,"lead "+ lead.getName()+"has been accepted");
+		json.put("alert" ,"A new lead has been accepted");
 		defaultJavaSender.broadcast(json, pushApplicationId);
 	}
 
