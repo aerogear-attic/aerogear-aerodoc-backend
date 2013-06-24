@@ -44,6 +44,7 @@ public class LeadSender {
 		categories.put("lead", "version="+leadVersion++); ////TODO manage the id
 		Map json = new HashMap();
 		json.put("id", lead.getId());
+		json.put("messageType", "pushed_lead");
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
@@ -58,6 +59,7 @@ public class LeadSender {
 		categories.put("broadcast", "version="+broadcastVersion++); //TODO manage the id
 		Map json = new HashMap();
 		json.put("id", lead.getId());
+		json.put("messageType", "accepted_lead");
 		json.put("name", lead.getName());
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
