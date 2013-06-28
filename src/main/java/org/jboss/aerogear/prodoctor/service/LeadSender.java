@@ -49,6 +49,7 @@ public class LeadSender {
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
+		json.put("sound" ,"default");
 		json.put("alert" ,"A new lead has been created");
 
 		defaultJavaSender.sendTo(users, json, pushApplicationId);
@@ -65,6 +66,7 @@ public class LeadSender {
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
 		json.put("alert" ,"A new lead has been accepted");
+		json.put("sound" ,"default");
 		defaultJavaSender.broadcast(json, pushApplicationId);
 	}
 
