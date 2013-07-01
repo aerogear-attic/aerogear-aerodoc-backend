@@ -1,0 +1,38 @@
+<h2>SaleAgents List</h2>
+<form id="SaleAgentSearch" class="form-horizontal">
+    <div class="control-group">
+        <div class="controls">
+            <a id="Create" name="Create" class="btn" href="#/SaleAgents/new"><i class="icon-plus-sign"></i> Create
+                New SaleAgent</a>
+        </div>
+    </div>
+</form>
+<div id="search-results">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+                <th>Status</th>
+                <th>Location</th>
+        </tr>
+        </thead>
+        <tbody id="search-results-body">
+        <tr ng-repeat="result in searchResults | filter:filterSearchResults | startFrom:currentPage*pageSize | limitTo:pageSize">
+                    <td><a href="#/SaleAgents/edit/{{result.id}}">{{result.status}}</a></td>
+                    <td><a href="#/SaleAgents/edit/{{result.id}}">{{result.location}}</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination pagination-centered">
+        <ul>
+            <li ng-class="{disabled:currentPage == 0}">
+                <a id="prev" href ng-click="previous()">«</a>
+            </li>
+            <li ng-repeat="n in pageRange" ng-class="{active:currentPage == n}" ng-click="setPage(n)">
+                <a href ng-bind="n + 1">1</a>
+            </li>
+            <li ng-class="{disabled: currentPage == (numberOfPages() - 1)}">
+                <a id="next" href ng-click="next()">»</a>
+            </li>
+        </ul>
+    </div>
+</div>
