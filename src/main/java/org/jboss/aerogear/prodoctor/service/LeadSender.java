@@ -32,8 +32,8 @@ public class LeadSender {
 	private String pushApplicationId = "317cce6d-efaf-4ff8-94e3-a45c0a3a688c";
 	
 	//TODO we don't this
-	private int leadVersion = 0;
-	private int broadcastVersion = 0;
+	private int leadVersion = 1;
+	private int broadcastVersion = 1;
 
 	private DefaultJavaSender defaultJavaSender = new DefaultJavaSender(
 			serverURL, new RestEasyClient());

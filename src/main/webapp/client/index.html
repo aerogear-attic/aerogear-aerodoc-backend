@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" ng-app="prodoctor">
+<head>
+<meta charset="UTF-8">
+<title>prodoctor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css"
+	href="css/topcoat-desktop-dark.css">
+<link rel="stylesheet" type="text/css" href="css/topcoat-notification.min.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<script src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+<script src='http://cdn.sockjs.org/sockjs-0.3.min.js'></script>
+<script>
+        localStorage.removeItem("ag-push-store");
+        var AeroGearSimplePush = {
+                variantID: "02e5900c-17b2-49e8-b689-13ccbc960617",
+                unifiedPushServerURL: "http://localhost:8080/ag-push/rest/registry/device",
+                simplePushServerURL: "http://spsvertx-aerogearkb.rhcloud.com/simplepush"
+            };
+</script>
+<script src="scripts/vendor/aerogear.custom.js"></script>
+<script src="scripts/vendor/angular.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/services/dataService.js"></script>
+<script src="scripts/controller/LeadControllers.js"></script>
+<script src="scripts/controller/SaleAgentControllers.js"></script>
+<script src="scripts/controller/LoginController.js"></script>
+<script src="scripts/controller/NotificationController.js"></script>
+
+<script src="scripts/filters.js"></script>
+</head>
+<body>
+	<div class="topcoat-navigation-bar">
+
+		<div class="topcoat-navigation-bar__item left quarter">
+			<h1 class="topcoat-navigation-bar__title">ProDoctor</h1>
+		</div>
+		<div class="topcoat-navigation-bar__item center half"></div>
+
+	</div>
+	<div class="topcoat-overlay-bg" ng-controller="LoginController"
+		ng-show="!isLoggedIn()"></div>
+	<form>
+		<aside class="topcoat-overlay" id="auth-error-box"
+			ng-controller="LoginController" ng-show="!isLoggedIn()">
+			<h1>Login</h1>
+			<input type="text" class="input-small" name="username" id="username"
+				ng-model="user.loginName" placeholder="username"></input> <input
+				type="password" class="input-small" name="password" id="password"
+				ng-model="user.password" placeholder="password"></input>
+
+			<div class="topcoat-overlay-buttons">
+				<button id="login" name="login" role="button" class="topcoat-button"
+					ng-click="login()">Sign in</button>
+
+			</div>
+		</aside>
+	</form>
+	<span class="topcoat-notification" ng-show="showNotification()" ng-controller="ShowNotificationController">A new Lead has been pushed</span>
+	<div ng-view>
+		
+	</div>
+	<div class="bar bottom">
+	<div class="settings container">
+		<a href="#/Leads">
+   			 <img src='img/listview.svg'/>
+   		</a>
+   		<a href="#/Leads/accepted">
+   			 <img src='img/page.svg'/>
+   		</a>
+   		
+	</div>
+	</div>
+	<script src="scripts/vendor/socket.js"></script>
+</body>
+</html>

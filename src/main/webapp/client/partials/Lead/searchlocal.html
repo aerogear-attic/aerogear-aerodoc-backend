@@ -1,0 +1,13 @@
+<div class="topcoat-list__container">
+<h3 class="topcoat-list__header">Accepted Leads</h3>
+		<ul class="topcoat-list list">
+			<li ng-repeat="result in searchResults" class="topcoat-list__item">
+			<a href="#/Leads/show/{{result.id}}">
+   			 <img src='img/user.svg'/>
+   			 <p>{{result.name}}</p>
+    		 <p>{{result.location}}</p>
+   		 	 <span class="chevron"></span>
+		    </a>
+			</li>
+		</ul>
+</div>
