@@ -1,12 +1,13 @@
 'use strict';
 
-function ShowNotificationController($scope, $routeParams, $location,
+function ShowNotificationController($scope, $rootScope, $routeParams, $location,
 		dataService) {
 	var showBar = false;
 	navigator.setMessageHandler("push", function(message) {
 		console.log("Message received" + message.channelID);
 		showBar = true;
-		$location.path('/Leads');
+		var message = "refresh";
+		$rootScope.$broadcast('refreshLeads', message);
 		$scope.$apply();
 
 	});
