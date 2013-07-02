@@ -1,6 +1,6 @@
 'use strict';
 
-function SearchLeadController($scope, $filter, dataService) {
+function SearchLeadController($scope, $location, $filter, dataService) {
 	$scope.filter = $filter;
 	$scope.search = {};
 	$scope.currentPage = 0;
@@ -75,6 +75,10 @@ function SearchLeadController($scope, $filter, dataService) {
 		}
 		return true;
 	};
+	
+	$scope.$on('refreshLeads', function(e,arg){
+		$scope.performSearch();
+	});
 
 	
 
