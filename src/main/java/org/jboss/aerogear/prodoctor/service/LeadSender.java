@@ -51,7 +51,7 @@ public class LeadSender {
 		json.put("simple-push", categories);
 		json.put("alert" ,"A new lead has been created");
 
-		defaultJavaSender.sendTo(users, json, pushApplicationId);
+		defaultJavaSender.sendTo(users, json, pushApplicationId, "masterSecret");
 	}
 
 	public void sendBroadCast(Lead lead) {
@@ -65,7 +65,7 @@ public class LeadSender {
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
 		json.put("alert" ,"A new lead has been accepted");
-		defaultJavaSender.broadcast(json, pushApplicationId);
+		defaultJavaSender.broadcast(json, pushApplicationId, "masterSecret");
 	}
 
 	public String getServerURL() {
