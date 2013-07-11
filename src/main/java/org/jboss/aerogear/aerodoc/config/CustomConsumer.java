@@ -1,4 +1,4 @@
-package org.jboss.aerogear.prodoctor.config;
+package org.jboss.aerogear.aerodoc.config;
 
 import org.jboss.aerogear.controller.router.MediaType;
 import org.jboss.aerogear.controller.router.rest.JsonConsumer;

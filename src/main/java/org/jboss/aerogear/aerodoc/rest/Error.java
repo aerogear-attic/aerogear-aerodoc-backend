@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.jboss.aerogear.prodoctor.rest;
+package org.jboss.aerogear.aerodoc.rest;
 
 import javax.servlet.http.HttpServletResponse;
 

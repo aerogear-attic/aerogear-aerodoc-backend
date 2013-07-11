@@ -6,7 +6,7 @@ This Application shows how a business specific App can interact with [aerogear-u
 
 # Description of the Application
 
-Prodoctor is a company in the health care industry, selling a revolutionary tensiometer. Their clients are doctors. Prodoctor has several sales agents all over the United States. At the headquarters, they have their "first line" sales departement, doing cold calls all along the day. As soon they have a concrete lead, they use their Prodoctor Admin app to filter out available sales Agents available in the lead area. They can then send them a push notification.
+AeroDoc is a company in the health care industry, selling a revolutionary tensiometer. Their clients are doctors. AeroDoc has several sales agents all over the United States. At the headquarters, they have their "first line" sales departement, doing cold calls all along the day. As soon they have a concrete lead, they use their AeroDoc Admin app to filter out available sales Agents available in the lead area. They can then send them a push notification.
 
 The sales agent receives the notification on their mobile device that a new lead is available. The agent will handle the lead by "accepting" the notifcation, informing the other agents that the lead has been processed.
 
@@ -22,7 +22,7 @@ In this highly competitive market of the tensiometers, be able to process a lead
 3. The client has a location
 4. The client has an alias
 
-## Prodoctor Admin client
+## AeroDoc Admin client
 
 1. The admin client can create a new lead :
 
@@ -85,7 +85,7 @@ For all these aliases the password is ``` 123 ```
 
 # Setting the PushApplicationId and the Push Server URL
 
-Before building and deploying the app be sure to change the values in ``` org.jboss.aerogear.prodoctor.service.LeadSender ``` :
+Before building and deploying the app be sure to change the values in ``` org.jboss.aerogear.aerodoc.service.LeadSender ``` :
 
 * ``` pushApplicationId ``` : See intructions [here](https://github.com/aerogear/aerogear-unified-push-server#register-push-app) to obtain one.
 
@@ -113,7 +113,7 @@ Use the form to create a new Lead
 * Select the agents you want to send the lead to.
 * Push the button ``` Send Lead ```
 
-# Prodoctor API
+# AeroDoc API
 
 The native clients can access the following REST based services :
 
