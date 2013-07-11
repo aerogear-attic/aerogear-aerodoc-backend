@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.aerogear.prodoctor.config;
+package org.jboss.aerogear.aerodoc.config;
 
 import org.picketlink.annotations.PicketLink;
 

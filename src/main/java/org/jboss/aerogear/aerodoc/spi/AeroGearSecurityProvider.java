@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package org.jboss.aerogear.prodoctor.spi;
+package org.jboss.aerogear.aerodoc.spi;
 
+import org.jboss.aerogear.aerodoc.exceptions.HttpSecurityException;
 import org.jboss.aerogear.controller.router.Route;
 import org.jboss.aerogear.controller.spi.SecurityProvider;
-import org.jboss.aerogear.prodoctor.exceptions.HttpSecurityException;
 import org.jboss.aerogear.security.authz.IdentityManagement;
 import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 import org.jboss.aerogear.security.exception.HttpStatus;

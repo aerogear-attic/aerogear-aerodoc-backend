@@ -14,38 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.jboss.aerogear.aerodoc.rest;
 
-package org.jboss.aerogear.prodoctor.rest;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.jboss.aerogear.prodoctor.model.SaleAgent;
-import org.jboss.aerogear.security.auth.AuthenticationManager;
-import org.jboss.aerogear.security.authz.IdentityManagement;
-
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-@Stateless
-public class Register
+public class ResponseHeaders
 {
 
-   public static final String DEFAULT_ROLE = "simple";
+   private Map<String, String> headers = new HashMap
+         <String, String>();
 
-   @Inject
-   private IdentityManagement configuration;
-
-   @Inject
-   private AuthenticationManager authenticationManager;
-
-   public void index()
+   public ResponseHeaders(final String name, final String value)
    {
-
+      headers.put(name, value);
    }
 
-   public SaleAgent register(SaleAgent user)
+   public Map
+         <String, String> getHeaders()
    {
-      configuration.create(user,null);
-      configuration.grant(DEFAULT_ROLE).to(user.getLoginName());
-      authenticationManager.login(user,null);
-      return user;
+      return Collections.unmodifiableMap(headers);
    }
 }

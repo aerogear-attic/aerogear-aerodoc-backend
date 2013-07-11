@@ -1,4 +1,4 @@
-package org.jboss.aerogear.prodoctor.model;
+package org.jboss.aerogear.aerodoc.model;
 
 import java.io.Serializable;
 import java.lang.String;
