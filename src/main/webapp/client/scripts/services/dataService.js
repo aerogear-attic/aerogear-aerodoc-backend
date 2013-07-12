@@ -6,7 +6,7 @@ prodoctor.factory("dataService", function() {
 			name : "auth",
 			settings : {
 				agAuth : true,
-				baseURL : "http://localhost:8080/prodoctor/",
+				baseURL : "http://localhost:8080/aerodoc/",
 				endpoints : {
 					enroll : "register",
 					login : "login",
@@ -17,7 +17,7 @@ prodoctor.factory("dataService", function() {
 		leadPipe : AeroGear.Pipeline({
 			name : "leads",
 			settings : {
-				baseURL : "http://localhost:8080/prodoctor/",
+				baseURL : "http://localhost:8080/aerodoc/",
 				endpoint : "leads",
 				authenticator : this.restAuth
 			}
@@ -28,7 +28,7 @@ prodoctor.factory("dataService", function() {
 			settings : {
 				authenticator : this.restAuth,
 				endpoint: "rest/saleagents/searchagents",
-				baseURL : "http://localhost:8080/prodoctor/"
+				baseURL : "http://localhost:8080/aerodoc/"
 			}
 		}).pipes.searchAgents,
 
@@ -43,7 +43,7 @@ prodoctor.factory("dataService", function() {
 			name : "rest/saleagents",
 			settings : {
 				authenticator : this.restAuth,
-				baseURL : "http://localhost:8080/prodoctor/"
+				baseURL : "http://localhost:8080/aerodoc/"
 			}
 		}).pipes.saleagents,
 
