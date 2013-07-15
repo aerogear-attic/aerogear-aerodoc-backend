@@ -1,6 +1,6 @@
 'use strict';
 
-var prodoctor = angular.module('prodoctor', [ 'prodoctor.filters' ]).config(
+var aerodoc = angular.module('aerodoc', [ 'aerodoc.filters' ]).config(
 		[ '$routeProvider', function($routeProvider) {
 			$routeProvider.when('/Leads', {
 				templateUrl : 'partials/Lead/search.html',
