@@ -15,28 +15,36 @@
  * limitations under the License.
  */
 
-package org.jboss.aerogear.prodoctor.service;
+package org.jboss.aerogear.aerodoc.service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.jboss.aerogear.unifiedpush.DefaultJavaSender;
+import org.jboss.aerogear.unifiedpush.async.AsyncClient;
 import org.jboss.aerogear.unifiedpush.resteasy.RestEasyClient;
-import org.jboss.aerogear.prodoctor.model.Lead;
+import org.jboss.aerogear.aerodoc.model.Lead;
 
 public class LeadSender {
 
 	private String serverURL = "http://localhost:8080/ag-push";
 
-	private String pushApplicationId = "317cce6d-efaf-4ff8-94e3-a45c0a3a688c";
+	private String pushApplicationId = "c7fc6525-5506-4ca9-9cf1-55cc261ddb9c";
+	
+	private String masterPassWord = "8b2f43a9-23c8-44fe-bee9-d6b0af9e316b";
 	
 	//TODO we don't this
-	private int leadVersion = 0;
-	private int broadcastVersion = 0;
+	private int leadVersion = 1;
+	private int broadcastVersion = 1;
 
-	private DefaultJavaSender defaultJavaSender = new DefaultJavaSender(
-			serverURL, new RestEasyClient());
+	
+	public LeadSender() {
+		defaultJavaSender =  new DefaultJavaSender(
+				serverURL, new AsyncClient());
+	}
+
+	private DefaultJavaSender defaultJavaSender;
 
 	public void sendLeads(List<String> users, Lead lead) {
 
@@ -49,9 +57,10 @@ public class LeadSender {
 		json.put("location", lead.getLocation());
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
+		json.put("sound" ,"default");
 		json.put("alert" ,"A new lead has been created");
 
-		defaultJavaSender.sendTo(users, json, pushApplicationId);
+		defaultJavaSender.sendTo(users, json, pushApplicationId,masterPassWord);
 	}
 
 	public void sendBroadCast(Lead lead) {
@@ -65,7 +74,8 @@ public class LeadSender {
 		json.put("phone", lead.getPhoneNumber());
 		json.put("simple-push", categories);
 		json.put("alert" ,"A new lead has been accepted");
-		defaultJavaSender.broadcast(json, pushApplicationId);
+		json.put("sound" ,"default");
+		defaultJavaSender.broadcast(json, pushApplicationId,masterPassWord);
 	}
 
 	public String getServerURL() {

@@ -15,22 +15,22 @@
  * limitations under the License.
  */
 
-package org.jboss.aerogear.prodoctor;
+package org.jboss.aerogear.aerodoc;
 
 import java.util.List;
 
 
+import org.jboss.aerogear.aerodoc.config.CustomMediaTypeResponder;
+import org.jboss.aerogear.aerodoc.exceptions.HttpSecurityException;
+import org.jboss.aerogear.aerodoc.model.Lead;
+import org.jboss.aerogear.aerodoc.model.SaleAgent;
+import org.jboss.aerogear.aerodoc.rest.Error;
+import org.jboss.aerogear.aerodoc.rest.LeadEndpoint;
+import org.jboss.aerogear.aerodoc.rest.Login;
+import org.jboss.aerogear.aerodoc.rest.Register;
+import org.jboss.aerogear.aerodoc.rest.SaleAgentEndpoint;
 import org.jboss.aerogear.controller.router.AbstractRoutingModule;
 import org.jboss.aerogear.controller.router.RequestMethod;
-import org.jboss.aerogear.prodoctor.config.CustomMediaTypeResponder;
-import org.jboss.aerogear.prodoctor.exceptions.HttpSecurityException;
-import org.jboss.aerogear.prodoctor.model.Lead;
-import org.jboss.aerogear.prodoctor.model.SaleAgent;
-import org.jboss.aerogear.prodoctor.rest.Error;
-import org.jboss.aerogear.prodoctor.rest.LeadEndpoint;
-import org.jboss.aerogear.prodoctor.rest.Login;
-import org.jboss.aerogear.prodoctor.rest.Register;
-import org.jboss.aerogear.prodoctor.rest.SaleAgentEndpoint;
 import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 
 
