@@ -1,6 +1,6 @@
 "use strict";
 
-prodoctor.factory("dataService", function() {
+aerodoc.factory("dataService", function() {
 	return {
 		restAuth : AeroGear.Auth({
 			name : "auth",
