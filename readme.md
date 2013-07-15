@@ -63,7 +63,7 @@ Be sure to have a running instance of a Push Server. Intructions can be found [h
 
 ## aerogear-unified-push-java-client 
 
-Prodoctor uses the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
+AeroDoc uses the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
 
 
 ## Clients
@@ -74,7 +74,7 @@ Prodoctor uses the  [aerogear-unified-push-java-client](https://github.com/aerog
 
 
 ### Available aliases
-When registring the device on the Push Server make sure to use one of the existing aliases (or you should create a new user on the Prodoctor Admin Page) :
+When registring the device on the Push Server make sure to use one of the existing aliases (or you should create a new user on the AeroDoc Admin Page) :
 
 * john
 * jake
@@ -96,9 +96,9 @@ Before building and deploying the app be sure to change the values in ``` org.jb
 
 ``` mvn clean install jboss-as:deploy ```
 
-# Prodoctor Admin Application
+# AeroDoc Admin Application
 
-Browse to ``` localhost:8080/prodoctor ```
+Browse to ``` localhost:8080/aerodoc ```
 
 You should log in with john/123 , he has admin rights and create leads and send notification.
 
@@ -123,7 +123,7 @@ Login service, mandatory for all further request.
 
 ``` 
 curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json"
--X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/prodoctor/login 
+-X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/aerodoc/login 
 ```
 
 It will return the user :
@@ -138,7 +138,7 @@ Logout service.
 
 ``` 
 curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json"
--X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/prodoctor/logout 
+-X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/aerodoc/logout 
 ```
 
 returns no data
@@ -149,7 +149,7 @@ Obtain a list of leads.
 
 ```
  curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" 
--X GET http://localhost:8080/prodoctor/leads 
+-X GET http://localhost:8080/aerodoc/leads 
 ```
 
 You will get a list of leads **which has not a saleAgent set yet** :
@@ -163,7 +163,7 @@ You will get a list of leads **which has not a saleAgent set yet** :
 Update a SaleAgent, the service will only update the status and the location for now.
 
 ```
- curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":"13bbaea3-9271-43f7-80aa-fb21360ff684","enabled":true,"createdDate":1371213256827,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"version":0,"status":"CHANGED","password":"123","location":"New York"}' http://localhost:8080/prodoctor/saleagents/13bbaea3-9271-43f7-80aa-fb21360ff684
+ curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":"13bbaea3-9271-43f7-80aa-fb21360ff684","enabled":true,"createdDate":1371213256827,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"version":0,"status":"CHANGED","password":"123","location":"New York"}' http://localhost:8080/aerodoc/saleagents/13bbaea3-9271-43f7-80aa-fb21360ff684
 ```
 
 returns no data
@@ -173,7 +173,7 @@ returns no data
 Update a Lead, typically used if a Sale Agent wants to assign a lead to him.
 
 ```
-curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"121212121","saleAgent":"13bbaea3-9271-43f7-80aa-fb21360ff684"}' http://localhost:8080/prodoctor/leads/39
+curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"121212121","saleAgent":"13bbaea3-9271-43f7-80aa-fb21360ff684"}' http://localhost:8080/aerodoc/leads/39
 ```
 
 returns no data
