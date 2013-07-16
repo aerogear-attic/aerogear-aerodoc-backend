@@ -18,72 +18,56 @@
 package org.jboss.aerogear.aerodoc.rest;
 
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
-import org.jboss.aerogear.aerodoc.rest.ResponseHeaders;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.IdentityType;
-import org.picketlink.idm.model.SimpleUser;
 import org.picketlink.idm.model.User;
-import org.picketlink.idm.query.IdentityQuery;
-
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.logging.Logger;
 
 @Stateless
-public class Login
-{
+public class Login {
 
-   private static final Logger LOGGER = Logger.getLogger(Login.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(Login.class.getSimpleName());
 
+    @Inject
+    private AuthenticationManager authenticationManager;
 
-   @Inject
-   private AuthenticationManager authenticationManager;
-   
-   @Inject
-   private IdentityManager identityManager;
+    @Inject
+    private IdentityManager identityManager;
 
-  
+    @Inject
+    Event<ResponseHeaders> headers;
 
-   @Inject
-   Event<ResponseHeaders> headers;
+    public void index() {
+        LOGGER.info("Login page!");
+    }
 
-   public void index()
-   {
-      LOGGER.info("Login page!");
-   }
+    /**
+     * {@link org.jboss.aerogear.security.model.AeroGearUser} registration
+     *
+     * @param user represents a simple implementation that holds user's credentials.
+     * @return HTTP response and the session ID
+     */
+    public SaleAgent login(final SaleAgent user) {
+        performLogin(user);
+        return user;
+    }
 
-   /**
-    * {@link org.jboss.aerogear.security.model.AeroGearUser} registration
-    *
-    * @param user represents a simple implementation that holds user's credentials.
-    * @return HTTP response and the session ID
-    */
-   public SaleAgent login(final SaleAgent user)
-   {
-      performLogin(user);
-      return user;
-   }
+    public void logout() {
+        LOGGER.info("User logout!");
+        authenticationManager.logout();
+    }
 
-   public void logout()
-   {
-      LOGGER.info("User logout!");
-      authenticationManager.logout();
-   }
+    private void performLogin(SaleAgent saleAgent) {
+        authenticationManager.login(saleAgent, saleAgent.getPassword());
+        //workaround to load the extra attributes, maybe a bug ??
+        User user = identityManager.getUser(saleAgent.getLoginName());
+        saleAgent.setLocation(user.getAttribute("location").getValue().toString());
+        saleAgent.setStatus(user.getAttribute("status").getValue().toString());
+        saleAgent.setId(user.getId());
+    }
 
-   private void performLogin(SaleAgent saleAgent)
-   {
-      authenticationManager.login(saleAgent,saleAgent.getPassword());
-      //workaround to load the extra attributes, maybe a bug ??
-      User user  =  identityManager.getUser(saleAgent.getLoginName());
-      saleAgent.setLocation(user.getAttribute("location").getValue().toString());
-      saleAgent.setStatus(user.getAttribute("status").getValue().toString());
-      saleAgent.setId(user.getId());
-   }
-
- 
 }

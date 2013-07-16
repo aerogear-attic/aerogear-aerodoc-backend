@@ -17,23 +17,13 @@
 
 package org.jboss.aerogear.aerodoc.rest;
 
-import javax.servlet.http.HttpServletResponse;
+public class Error {
 
-import org.jboss.aerogear.controller.router.error.ErrorResponse;
-import org.jboss.aerogear.controller.router.error.JsonErrorResponse;
-import org.jboss.aerogear.controller.router.parameter.MissingRequestParameterException;
-import org.jboss.aerogear.controller.router.rest.pagination.PaginationRequestException;
+    public String index(Exception e) {
 
-public class Error
-{
+        return "{exception:" + e.getMessage() + "}";
+    }
 
-   public String index(Exception e)
-   {
-
-      return "{exception:" + e.getMessage() + "}";
-   }
-
-   public void alreadyLoggedIn()
-   {
-   }
+    public void alreadyLoggedIn() {
+    }
 }

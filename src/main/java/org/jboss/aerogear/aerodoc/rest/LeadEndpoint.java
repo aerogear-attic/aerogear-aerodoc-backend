@@ -44,84 +44,84 @@ import org.picketlink.idm.model.User;
 @Stateless
 @Path("/leads")
 public class LeadEndpoint {
-	
-	@Inject
-	private IdentityManager identityManager;
-	
-	@Inject
-	private LeadSender leadSender;
 
-	@PersistenceContext(unitName = "forge-default")
-	private EntityManager em;
+    @Inject
+    private IdentityManager identityManager;
 
-	@POST
-	@Consumes("application/json")
-	public Response create(Lead entity) {
-		em.persist(entity);
-		return Response.created(
-				UriBuilder.fromResource(LeadEndpoint.class)
-						.path(String.valueOf(entity.getId())).build()).build();
-	}
+    @Inject
+    private LeadSender leadSender;
 
-	@DELETE
-	@Path("/{id:[0-9][0-9]*}")
-	public Response deleteById(@PathParam("id") Long id) {
-		Lead entity = em.find(Lead.class, id);
-		if (entity == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		em.remove(entity);
-		return Response.noContent().build();
-	}
+    @PersistenceContext(unitName = "forge-default")
+    private EntityManager em;
 
-	@GET
-	@Path("/{id:[0-9][0-9]*}")
-	@Produces("application/json")
-	public Response findById(@PathParam("id") Long id) {
-		TypedQuery<Lead> findByIdQuery = em
-				.createQuery(
-						"SELECT l FROM Lead l WHERE l.id = :entityId",
-						Lead.class);
-		findByIdQuery.setParameter("entityId", id);
-		Lead entity = findByIdQuery.getSingleResult();
-		if (entity == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		return Response.ok(entity).build();
-	}
+    @POST
+    @Consumes("application/json")
+    public Response create(Lead entity) {
+        em.persist(entity);
+        return Response.created(
+                UriBuilder.fromResource(LeadEndpoint.class)
+                        .path(String.valueOf(entity.getId())).build()).build();
+    }
 
-	@GET
-	@Produces("application/json")
-	public List<Lead> listAll() {
-		final List<Lead> results = em.createQuery(
-				"SELECT l FROM Lead l where l.saleAgent = null", Lead.class)
-				.getResultList();
-		return results;
-	}
+    @DELETE
+    @Path("/{id:[0-9][0-9]*}")
+    public Response deleteById(@PathParam("id") Long id) {
+        Lead entity = em.find(Lead.class, id);
+        if (entity == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        em.remove(entity);
+        return Response.noContent().build();
+    }
 
-	@PUT
-	@Path("/{id:[0-9][0-9]*}")
-	@Consumes("application/json")
-	public Response update(@PathParam("id") Long id, Lead entity) {
-		entity.setId(id);
-		entity = em.merge(entity);
-		//Broadcast the change to everyone
-		leadSender.sendBroadCast(entity);
-		return Response.noContent().build();
-	}
+    @GET
+    @Path("/{id:[0-9][0-9]*}")
+    @Produces("application/json")
+    public Response findById(@PathParam("id") Long id) {
+        TypedQuery<Lead> findByIdQuery = em
+                .createQuery(
+                        "SELECT l FROM Lead l WHERE l.id = :entityId",
+                        Lead.class);
+        findByIdQuery.setParameter("entityId", id);
+        Lead entity = findByIdQuery.getSingleResult();
+        if (entity == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        return Response.ok(entity).build();
+    }
 
-	public void sendLead(Long id, List<LinkedHashMap> agents) {
-		TypedQuery<Lead> findByIdQuery = em
-				.createQuery(
-						"SELECT l FROM Lead l WHERE l.id = :entityId",
-						Lead.class);
-		findByIdQuery.setParameter("entityId", id);
-		Lead entity = findByIdQuery.getSingleResult();
-		List<String> aliases = new ArrayList<String>();
-		for(LinkedHashMap hashMap : agents){
-			aliases.add(hashMap.get("loginName").toString());
-			
-		}
-		leadSender.sendLeads(aliases, entity);
-	}
+    @GET
+    @Produces("application/json")
+    public List<Lead> listAll() {
+        final List<Lead> results = em.createQuery(
+                "SELECT l FROM Lead l where l.saleAgent = null", Lead.class)
+                .getResultList();
+        return results;
+    }
+
+    @PUT
+    @Path("/{id:[0-9][0-9]*}")
+    @Consumes("application/json")
+    public Response update(@PathParam("id") Long id, Lead entity) {
+        entity.setId(id);
+        entity = em.merge(entity);
+        //Broadcast the change to everyone
+        leadSender.sendBroadCast(entity);
+        return Response.noContent().build();
+    }
+
+    public void sendLead(Long id, List<LinkedHashMap> agents) {
+        TypedQuery<Lead> findByIdQuery = em
+                .createQuery(
+                        "SELECT l FROM Lead l WHERE l.id = :entityId",
+                        Lead.class);
+        findByIdQuery.setParameter("entityId", id);
+        Lead entity = findByIdQuery.getSingleResult();
+        List<String> aliases = new ArrayList<String>();
+        for (LinkedHashMap hashMap : agents) {
+            aliases.add(hashMap.get("loginName").toString());
+
+        }
+        leadSender.sendLeads(aliases, entity);
+    }
 }
