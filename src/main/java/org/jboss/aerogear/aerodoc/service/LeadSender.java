@@ -21,10 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.aerogear.unifiedpush.DefaultJavaSender;
-import org.jboss.aerogear.unifiedpush.async.AsyncClient;
-import org.jboss.aerogear.unifiedpush.resteasy.RestEasyClient;
 import org.jboss.aerogear.aerodoc.model.Lead;
+import org.jboss.aerogear.unifiedpush.JavaSender;
+import org.jboss.aerogear.unifiedpush.SenderClient;
 
 public class LeadSender {
 
@@ -38,13 +37,11 @@ public class LeadSender {
 	private int leadVersion = 1;
 	private int broadcastVersion = 1;
 
+    private JavaSender javaSender;
 	
 	public LeadSender() {
-		defaultJavaSender =  new DefaultJavaSender(
-				serverURL, new AsyncClient());
+		javaSender =  new SenderClient(serverURL);
 	}
-
-	private DefaultJavaSender defaultJavaSender;
 
 	public void sendLeads(List<String> users, Lead lead) {
 
@@ -60,7 +57,7 @@ public class LeadSender {
 		json.put("sound" ,"default");
 		json.put("alert" ,"A new lead has been created");
 
-		defaultJavaSender.sendTo(users, json, pushApplicationId,masterPassWord);
+		javaSender.sendTo(users, json, pushApplicationId, masterPassWord);
 	}
 
 	public void sendBroadCast(Lead lead) {
@@ -75,7 +72,7 @@ public class LeadSender {
 		json.put("simple-push", categories);
 		json.put("alert" ,"A new lead has been accepted");
 		json.put("sound" ,"default");
-		defaultJavaSender.broadcast(json, pushApplicationId,masterPassWord);
+		javaSender.broadcast(json, pushApplicationId, masterPassWord);
 	}
 
 	public String getServerURL() {
@@ -86,12 +83,12 @@ public class LeadSender {
 		this.serverURL = serverURL;
 	}
 
-	public DefaultJavaSender getDefaultJavaSender() {
-		return defaultJavaSender;
+	public JavaSender getJavaSender() {
+		return javaSender;
 	}
 
-	public void setDefaultJavaSender(DefaultJavaSender defaultJavaSender) {
-		this.defaultJavaSender = defaultJavaSender;
+	public void setJavaSender(JavaSender javaSender) {
+		this.javaSender = javaSender;
 	}
 
 }
