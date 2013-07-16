@@ -38,72 +38,67 @@ import javax.inject.Inject;
 @Startup
 public class PicketLinkDefaultUsers {
 
-	@Inject
-	private IdentityManager identityManager;
+    @Inject
+    private IdentityManager identityManager;
 
-	/**
-	 * <p>
-	 * Loads some users during the first construction.
-	 * </p>
-	 */
-	@PostConstruct
-	public void create() {
+    /**
+     * <p>
+     * Loads some users during the first construction.
+     * </p>
+     */
+    @PostConstruct
+    public void create() {
 
-		SaleAgent john = new SaleAgent();
-		john.setLocation("New York");
-		john.setStatus("PTO");
-		john.setLoginName("john");
-		
+        SaleAgent john = new SaleAgent();
+        john.setLocation("New York");
+        john.setStatus("PTO");
+        john.setLoginName("john");
 
-		SaleAgent bob = new SaleAgent();
-		bob.setLocation("New York");
-		bob.setStatus("STANDBY");
-		bob.setLoginName("bob");
-		
-		
-		SaleAgent maria = new SaleAgent();
-		maria.setLocation("New York");
-		maria.setStatus("STANDBY");
-		maria.setLoginName("maria");
-		
-		SaleAgent jake = new SaleAgent();
-		jake.setLocation("Boston");
-		jake.setStatus("STANDBY");
-		jake.setLoginName("jake");
-		
-		
-		/*
-		 * Note: Password will be encoded in SHA-512 with SecureRandom-1024 salt
-		 * See
-		 * http://lists.jboss.org/pipermail/security-dev/2013-January/000650.
-		 * html for more information
-		 */
-		this.identityManager.add(john);
-		this.identityManager.updateCredential(john, new Password("123"));
+        SaleAgent bob = new SaleAgent();
+        bob.setLocation("New York");
+        bob.setStatus("STANDBY");
+        bob.setLoginName("bob");
 
-		this.identityManager.add(bob);
-		this.identityManager.updateCredential(bob, new Password("123"));
-		
-		this.identityManager.add(maria);
-		this.identityManager.updateCredential(maria, new Password("123"));
+        SaleAgent maria = new SaleAgent();
+        maria.setLocation("New York");
+        maria.setStatus("STANDBY");
+        maria.setLoginName("maria");
 
-		this.identityManager.add(jake);
-		this.identityManager.updateCredential(jake, new Password("123"));
-		
-		Role admin = new SimpleRole("admin");
-		this.identityManager.add(admin);
+        SaleAgent jake = new SaleAgent();
+        jake.setLocation("Boston");
+        jake.setStatus("STANDBY");
+        jake.setLoginName("jake");
 
-		Role simple = new SimpleRole("simple");
-		this.identityManager.add(simple);
-		identityManager.grantRole(john, admin);
-		identityManager.grantRole(john, simple);
+        /*
+         * Note: Password will be encoded in SHA-512 with SecureRandom-1024 salt
+         * See
+         * http://lists.jboss.org/pipermail/security-dev/2013-January/000650.
+         * html for more information
+         */
+        this.identityManager.add(john);
+        this.identityManager.updateCredential(john, new Password("123"));
 
-		identityManager.grantRole(bob, simple);
-		identityManager.grantRole(maria, simple);
-		identityManager.grantRole(jake, simple);
-		
-		
+        this.identityManager.add(bob);
+        this.identityManager.updateCredential(bob, new Password("123"));
 
-	}
+        this.identityManager.add(maria);
+        this.identityManager.updateCredential(maria, new Password("123"));
+
+        this.identityManager.add(jake);
+        this.identityManager.updateCredential(jake, new Password("123"));
+
+        Role admin = new SimpleRole("admin");
+        this.identityManager.add(admin);
+
+        Role simple = new SimpleRole("simple");
+        this.identityManager.add(simple);
+        identityManager.grantRole(john, admin);
+        identityManager.grantRole(john, simple);
+
+        identityManager.grantRole(bob, simple);
+        identityManager.grantRole(maria, simple);
+        identityManager.grantRole(jake, simple);
+
+    }
 
 }

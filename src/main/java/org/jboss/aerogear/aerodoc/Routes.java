@@ -19,7 +19,6 @@ package org.jboss.aerogear.aerodoc;
 
 import java.util.List;
 
-
 import org.jboss.aerogear.aerodoc.config.CustomMediaTypeResponder;
 import org.jboss.aerogear.aerodoc.exceptions.HttpSecurityException;
 import org.jboss.aerogear.aerodoc.model.Lead;
@@ -33,73 +32,72 @@ import org.jboss.aerogear.controller.router.AbstractRoutingModule;
 import org.jboss.aerogear.controller.router.RequestMethod;
 import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 
-
 public class Routes extends AbstractRoutingModule {
 
-	@Override
-	public void configuration() throws Exception {
-		route().on(AeroGearSecurityException.class).produces(JSON)
-				.to(Error.class).index(param(HttpSecurityException.class));
-		route().from("/login").on(RequestMethod.POST).consumes("application/json; charset=utf-8","application/json")
-				.produces(CustomMediaTypeResponder.CUSTOM_MEDIA_TYPE)
-				.to(Login.class).login(param(SaleAgent.class));
+    @Override
+    public void configuration() throws Exception {
+        route().on(AeroGearSecurityException.class).produces(JSON)
+                .to(Error.class).index(param(HttpSecurityException.class));
+        route().from("/login").on(RequestMethod.POST).consumes("application/json; charset=utf-8", "application/json")
+                .produces(CustomMediaTypeResponder.CUSTOM_MEDIA_TYPE)
+                .to(Login.class).login(param(SaleAgent.class));
 
-		route().from("/logout").on(RequestMethod.POST).consumes("application/json; charset=utf-8","application/json")
-				.produces(CustomMediaTypeResponder.CUSTOM_MEDIA_TYPE)
-				.to(Login.class).logout();
+        route().from("/logout").on(RequestMethod.POST).consumes("application/json; charset=utf-8", "application/json")
+                .produces(CustomMediaTypeResponder.CUSTOM_MEDIA_TYPE)
+                .to(Login.class).logout();
 
-		route().from("/register").on(RequestMethod.POST).consumes("application/json; charset=utf-8","application/json")
-				.produces(CustomMediaTypeResponder.CUSTOM_MEDIA_TYPE)
-				.to(Register.class).register(param(SaleAgent.class));
+        route().from("/register").on(RequestMethod.POST).consumes("application/json; charset=utf-8", "application/json")
+                .produces(CustomMediaTypeResponder.CUSTOM_MEDIA_TYPE)
+                .to(Register.class).register(param(SaleAgent.class));
 
-		route().from("/leads").roles("simple").on(RequestMethod.GET)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(LeadEndpoint.class).listAll();
+        route().from("/leads").roles("simple").on(RequestMethod.GET)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(LeadEndpoint.class).listAll();
 
-		route().from("/leads").roles("simple").on(RequestMethod.POST)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(LeadEndpoint.class)
-				.create(param(Lead.class));
+        route().from("/leads").roles("simple").on(RequestMethod.POST)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(LeadEndpoint.class)
+                .create(param(Lead.class));
 
-		route().from("/leads/{id}").roles("simple").on(RequestMethod.DELETE)
-				.consumes(JSON).produces(JSON).to(LeadEndpoint.class)
-				.deleteById(param("id", Long.class));
+        route().from("/leads/{id}").roles("simple").on(RequestMethod.DELETE)
+                .consumes(JSON).produces(JSON).to(LeadEndpoint.class)
+                .deleteById(param("id", Long.class));
 
-		route().from("/leads/{id}").roles("simple").on(RequestMethod.GET)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(LeadEndpoint.class)
-				.findById(param("id", Long.class));
+        route().from("/leads/{id}").roles("simple").on(RequestMethod.GET)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(LeadEndpoint.class)
+                .findById(param("id", Long.class));
 
-		route().from("/leads/{id}").roles("simple").on(RequestMethod.PUT)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(LeadEndpoint.class)
-				.update(param("id", Long.class), param(Lead.class));
+        route().from("/leads/{id}").roles("simple").on(RequestMethod.PUT)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(LeadEndpoint.class)
+                .update(param("id", Long.class), param(Lead.class));
 
-		route().from("/saleagents").roles("simple").on(RequestMethod.GET)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(SaleAgentEndpoint.class)
-				.listAll();
+        route().from("/saleagents").roles("simple").on(RequestMethod.GET)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(SaleAgentEndpoint.class)
+                .listAll();
 
-		route().from("/saleagents").roles("simple").on(RequestMethod.POST)
-				.consumes(JSON).produces(JSON).to(SaleAgentEndpoint.class)
-				.create(param(SaleAgent.class));
-		
-		route().from("/sendleads/{id}").on(RequestMethod.POST)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(LeadEndpoint.class)
-				.sendLead(param("id", Long.class), param(List.class));
+        route().from("/saleagents").roles("simple").on(RequestMethod.POST)
+                .consumes(JSON).produces(JSON).to(SaleAgentEndpoint.class)
+                .create(param(SaleAgent.class));
 
-		route().from("/searchAgents").roles("simple").on(RequestMethod.GET)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(SaleAgentEndpoint.class)
-				.listByCriteria(param("status", ""), param("location", ""));
+        route().from("/sendleads/{id}").on(RequestMethod.POST)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(LeadEndpoint.class)
+                .sendLead(param("id", Long.class), param(List.class));
 
-		route().from("/saleagents/{id}").roles("simple")
-				.on(RequestMethod.DELETE).consumes(JSON).produces(JSON)
-				.to(SaleAgentEndpoint.class)
-				.deleteById(param("id", Long.class));
+        route().from("/searchAgents").roles("simple").on(RequestMethod.GET)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(SaleAgentEndpoint.class)
+                .listByCriteria(param("status", ""), param("location", ""));
 
-		route().from("/saleagents/{id}").roles("simple").on(RequestMethod.GET)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(SaleAgentEndpoint.class)
-				.findById(param("id", Long.class));
+        route().from("/saleagents/{id}").roles("simple")
+                .on(RequestMethod.DELETE).consumes(JSON).produces(JSON)
+                .to(SaleAgentEndpoint.class)
+                .deleteById(param("id", Long.class));
 
-		route().from("/saleagents/{id}").roles("simple").on(RequestMethod.PUT)
-				.consumes("application/json; charset=utf-8","application/json").produces(JSON).to(SaleAgentEndpoint.class)
-				.update(param("id"), param(SaleAgent.class));
+        route().from("/saleagents/{id}").roles("simple").on(RequestMethod.GET)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(SaleAgentEndpoint.class)
+                .findById(param("id", Long.class));
 
-	}
+        route().from("/saleagents/{id}").roles("simple").on(RequestMethod.PUT)
+                .consumes("application/json; charset=utf-8", "application/json").produces(JSON).to(SaleAgentEndpoint.class)
+                .update(param("id"), param(SaleAgent.class));
+
+    }
 
 }

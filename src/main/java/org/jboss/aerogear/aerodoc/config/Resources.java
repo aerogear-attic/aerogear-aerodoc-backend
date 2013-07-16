@@ -38,34 +38,30 @@ import java.util.logging.Logger;
  * private EntityManager em;
  * </pre>
  */
-public class Resources
-{
+public class Resources {
 
-   @SuppressWarnings("unused")
-   @PersistenceContext(unitName = "forge-default")
-   private EntityManager em;
+    @SuppressWarnings("unused")
+    @PersistenceContext(unitName = "forge-default")
+    private EntityManager em;
 
-   @SuppressWarnings("unused")
-   @PicketLink
-   @PersistenceContext(unitName = "picketlink-default")
-   @Produces
-   private EntityManager picketLinkEntityManager;
+    @SuppressWarnings("unused")
+    @PicketLink
+    @PersistenceContext(unitName = "picketlink-default")
+    @Produces
+    private EntityManager picketLinkEntityManager;
 
-   @Produces
-   public Logger produceLog(InjectionPoint injectionPoint)
-   {
-      return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
-   }
+    @Produces
+    public Logger produceLog(InjectionPoint injectionPoint) {
+        return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
+    }
 
-   @Produces
-   public EntityManager produceEm()
-   {
-      return em;
-   }
+    @Produces
+    public EntityManager produceEm() {
+        return em;
+    }
 
-   @Produces
-   EntityManager producePicketLinkEntityManager()
-   {
-      return picketLinkEntityManager;
-   }
+    @Produces
+    EntityManager producePicketLinkEntityManager() {
+        return picketLinkEntityManager;
+    }
 }

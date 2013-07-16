@@ -32,46 +32,46 @@ import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.SimpleUser;
 
 @XmlRootElement
-@JsonIgnoreProperties({ "attributes" })
+@JsonIgnoreProperties( { "attributes" })
 public class SaleAgent extends SimpleUser implements Serializable {
 
-	private String status;
+    private String status;
 
-	private String password;
+    private String password;
 
-	private String location;
+    private String location;
 
-	public String getStatus() {
-		return this.getAttribute("status").getValue().toString();
-	}
+    public String getStatus() {
+        return this.getAttribute("status").getValue().toString();
+    }
 
-	public void setStatus(final String status) {
-		this.setAttribute(new Attribute("status", status));
-	}
+    public void setStatus(final String status) {
+        this.setAttribute(new Attribute("status", status));
+    }
 
-	public String getLocation() {
-		return this.getAttribute("location").getValue().toString();
-	}
+    public String getLocation() {
+        return this.getAttribute("location").getValue().toString();
+    }
 
-	public void setLocation(final String location) {
-		this.setAttribute(new Attribute("location", location));
-	}
+    public void setLocation(final String location) {
+        this.setAttribute(new Attribute("location", location));
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	@Override
-	public String toString() {
-		String result = getClass().getSimpleName() + " ";
-		if (status != null && !status.trim().isEmpty())
-			result += "status: " + status;
-		if (location != null && !location.trim().isEmpty())
-			result += ", location: " + location;
-		return result;
-	}
+    @Override
+    public String toString() {
+        String result = getClass().getSimpleName() + " ";
+        if (status != null && !status.trim().isEmpty())
+            result += "status: " + status;
+        if (location != null && !location.trim().isEmpty())
+            result += ", location: " + location;
+        return result;
+    }
 }

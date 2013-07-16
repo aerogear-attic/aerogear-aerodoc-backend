@@ -24,16 +24,13 @@ import org.jboss.aerogear.controller.router.error.JsonErrorResponse;
 import org.jboss.aerogear.controller.router.parameter.MissingRequestParameterException;
 import org.jboss.aerogear.controller.router.rest.pagination.PaginationRequestException;
 
-public class Error
-{
+public class Error {
 
-   public String index(Exception e)
-   {
+    public String index(Exception e) {
 
-      return "{exception:" + e.getMessage() + "}";
-   }
+        return "{exception:" + e.getMessage() + "}";
+    }
 
-   public void alreadyLoggedIn()
-   {
-   }
+    public void alreadyLoggedIn() {
+    }
 }
