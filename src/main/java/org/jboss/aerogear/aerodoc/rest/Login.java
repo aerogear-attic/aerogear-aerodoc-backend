@@ -18,18 +18,12 @@
 package org.jboss.aerogear.aerodoc.rest;
 
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
-import org.jboss.aerogear.aerodoc.rest.ResponseHeaders;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.IdentityType;
-import org.picketlink.idm.model.SimpleUser;
 import org.picketlink.idm.model.User;
-import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.logging.Logger;
 

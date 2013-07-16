@@ -21,7 +21,6 @@ import org.jboss.aerogear.aerodoc.exceptions.HttpSecurityException;
 import org.jboss.aerogear.controller.router.Route;
 import org.jboss.aerogear.controller.spi.SecurityProvider;
 import org.jboss.aerogear.security.authz.IdentityManagement;
-import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 import org.jboss.aerogear.security.exception.HttpStatus;
 
 import javax.inject.Inject;

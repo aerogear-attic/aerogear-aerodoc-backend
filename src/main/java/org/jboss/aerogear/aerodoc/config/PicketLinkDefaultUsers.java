@@ -20,14 +20,8 @@ package org.jboss.aerogear.aerodoc.config;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.SimpleRole;
-import org.picketlink.idm.model.SimpleUser;
-import org.picketlink.idm.model.User;
-import org.picketlink.idm.query.IdentityQuery;
-import org.picketlink.idm.query.QueryParameter;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
