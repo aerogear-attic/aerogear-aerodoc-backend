@@ -79,16 +79,6 @@
 
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>JBOSS_NEXUS</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public</url>
-        </repository>
-        <repository>
-            <id>staging</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-1085</url>
-        </repository>
-    </repositories>
     <build>
         <finalName>aerodoc</finalName>
         <plugins>
