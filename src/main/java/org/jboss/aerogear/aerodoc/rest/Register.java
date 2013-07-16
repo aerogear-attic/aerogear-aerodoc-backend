@@ -25,27 +25,24 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 @Stateless
-public class Register
-{
+public class Register {
 
-   public static final String DEFAULT_ROLE = "simple";
+    public static final String DEFAULT_ROLE = "simple";
 
-   @Inject
-   private IdentityManagement configuration;
+    @Inject
+    private IdentityManagement configuration;
 
-   @Inject
-   private AuthenticationManager authenticationManager;
+    @Inject
+    private AuthenticationManager authenticationManager;
 
-   public void index()
-   {
+    public void index() {
 
-   }
+    }
 
-   public SaleAgent register(SaleAgent user)
-   {
-      configuration.create(user,null);
-      configuration.grant(DEFAULT_ROLE).to(user.getLoginName());
-      authenticationManager.login(user,null);
-      return user;
-   }
+    public SaleAgent register(SaleAgent user) {
+        configuration.create(user, null);
+        configuration.grant(DEFAULT_ROLE).to(user.getLoginName());
+        authenticationManager.login(user, null);
+        return user;
+    }
 }

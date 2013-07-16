@@ -49,92 +49,92 @@ import org.picketlink.idm.query.IdentityQuery;
 @Path("/saleagents")
 public class SaleAgentEndpoint {
 
-	@Inject
-	private IdentityManager identityManager;
+    @Inject
+    private IdentityManager identityManager;
 
-	@PersistenceContext(unitName = "picketlink-default")
-	private EntityManager em;
+    @PersistenceContext(unitName = "picketlink-default")
+    private EntityManager em;
 
-	@POST
-	@Consumes("application/json")
-	public Response create(SaleAgent entity) {
-		em.persist(entity);
-		return Response.created(
-				UriBuilder.fromResource(SaleAgentEndpoint.class)
-						.path(String.valueOf(entity.getId())).build()).build();
-	}
+    @POST
+    @Consumes("application/json")
+    public Response create(SaleAgent entity) {
+        em.persist(entity);
+        return Response.created(
+                UriBuilder.fromResource(SaleAgentEndpoint.class)
+                        .path(String.valueOf(entity.getId())).build()).build();
+    }
 
-	@DELETE
-	@Path("/{id:[0-9][0-9]*}")
-	public Response deleteById(@PathParam("id") Long id) {
-		SaleAgent entity = em.find(SaleAgent.class, id);
-		if (entity == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		em.remove(entity);
-		return Response.noContent().build();
-	}
+    @DELETE
+    @Path("/{id:[0-9][0-9]*}")
+    public Response deleteById(@PathParam("id") Long id) {
+        SaleAgent entity = em.find(SaleAgent.class, id);
+        if (entity == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        em.remove(entity);
+        return Response.noContent().build();
+    }
 
-	@GET
-	@Path("/{id:[0-9][0-9]*}")
-	@Produces("application/json")
-	public Response findById(@PathParam("id") Long id) {
-		TypedQuery<SaleAgent> findByIdQuery = em.createQuery(
-				"SELECT s FROM SaleAgent s WHERE s.id = :entityId",
-				SaleAgent.class);
-		findByIdQuery.setParameter("entityId", id);
-		SaleAgent entity = findByIdQuery.getSingleResult();
-		if (entity == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		return Response.ok(entity).build();
-	}
+    @GET
+    @Path("/{id:[0-9][0-9]*}")
+    @Produces("application/json")
+    public Response findById(@PathParam("id") Long id) {
+        TypedQuery<SaleAgent> findByIdQuery = em.createQuery(
+                "SELECT s FROM SaleAgent s WHERE s.id = :entityId",
+                SaleAgent.class);
+        findByIdQuery.setParameter("entityId", id);
+        SaleAgent entity = findByIdQuery.getSingleResult();
+        if (entity == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        return Response.ok(entity).build();
+    }
 
-	@GET
-	@Produces("application/json")
-	public List<SaleAgent> listAll() {
-		final List<SaleAgent> results = em.createQuery(
-				"SELECT s FROM SaleAgent s", SaleAgent.class).getResultList();
-		return results;
-	}
+    @GET
+    @Produces("application/json")
+    public List<SaleAgent> listAll() {
+        final List<SaleAgent> results = em.createQuery(
+                "SELECT s FROM SaleAgent s", SaleAgent.class).getResultList();
+        return results;
+    }
 
-	@PUT
-	@Path("/{id:[0-9][0-9]*}")
-	@Consumes("application/json")
-	public Response update(@PathParam("id") String id, SaleAgent entity) {
-		User user = identityManager.getUser(entity.getLoginName());
-		Attribute<String> attributeStatus = user.getAttribute("status");
-		attributeStatus.setValue(entity.getStatus());
-		Attribute<String> attributeLocation = user.getAttribute("location");
-		attributeLocation.setValue(entity.getLocation());
-		identityManager.update(user);
-		return Response.noContent().build();
-	}
+    @PUT
+    @Path("/{id:[0-9][0-9]*}")
+    @Consumes("application/json")
+    public Response update(@PathParam("id") String id, SaleAgent entity) {
+        User user = identityManager.getUser(entity.getLoginName());
+        Attribute<String> attributeStatus = user.getAttribute("status");
+        attributeStatus.setValue(entity.getStatus());
+        Attribute<String> attributeLocation = user.getAttribute("location");
+        attributeLocation.setValue(entity.getLocation());
+        identityManager.update(user);
+        return Response.noContent().build();
+    }
 
-	public List<SaleAgent> listByCriteria(String status, String location) {
+    public List<SaleAgent> listByCriteria(String status, String location) {
 
-		IdentityQuery<User> query = identityManager
-				.createIdentityQuery(User.class);
+        IdentityQuery<User> query = identityManager
+                .createIdentityQuery(User.class);
 
-		if (!status.isEmpty()) {
-			query.setParameter(IdentityType.ATTRIBUTE.byName("status"),
-					new Object[] { status });
-		}
-		if (!location.isEmpty()) {
-			query.setParameter(IdentityType.ATTRIBUTE.byName("location"),
-					new Object[] { location });
-		}
-		List<User> users = query.getResultList();
-		List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
-		for (User user : users) {
-			SaleAgent agent = new SaleAgent();
-			agent.setLoginName(user.getLoginName());
-			agent.setAttribute(user.getAttribute("location"));
-			agent.setAttribute(user.getAttribute("status"));
-			saleAgents.add(agent);
-		}
-		return saleAgents;
+        if (!status.isEmpty()) {
+            query.setParameter(IdentityType.ATTRIBUTE.byName("status"),
+                    new Object[] { status });
+        }
+        if (!location.isEmpty()) {
+            query.setParameter(IdentityType.ATTRIBUTE.byName("location"),
+                    new Object[] { location });
+        }
+        List<User> users = query.getResultList();
+        List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
+        for (User user : users) {
+            SaleAgent agent = new SaleAgent();
+            agent.setLoginName(user.getLoginName());
+            agent.setAttribute(user.getAttribute("location"));
+            agent.setAttribute(user.getAttribute("status"));
+            saleAgents.add(agent);
+        }
+        return saleAgents;
 
-	}
+    }
 
 }
