@@ -1,5 +1,4 @@
-aerogear-push-quickstart-backend
-================================
+# aerogear-push-quickstart-backend  [![Build Status](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend.png)](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend)
 
 This backend application is a showcase / quickstart part of Aerogear's Unified Push facilities.
 This Application shows how a business specific App can interact with [aerogear-unified-push-server](https://github.com/aerogear/aerogear-unified-push-server) . It shows how it can use the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) to send Unified Messages to the push server.
