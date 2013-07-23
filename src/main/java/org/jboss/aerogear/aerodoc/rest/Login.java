@@ -45,7 +45,7 @@ public class Login {
     }
 
     /**
-     * {@link org.jboss.aerogear.security.model.AeroGearUser} registration
+     * {@link SaleAgent} registration
      *
      * @param user represents a simple implementation that holds user's credentials.
      * @return HTTP response and the session ID
