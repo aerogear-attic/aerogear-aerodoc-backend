@@ -101,6 +101,14 @@ Browse to ``` localhost:8080/aerodoc ```
 
 You should log in with john/123 , he has admin rights and create leads and send notification.
 
+## Configure the Push Server Details
+
+On the left menu you should have a link to ```Push Configuration``` .
+From there you can create and manage your push configs. You should have at least 1 config available.
+
+You can have more than one config but only one can be active. This can be useful when you have to switch between localhost and an OpenShift hosted Push Server for instance. Switching from one config to another can be done at runtime and no restart is needed. Just select the config you want and make sure it has ```active``` enabled. 
+
+
 ## Creating a lead
 
 Use the form to create a new Lead
