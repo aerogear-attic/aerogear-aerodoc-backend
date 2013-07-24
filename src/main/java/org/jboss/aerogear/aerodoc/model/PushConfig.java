@@ -37,9 +37,16 @@ public class PushConfig implements Serializable {
 
     @Column
     private String pushApplicationId;
+    
+    @Column
+    private String masterSecret;
 
     @Column
     private String serverURL;
+    
+    @Column
+    private boolean active;
+    
     private static final long serialVersionUID = 1L;
 
     public PushConfig() {
@@ -77,5 +84,23 @@ public class PushConfig implements Serializable {
     public void setVersion(int version) {
         this.version = version;
     }
+
+	public String getMasterSecret() {
+		return masterSecret;
+	}
+
+	public void setMasterSecret(String masterSecret) {
+		this.masterSecret = masterSecret;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+    
+    
 
 }
