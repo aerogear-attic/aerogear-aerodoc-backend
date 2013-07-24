@@ -132,6 +132,10 @@ public class Routes extends AbstractRoutingModule {
 		route().from("/pushconfig").roles("admin").on(RequestMethod.POST)
 				.consumes(JSON).produces(JSON).to(PushConfigEndpoint.class)
 				.create(param(PushConfig.class));
+		
+		route().from("/pushconfig/{id}").roles("admin").on(RequestMethod.DELETE)
+		.consumes(JSON).produces(JSON).to(PushConfigEndpoint.class)
+		.deleteById(param("id", Long.class));
 
 	}
 

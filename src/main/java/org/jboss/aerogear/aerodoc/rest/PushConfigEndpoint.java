@@ -52,7 +52,7 @@ public class PushConfigEndpoint {
 	@DELETE
 	@Path("/{id:[0-9][0-9]*}")
 	public Response deleteById(@PathParam("id") Long id) {
-		Lead entity = em.find(Lead.class, id);
+		PushConfig entity = em.find(PushConfig.class, id);
 		if (entity == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}

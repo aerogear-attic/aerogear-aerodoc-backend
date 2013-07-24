@@ -163,7 +163,7 @@ function EditPushConfigController($scope, $routeParams, $location, dataService) 
 	};
 
 	$scope.remove = function() {
-		pushPipe.remove($scope.lead, {
+		pushPipe.remove($scope.pushConfig, {
 			success : function(data) {
 				$location.path('/pushconfig');
 				$scope.$apply();
@@ -240,7 +240,7 @@ function ShowPushConfigController($scope, $routeParams, $location, $filter,
 	};
 
 	$scope.remove = function() {
-		leadPipe.remove($scope.lead, {
+		leadPipe.remove($scope.pushConfig, {
 			success : function(data) {
 				$location.path('/pushconfig');
 				$scope.$apply();
