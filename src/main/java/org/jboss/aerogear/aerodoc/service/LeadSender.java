@@ -34,13 +34,7 @@ public class LeadSender {
 
 	@Inject
 	PushConfigEndpoint pushConfigEndpoint;
-
-	private String serverURL = "http://localhost:8080/ag-push";
-
-	private String pushApplicationId = "c7fc6525-5506-4ca9-9cf1-55cc261ddb9c";
-
-	private String masterPassWord = "8b2f43a9-23c8-44fe-bee9-d6b0af9e316b";
-
+	
 	// TODO we don't this
 	private int leadVersion = 1;
 	private int broadcastVersion = 1;
@@ -48,6 +42,7 @@ public class LeadSender {
 	private JavaSender javaSender;
 
 	public LeadSender() {
+		//TODO using a dummy value, will be removed with the non-arg constructor in the next release
 		javaSender = new SenderClient("http://localhost:8080/ag-push");
 	}
 
@@ -87,14 +82,7 @@ public class LeadSender {
 		javaSender.broadcast(unifiedMessage);
 	}
 
-	public String getServerURL() {
-		return serverURL;
-	}
-
-	public void setServerURL(String serverURL) {
-		this.serverURL = serverURL;
-	}
-
+	
 	public JavaSender getJavaSender() {
 		return javaSender;
 	}
@@ -104,18 +92,7 @@ public class LeadSender {
 	}
 
 	private PushConfig getActivePushConfig() {
-		PushConfig pushConfig;
-		pushConfig = pushConfigEndpoint.findActiveConfig();
-		// if we don't find any config, let's use the default value and save it
-		// as default pushConfig entity
-		if (pushConfig == null) {
-			pushConfig = new PushConfig();
-			pushConfig.setActive(true);
-			pushConfig.setMasterSecret(masterPassWord);
-			pushConfig.setPushApplicationId(pushApplicationId);
-			pushConfig.setServerURL(serverURL);
-			pushConfigEndpoint.create(pushConfig);
-		}
+		PushConfig pushConfig = pushConfigEndpoint.findActiveConfig();
 		return pushConfig;
 
 	}
