@@ -1,0 +1,59 @@
+<form id="new-PushConfig" name="newPushConfig" class="form-horizontal">
+    <div class="control-group">
+    </div>
+    <div class="control-group">
+    </div>
+    <div class="control-group">
+            <label for="status" class="control-label">Server URL</label>
+
+            <div class="controls">
+                    <input id="serverURL" name="serverURL" type="text"
+                           
+                           ng-model="pushConfig.serverURL"
+                           placeholder="Enter the push server url"></input>
+            </div>
+    </div>
+    <div class="control-group">
+            <label for="location" class="control-label">Push Application ID</label>
+
+            <div class="controls">
+                    <input id="pushApplicationId" name="pushApplicationId" type="text"
+                           
+                           ng-model="pushConfig.pushApplicationId"
+                           placeholder="Enter the pushApplicationId"></input>
+            </div>
+    </div>
+     <div class="control-group">
+            <label for="location" class="control-label">MasterSecret</label>
+
+            <div class="controls">
+                    <input id="masterSecret" name="masterSecret" type="password"
+                           
+                           ng-model="pushConfig.masterSecret"
+                           placeholder="Enter the masterSecret"></input>
+            </div>
+    </div>
+     <div class="control-group">
+            <label for="location" class="control-label">Active?</label>
+
+            <div class="controls">
+                    <input id="active" name="active" type="checkbox"
+                           
+                           ng-model="pushConfig.active"
+                          ></input>
+            </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button id="savePushConfig" name="savePushConfig" class="btn btn-primary"
+                    ng-click="save()"><i
+                    class="icon-ok-sign icon-white"></i> Save
+            </button>
+            <button id="cancel" name="cancel" class="btn" ng-click="cancel()"><i class="icon-remove-sign"></i> Cancel
+            </button>
+            <button id="deletePushConfig" name="deletePushConfig" class="btn"
+                    ng-show="pushConfig.id" ng-click="remove()"><i class="icon-trash"></i> Delete
+            </button>
+        </div>
+        <div>
+</form>

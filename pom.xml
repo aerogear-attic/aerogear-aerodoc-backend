@@ -126,6 +126,6 @@
         <aerogear.security.version>1.1.1</aerogear.security.version>
         <aerogear.security.picketlink.version>1.1.1</aerogear.security.picketlink.version>
         <aerogear.controller.version>1.0.1</aerogear.controller.version>
-        <aerogear.unifiedpush.sender.version>0.1.0</aerogear.unifiedpush.sender.version>
+        <aerogear.unifiedpush.sender.version>0.2.0-SNAPSHOT</aerogear.unifiedpush.sender.version>
     </properties>
 </project>

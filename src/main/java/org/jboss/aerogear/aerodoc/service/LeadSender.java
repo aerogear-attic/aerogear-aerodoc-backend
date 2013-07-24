@@ -21,74 +21,103 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.jboss.aerogear.aerodoc.model.Lead;
+import org.jboss.aerogear.aerodoc.model.PushConfig;
+import org.jboss.aerogear.aerodoc.rest.PushConfigEndpoint;
 import org.jboss.aerogear.unifiedpush.JavaSender;
 import org.jboss.aerogear.unifiedpush.SenderClient;
+import org.jboss.aerogear.unifiedpush.message.UnifiedMessage;
 
 public class LeadSender {
 
-    private String serverURL = "http://localhost:8080/ag-push";
+	@Inject
+	PushConfigEndpoint pushConfigEndpoint;
 
-    private String pushApplicationId = "c7fc6525-5506-4ca9-9cf1-55cc261ddb9c";
+	private String serverURL = "http://localhost:8080/ag-push";
 
-    private String masterPassWord = "8b2f43a9-23c8-44fe-bee9-d6b0af9e316b";
+	private String pushApplicationId = "c7fc6525-5506-4ca9-9cf1-55cc261ddb9c";
 
-    //TODO we don't this
-    private int leadVersion = 1;
-    private int broadcastVersion = 1;
+	private String masterPassWord = "8b2f43a9-23c8-44fe-bee9-d6b0af9e316b";
 
-    private JavaSender javaSender;
+	// TODO we don't this
+	private int leadVersion = 1;
+	private int broadcastVersion = 1;
 
-    public LeadSender() {
-        javaSender = new SenderClient(serverURL);
-    }
+	private JavaSender javaSender;
 
-    public void sendLeads(List<String> users, Lead lead) {
+	public LeadSender() {
+		javaSender = new SenderClient("http://localhost:8080/ag-push");
+	}
 
-        Map categories = new HashMap();
-        categories.put("lead", "version=" + leadVersion++); ////TODO manage the id
-        Map json = new HashMap();
-        json.put("id", lead.getId());
-        json.put("messageType", "pushed_lead");
-        json.put("name", lead.getName());
-        json.put("location", lead.getLocation());
-        json.put("phone", lead.getPhoneNumber());
-        json.put("simple-push", categories);
-        json.put("sound", "default");
-        json.put("alert", "A new lead has been created");
+	public void sendLeads(List<String> users, Lead lead) {
 
-        javaSender.sendTo(users, json, pushApplicationId, masterPassWord);
-    }
+		Map categories = new HashMap();
+		categories.put("lead", "version=" + leadVersion++); // //TODO manage the
+															// id
+		UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
+				.pushApplicationId(getActivePushConfig().getPushApplicationId())
+				.masterSecret(getActivePushConfig().getMasterSecret())
+				.aliases(users).simplePush(categories)
+				.attribute("id", lead.getId().toString())
+				.attribute("messageType", "pushed_lead")
+				.attribute("name", lead.getName())
+				.attribute("location", lead.getLocation())
+				.attribute("phone", lead.getPhoneNumber()).sound("default")
+				.alert("A new lead has been created").build();
 
-    public void sendBroadCast(Lead lead) {
-        Map categories = new HashMap();
-        categories.put("broadcast", "version=" + broadcastVersion++); //TODO manage the id
-        Map json = new HashMap();
-        json.put("id", lead.getId());
-        json.put("messageType", "accepted_lead");
-        json.put("name", lead.getName());
-        json.put("location", lead.getLocation());
-        json.put("phone", lead.getPhoneNumber());
-        json.put("simple-push", categories);
-        json.put("alert", "A new lead has been accepted");
-        json.put("sound", "default");
-        javaSender.broadcast(json, pushApplicationId, masterPassWord);
-    }
+		javaSender.sendTo(unifiedMessage);
+	}
 
-    public String getServerURL() {
-        return serverURL;
-    }
+	public void sendBroadCast(Lead lead) {
 
-    public void setServerURL(String serverURL) {
-        this.serverURL = serverURL;
-    }
+		UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
+				.pushApplicationId(getActivePushConfig().getPushApplicationId())
+				.masterSecret(getActivePushConfig().getMasterSecret())
+				.simplePush("version=" + broadcastVersion++)
+				.attribute("id", lead.getId().toString())
+				.attribute("messageType", "pushed_lead")
+				.attribute("name", lead.getName())
+				.attribute("location", lead.getLocation())
+				.attribute("phone", lead.getPhoneNumber())
+				.attribute("messageType", "accepted_lead").sound("default")
+				.alert("A new lead has been accepted").build();
 
-    public JavaSender getJavaSender() {
-        return javaSender;
-    }
+		javaSender.broadcast(unifiedMessage);
+	}
 
-    public void setJavaSender(JavaSender javaSender) {
-        this.javaSender = javaSender;
-    }
+	public String getServerURL() {
+		return serverURL;
+	}
+
+	public void setServerURL(String serverURL) {
+		this.serverURL = serverURL;
+	}
+
+	public JavaSender getJavaSender() {
+		return javaSender;
+	}
+
+	public void setJavaSender(JavaSender javaSender) {
+		this.javaSender = javaSender;
+	}
+
+	private PushConfig getActivePushConfig() {
+		PushConfig pushConfig;
+		pushConfig = pushConfigEndpoint.findActiveConfig();
+		// if we don't find any config, let's use the default value and save it
+		// as default pushConfig entity
+		if (pushConfig == null) {
+			pushConfig = new PushConfig();
+			pushConfig.setActive(true);
+			pushConfig.setMasterSecret(masterPassWord);
+			pushConfig.setPushApplicationId(pushApplicationId);
+			pushConfig.setServerURL(serverURL);
+			pushConfigEndpoint.create(pushConfig);
+		}
+		return pushConfig;
+
+	}
 
 }

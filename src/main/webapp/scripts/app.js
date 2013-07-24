@@ -23,6 +23,15 @@ var aerodoc = angular.module('aerodoc', [ 'aerodoc.filters' ]).config(
 			}).when('/SaleAgents/edit/:SaleAgentId', {
 				templateUrl : 'partials/SaleAgent/detail.html',
 				controller : EditSaleAgentController
+			}).when('/pushconfig', {
+				templateUrl : 'partials/PushConfig/search.html',
+				controller : SearchPushConfigController
+			}).when('/pushconfig/new', {
+				templateUrl : 'partials/PushConfig/detail.html',
+				controller : NewPushConfigController
+			}).when('/pushconfig/edit/:PushConfigId', {
+				templateUrl : 'partials/PushConfig/detail.html',
+				controller : EditPushConfigController
 			}).otherwise({
 				templateUrl : 'partials/Lead/search.html',
 				controller : SearchLeadController
