@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 public class Resources {
 
     @SuppressWarnings("unused")
-    @PersistenceContext(unitName = "forge-default")
+    @PersistenceContext(unitName = "aerodoc-default")
     private EntityManager em;
 
     @SuppressWarnings("unused")

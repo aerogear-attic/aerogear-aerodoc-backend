@@ -35,6 +35,13 @@ aerodoc.factory("dataService", function() {
 				authenticator : this.restAuth
 			}
 		}).pipes.leads,
+		
+		pushPipe: AeroGear.Pipeline({
+			name : "pushconfig",
+			settings : {
+				authenticator : this.restAuth
+			}
+		}).pipes.pushconfig,
 
 		searchAgents : AeroGear.Pipeline({
 			name : "searchAgents",
