@@ -80,7 +80,7 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.aerogear.unifiedpush</groupId>
-            <artifactId>java-sender</artifactId>
+            <artifactId>unified-push-java-client</artifactId>
             <version>${aerogear.unifiedpush.sender.version}</version>
         </dependency>
     </dependencies>
