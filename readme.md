@@ -82,15 +82,6 @@ When registring the device on the Push Server make sure to use one of the existi
 
 For all these aliases the password is ``` 123 ```
 
-# Setting the PushApplicationId and the Push Server URL
-
-Before building and deploying the app be sure to change the values in ``` org.jboss.aerogear.aerodoc.service.LeadSender ``` :
-
-* ``` pushApplicationId ``` : See intructions [here](https://github.com/aerogear/aerogear-unified-push-server#register-push-app) to obtain one.
-
-* ``` serverURL ``` : enters here the server location of your Push Server (if you are using a local one you can keep the default value).
-
-
 # Deploying the app
 
 ``` mvn clean install jboss-as:deploy ```
