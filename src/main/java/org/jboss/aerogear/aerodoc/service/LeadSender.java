@@ -35,7 +35,7 @@ public class LeadSender {
 	@Inject
 	PushConfigEndpoint pushConfigEndpoint;
 	
-	// TODO we don't this
+	// TODO we don't want this
 	private int leadVersion = 1;
 	private int broadcastVersion = 1;
 
@@ -49,8 +49,7 @@ public class LeadSender {
 	public void sendLeads(List<String> users, Lead lead) {
 
 		Map categories = new HashMap();
-		categories.put("lead", "version=" + leadVersion++); // //TODO manage the
-															// id
+		categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
 		UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
 				.pushApplicationId(getActivePushConfig().getPushApplicationId())
 				.masterSecret(getActivePushConfig().getMasterSecret())

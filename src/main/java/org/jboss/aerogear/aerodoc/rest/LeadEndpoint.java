@@ -51,7 +51,7 @@ public class LeadEndpoint {
     @Inject
     private LeadSender leadSender;
 
-    @PersistenceContext(unitName = "forge-default")
+    @PersistenceContext(unitName = "aerodoc-default")
     private EntityManager em;
 
     @POST
