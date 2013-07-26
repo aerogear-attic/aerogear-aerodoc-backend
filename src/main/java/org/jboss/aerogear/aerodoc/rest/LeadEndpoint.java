@@ -21,27 +21,33 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.service.LeadSender;
+import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.User;
 
 /**
  * 
  */
 @Stateless
 @Path("/leads")
+@Secure("simple")
 public class LeadEndpoint {
 
     @Inject
@@ -55,6 +61,7 @@ public class LeadEndpoint {
 
     @POST
     @Consumes("application/json")
+    @Secure("admin")
     public Response create(Lead entity) {
         em.persist(entity);
         return Response.created(
@@ -64,6 +71,7 @@ public class LeadEndpoint {
 
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
+    @Secure("admin")
     public Response deleteById(@PathParam("id") Long id) {
         Lead entity = em.find(Lead.class, id);
         if (entity == null) {
@@ -109,7 +117,9 @@ public class LeadEndpoint {
         return Response.noContent().build();
     }
 
-    public void sendLead(Long id, List<LinkedHashMap> agents) {
+    @POST
+    @Path("/sendleads/{id:[0-9][0-9]*}")
+    public void sendLead(@PathParam("id") Long id, List<LinkedHashMap> agents) {
         TypedQuery<Lead> findByIdQuery = em
                 .createQuery(
                         "SELECT l FROM Lead l WHERE l.id = :entityId",

@@ -35,6 +35,7 @@ import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.aerodoc.service.LeadSender;
 import org.jboss.aerogear.aerodoc.utility.SaleAgentCriteria;
+import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.IdentityType;
@@ -46,6 +47,7 @@ import org.picketlink.idm.query.IdentityQuery;
  */
 @Stateless
 @Path("/saleagents")
+@Secure("admin")
 public class SaleAgentEndpoint {
 
     @Inject
@@ -100,6 +102,7 @@ public class SaleAgentEndpoint {
     @PUT
     @Path("/{id:[0-9][0-9]*}")
     @Consumes("application/json")
+    @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity) {
         User user = identityManager.getUser(entity.getLoginName());
         Attribute<String> attributeStatus = user.getAttribute("status");
@@ -110,7 +113,10 @@ public class SaleAgentEndpoint {
         return Response.noContent().build();
     }
 
-    public List<SaleAgent> listByCriteria(String status, String location) {
+    @GET
+    @Path("/searchAgents")
+    @Produces("application/json")
+    public List<SaleAgent> listByCriteria(@DefaultValue("") @QueryParam("status") String status, @DefaultValue("") @QueryParam("location") String location) {
 
         IdentityQuery<User> query = identityManager
                 .createIdentityQuery(User.class);

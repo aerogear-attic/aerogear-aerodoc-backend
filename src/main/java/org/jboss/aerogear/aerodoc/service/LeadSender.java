@@ -31,68 +31,67 @@ import org.jboss.aerogear.unifiedpush.message.UnifiedMessage;
 
 public class LeadSender {
 
-	@Inject
-	PushConfigEndpoint pushConfigEndpoint;
-	
-	// TODO we don't want this
-	private int leadVersion = 1;
-	private int broadcastVersion = 1;
+    @Inject
+    PushConfigEndpoint pushConfigEndpoint;
 
-	private JavaSender javaSender;
+    // TODO we don't want this
+    private int leadVersion = 1;
+    private int broadcastVersion = 1;
 
-	public LeadSender() {
-		//TODO using a dummy value, will be removed with the non-arg constructor in the next release
-		javaSender = new SenderClient("http://localhost:8080/ag-push");
-	}
+    private JavaSender javaSender;
 
-	public void sendLeads(List<String> users, Lead lead) {
+    public LeadSender() {
+        //TODO using a dummy value, will be removed with the non-arg constructor in the next release
+        javaSender = new SenderClient("http://localhost:8080/ag-push");
+    }
 
-		Map categories = new HashMap();
-		categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
-		UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
-				.pushApplicationId(getActivePushConfig().getPushApplicationId())
-				.masterSecret(getActivePushConfig().getMasterSecret())
-				.aliases(users).simplePush(categories)
-				.attribute("id", lead.getId().toString())
-				.attribute("messageType", "pushed_lead")
-				.attribute("name", lead.getName())
-				.attribute("location", lead.getLocation())
-				.attribute("phone", lead.getPhoneNumber()).sound("default")
-				.alert("A new lead has been created").build();
+    public void sendLeads(List<String> users, Lead lead) {
 
-		javaSender.sendTo(unifiedMessage);
-	}
+        Map categories = new HashMap();
+        categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
+        UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
+                .pushApplicationId(getActivePushConfig().getPushApplicationId())
+                .masterSecret(getActivePushConfig().getMasterSecret())
+                .aliases(users).simplePush(categories)
+                .attribute("id", lead.getId().toString())
+                .attribute("messageType", "pushed_lead")
+                .attribute("name", lead.getName())
+                .attribute("location", lead.getLocation())
+                .attribute("phone", lead.getPhoneNumber()).sound("default")
+                .alert("A new lead has been created").build();
 
-	public void sendBroadCast(Lead lead) {
+        javaSender.sendTo(unifiedMessage);
+    }
 
-		UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
-				.pushApplicationId(getActivePushConfig().getPushApplicationId())
-				.masterSecret(getActivePushConfig().getMasterSecret())
-				.simplePush("version=" + broadcastVersion++)
-				.attribute("id", lead.getId().toString())
-				.attribute("messageType", "pushed_lead")
-				.attribute("name", lead.getName())
-				.attribute("location", lead.getLocation())
-				.attribute("phone", lead.getPhoneNumber())
-				.attribute("messageType", "accepted_lead").sound("default")
-				.alert("A new lead has been accepted").build();
+    public void sendBroadCast(Lead lead) {
 
-		javaSender.broadcast(unifiedMessage);
-	}
+        UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
+                .pushApplicationId(getActivePushConfig().getPushApplicationId())
+                .masterSecret(getActivePushConfig().getMasterSecret())
+                .simplePush("version=" + broadcastVersion++)
+                .attribute("id", lead.getId().toString())
+                .attribute("messageType", "pushed_lead")
+                .attribute("name", lead.getName())
+                .attribute("location", lead.getLocation())
+                .attribute("phone", lead.getPhoneNumber())
+                .attribute("messageType", "accepted_lead").sound("default")
+                .alert("A new lead has been accepted").build();
 
-	
-	public JavaSender getJavaSender() {
-		return javaSender;
-	}
+        javaSender.broadcast(unifiedMessage);
+    }
 
-	public void setJavaSender(JavaSender javaSender) {
-		this.javaSender = javaSender;
-	}
+    public JavaSender getJavaSender() {
+        return javaSender;
+    }
 
-	private PushConfig getActivePushConfig() {
-		PushConfig pushConfig = pushConfigEndpoint.findActiveConfig();
-		return pushConfig;
+    public void setJavaSender(JavaSender javaSender) {
+        this.javaSender = javaSender;
+    }
 
-	}
+    private PushConfig getActivePushConfig() {
+        PushConfig pushConfig = pushConfigEndpoint.findActiveConfig();
+        return pushConfig;
+
+    }
 
 }

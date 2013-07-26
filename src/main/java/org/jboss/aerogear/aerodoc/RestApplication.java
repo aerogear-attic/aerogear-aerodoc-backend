@@ -14,22 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.aerogear.aerodoc.rest;
+package org.jboss.aerogear.aerodoc;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.ApplicationPath;
 
-public class ResponseHeaders {
-
-    private Map<String, String> headers = new HashMap
-            <String, String>();
-
-    public ResponseHeaders(final String name, final String value) {
-        headers.put(name, value);
-    }
-
-    public Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(headers);
-    }
+public @ApplicationPath("/rest")
+class RestApplication extends Application {
 }

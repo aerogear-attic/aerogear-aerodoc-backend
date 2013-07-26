@@ -18,15 +18,25 @@ package org.jboss.aerogear.aerodoc.rest;
 
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
+import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.User;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import java.util.logging.Logger;
 
 @Stateless
+@Path("/")
 public class Login {
 
     private static final Logger LOGGER = Logger.getLogger(Login.class.getSimpleName());
@@ -37,24 +47,21 @@ public class Login {
     @Inject
     private IdentityManager identityManager;
 
-    @Inject
-    Event<ResponseHeaders> headers;
-
-    public void index() {
-        LOGGER.info("Login page!");
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(final SaleAgent user) {
+        try {
+            performLogin(user);
+        } catch (AeroGearSecurityException agse) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+        return Response.ok(user).build();
     }
 
-    /**
-     * {@link SaleAgent} registration
-     *
-     * @param user represents a simple implementation that holds user's credentials.
-     * @return HTTP response and the session ID
-     */
-    public SaleAgent login(final SaleAgent user) {
-        performLogin(user);
-        return user;
-    }
-
+    @POST
+    @Path("/logout")
     public void logout() {
         LOGGER.info("User logout!");
         authenticationManager.logout();
