@@ -19,6 +19,6 @@ package org.jboss.aerogear.aerodoc;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ApplicationPath;
 
-public @ApplicationPath("/rest")
-class RestApplication extends Application {
+@ApplicationPath("/rest")
+public class RestApplication extends Application {
 }
