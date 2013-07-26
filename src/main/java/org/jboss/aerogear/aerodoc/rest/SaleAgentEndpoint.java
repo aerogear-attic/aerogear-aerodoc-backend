@@ -100,7 +100,7 @@ public class SaleAgentEndpoint {
     }
 
     @PUT
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{id}")
     @Consumes("application/json")
     @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity) {
