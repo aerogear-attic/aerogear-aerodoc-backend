@@ -32,7 +32,7 @@ function LoginController($scope, $routeParams, $location, dataService) {
 				$scope.$apply();
 			},
 			error : function(data) {
-
+				$("#auth-error-box").modal();
 			}
 		});
 	};

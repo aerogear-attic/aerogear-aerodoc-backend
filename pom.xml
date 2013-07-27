@@ -64,11 +64,6 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.aerogear</groupId>
-            <artifactId>aerogear-controller</artifactId>
-            <version>${aerogear.controller.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.aerogear</groupId>
             <artifactId>aerogear-security</artifactId>
 
             <version>${aerogear.security.version}</version>

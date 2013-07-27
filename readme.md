@@ -115,13 +115,13 @@ Use the form to create a new Lead
 
 The native clients can access the following REST based services :
 
-## ``` POST /login ``` 
+## ``` POST /rest/login ``` 
 
 Login service, mandatory for all further request.
 
 ``` 
 curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json"
--X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/aerodoc/login 
+-X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/aerodoc/rest/login 
 ```
 
 It will return the user :
@@ -130,24 +130,24 @@ It will return the user :
  {"id":"cb3c05aa-3fdd-4b4e-9b90-386fc7e5671a","enabled":true,"createdDate":1371215851063,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"status":"PTO","password":"123","location":"New York"}
 ```
 
-## ``` POST /logout ``` 
+## ``` POST /rest/logout ``` 
 
 Logout service.
 
 ``` 
 curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json"
--X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/aerodoc/logout 
+-X POST -d '{"loginName": "john", "password":"123"}' http://localhost:8080/aerodoc/rest/logout 
 ```
 
 returns no data
 
-## ``` GET  /leads ```
+## ``` GET  /rest/leads ```
 
 Obtain a list of leads.
 
 ```
  curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" 
--X GET http://localhost:8080/aerodoc/leads 
+-X GET http://localhost:8080/aerodoc/rest/leads 
 ```
 
 You will get a list of leads **which has not a saleAgent set yet** :
@@ -156,22 +156,22 @@ You will get a list of leads **which has not a saleAgent set yet** :
 [{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"0612412121"}]
 ```
 
-## ``` PUT /saleagents/{id} ```
+## ``` PUT /rest/saleagents/{id} ```
 
 Update a SaleAgent, the service will only update the status and the location for now.
 
 ```
- curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":"13bbaea3-9271-43f7-80aa-fb21360ff684","enabled":true,"createdDate":1371213256827,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"version":0,"status":"CHANGED","password":"123","location":"New York"}' http://localhost:8080/aerodoc/saleagents/13bbaea3-9271-43f7-80aa-fb21360ff684
+ curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":"13bbaea3-9271-43f7-80aa-fb21360ff684","enabled":true,"createdDate":1371213256827,"expirationDate":null,"partition":null,"loginName":"john","firstName":null,"lastName":null,"email":null,"version":0,"status":"CHANGED","password":"123","location":"New York"}' http://localhost:8080/aerodoc/rest/saleagents/13bbaea3-9271-43f7-80aa-fb21360ff684
 ```
 
 returns no data
 
-## ``` PUT /leads/{id} ```
+## ``` PUT /rest/leads/{id} ```
 
 Update a Lead, typically used if a Sale Agent wants to assign a lead to him.
 
 ```
-curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"121212121","saleAgent":"13bbaea3-9271-43f7-80aa-fb21360ff684"}' http://localhost:8080/aerodoc/leads/39
+curl -v -b cookies.txt -c cookies.txt -H "Accept: application/json" -H "Content-type: application/json" -X PUT -d '{"id":39,"version":0,"name":"Doctor No","location":"New York","phoneNumber":"121212121","saleAgent":"13bbaea3-9271-43f7-80aa-fb21360ff684"}' http://localhost:8080/aerodoc/rest/leads/39
 ```
 
 returns no data
