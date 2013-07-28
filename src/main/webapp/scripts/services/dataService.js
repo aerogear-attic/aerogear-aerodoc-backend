@@ -17,21 +17,23 @@
 "use strict";
 
 aerodoc.factory("dataService", function() {
+	var endpoint  = "rest/";
 	return {
 		restAuth : AeroGear.Auth({
 			name : "auth",
 			settings : {
 				agAuth : true,
 				endpoints : {
-					enroll : "register",
-					login : "login",
-					logout : "logout"
+					enroll : endpoint + "register",
+					login :  endpoint + "login",
+					logout : endpoint + "logout"
 				}
 			}
 		}).modules.auth,
 		leadPipe : AeroGear.Pipeline({
 			name : "leads",
 			settings : {
+				endpoint : endpoint + "leads",
 				authenticator : this.restAuth
 			}
 		}).pipes.leads,
@@ -39,6 +41,7 @@ aerodoc.factory("dataService", function() {
 		pushPipe: AeroGear.Pipeline({
 			name : "pushconfig",
 			settings : {
+				endpoint :endpoint + "pushconfig",
 				authenticator : this.restAuth
 			}
 		}).pipes.pushconfig,
@@ -46,6 +49,7 @@ aerodoc.factory("dataService", function() {
 		searchAgents : AeroGear.Pipeline({
 			name : "searchAgents",
 			settings : {
+				endpoint : endpoint + "saleagents/searchAgents",
 				authenticator : this.restAuth
 			}
 		}).pipes.searchAgents,
@@ -60,6 +64,7 @@ aerodoc.factory("dataService", function() {
 		saleAgentPipe : AeroGear.Pipeline({
 			name : "saleagents",
 			settings : {
+				endpoint : endpoint + "saleagents",
 				authenticator : this.restAuth
 			}
 		}).pipes.saleagents,

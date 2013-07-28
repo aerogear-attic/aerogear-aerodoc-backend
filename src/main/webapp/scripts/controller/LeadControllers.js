@@ -212,7 +212,7 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 	var sendLeads = AeroGear.Pipeline({
 		name : "sendleads",
 		settings : {
-			endpoint : "sendleads/" + $routeParams.LeadId
+			endpoint : "rest/leads/sendleads/" + $routeParams.LeadId
 		}
 	}).pipes.sendleads;
 
