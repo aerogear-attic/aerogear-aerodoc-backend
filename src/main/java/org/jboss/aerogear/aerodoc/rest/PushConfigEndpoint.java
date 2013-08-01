@@ -36,13 +36,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.model.PushConfig;
 import org.jboss.aerogear.security.authz.Secure;
 
 @Stateless
 @Path("/pushconfig")
-@Secure("admin")
 public class PushConfigEndpoint {
 
     @PersistenceContext(unitName = "aerodoc-default")
@@ -50,6 +48,7 @@ public class PushConfigEndpoint {
 
     @POST
     @Consumes("application/json")
+    @Secure("admin")
     public Response create(PushConfig entity) {
         updateActiveState(entity);
         em.persist(entity);
@@ -70,6 +69,7 @@ public class PushConfigEndpoint {
 
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
+    @Secure("admin")
     public Response deleteById(@PathParam("id") Long id) {
         PushConfig entity = em.find(PushConfig.class, id);
         if (entity == null) {

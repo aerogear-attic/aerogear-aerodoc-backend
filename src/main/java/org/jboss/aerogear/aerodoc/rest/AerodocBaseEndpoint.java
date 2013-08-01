@@ -42,7 +42,7 @@ public abstract class AerodocBaseEndpoint {
 		return appendPreflightResponseHeaders(headers, Response.ok()).build();
 	}
 
-	private ResponseBuilder appendPreflightResponseHeaders(HttpHeaders headers,
+	protected ResponseBuilder appendPreflightResponseHeaders(HttpHeaders headers,
 			ResponseBuilder response) {
 		// add response headers for the preflight request
 		// required

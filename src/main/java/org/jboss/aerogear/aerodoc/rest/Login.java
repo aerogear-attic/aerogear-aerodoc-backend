@@ -42,71 +42,52 @@ import java.util.logging.Logger;
 
 @Stateless
 @Path("/")
-public class Login {
+public class Login extends AerodocBaseEndpoint {
 
-    private static final Logger LOGGER = Logger.getLogger(Login.class.getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(Login.class
+			.getSimpleName());
 
-    @Inject
-    private AuthenticationManager authenticationManager;
+	@Inject
+	private AuthenticationManager authenticationManager;
 
-    @Inject
-    private IdentityManager identityManager;
+	@Inject
+	private IdentityManager identityManager;
 
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response login(final SaleAgent user, @Context HttpServletRequest request) {
-        try {
-            performLogin(user);
-        } catch (AeroGearSecurityException agse) {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-        return appendAllowOriginHeader(Response.ok(user),request);
-    }
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(final SaleAgent user,
+			@Context HttpServletRequest request) {
+		try {
+			performLogin(user);
+		} catch (AeroGearSecurityException agse) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+		return appendAllowOriginHeader(Response.ok(user), request);
+	}
 
-    @POST
-    @Path("/logout")
-    public void logout() {
-        LOGGER.info("User logout!");
-        authenticationManager.logout();
-    }
+	@POST
+	@Path("/logout")
+	public void logout() {
+		LOGGER.info("User logout!");
+		authenticationManager.logout();
+	}
 
-    private void performLogin(SaleAgent saleAgent) {
-        authenticationManager.login(saleAgent, saleAgent.getPassword());
-        //workaround to load the extra attributes, maybe a bug ??
-        User user = identityManager.getUser(saleAgent.getLoginName());
-        saleAgent.setLocation(user.getAttribute("location").getValue().toString());
-        saleAgent.setStatus(user.getAttribute("status").getValue().toString());
-        saleAgent.setId(user.getId());
-    }
-    
-    @OPTIONS
-    @Path("/login")
+	private void performLogin(SaleAgent saleAgent) {
+		authenticationManager.login(saleAgent, saleAgent.getPassword());
+		// workaround to load the extra attributes, maybe a bug ??
+		User user = identityManager.getUser(saleAgent.getLoginName());
+		saleAgent.setLocation(user.getAttribute("location").getValue()
+				.toString());
+		saleAgent.setStatus(user.getAttribute("status").getValue().toString());
+		saleAgent.setId(user.getId());
+	}
+
+	@OPTIONS
+	@Path("/login")
 	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-    	System.out.println("IN OPTIONS");
 		return appendPreflightResponseHeaders(headers, Response.ok()).build();
 	}
-
-	private ResponseBuilder appendPreflightResponseHeaders(HttpHeaders headers,
-			ResponseBuilder response) {
-		// add response headers for the preflight request
-		// required
-		response.header("Access-Control-Allow-Origin",
-				headers.getRequestHeader("Origin").get(0))
-				.header("Access-Control-Allow-Methods", "POST, DELETE, GET, PUT")
-				.header("Access-Control-Allow-Headers",
-						"accept, origin, content-type, authorization")
-				.header("Access-Control-Allow-Credentials", "true");
-
-		return response;
-	}
-	
-	protected Response appendAllowOriginHeader(ResponseBuilder rb, HttpServletRequest request) {
-
-        return rb.header("Access-Control-Allow-Origin", request.getHeader("Origin")) // return submitted origin
-                .header("Access-Control-Allow-Credentials", "true")
-                 .build();
-    }
 
 }

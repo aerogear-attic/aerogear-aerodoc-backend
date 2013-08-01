@@ -16,6 +16,7 @@
  */
 package org.jboss.aerogear.aerodoc.service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +49,14 @@ public class LeadSender {
     public void sendLeads(List<String> users, Lead lead) {
 
         Map categories = new HashMap();
+       
         categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
         UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                 .pushApplicationId(getActivePushConfig().getPushApplicationId())
                 .masterSecret(getActivePushConfig().getMasterSecret())
-                .aliases(users).simplePush(categories)
+                .aliases(users)
+                .deviceType(Arrays.asList("web"))
+                .simplePush(categories)
                 .attribute("id", lead.getId().toString())
                 .attribute("messageType", "pushed_lead")
                 .attribute("name", lead.getName())
