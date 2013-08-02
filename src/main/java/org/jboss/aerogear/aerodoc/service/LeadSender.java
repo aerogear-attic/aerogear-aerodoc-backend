@@ -55,7 +55,6 @@ public class LeadSender {
                 .pushApplicationId(getActivePushConfig().getPushApplicationId())
                 .masterSecret(getActivePushConfig().getMasterSecret())
                 .aliases(users)
-                .deviceType(Arrays.asList("web"))
                 .simplePush(categories)
                 .attribute("id", lead.getId().toString())
                 .attribute("messageType", "pushed_lead")
