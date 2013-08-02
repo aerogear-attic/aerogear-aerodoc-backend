@@ -84,8 +84,7 @@ public class Login {
     @OPTIONS
     @Path("/login")
 	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-    	System.out.println("IN OPTIONS");
-		return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    	return appendPreflightResponseHeaders(headers, Response.ok()).build();
 	}
 
 	private ResponseBuilder appendPreflightResponseHeaders(HttpHeaders headers,
