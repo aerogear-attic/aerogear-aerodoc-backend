@@ -63,22 +63,22 @@ public class LeadEndpoint {
     @PersistenceContext(unitName = "aerodoc-default")
     private EntityManager em;
 
-	@OPTIONS
-	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-		return appendPreflightResponseHeaders(headers, Response.ok()).build();
-	}
-	
+    @OPTIONS
+    public Response crossOriginForInstallations(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    }
+
     @OPTIONS
     @Path("/{token}")
-	public Response crossOriginForLead(@Context HttpHeaders headers) {
-		return appendPreflightResponseHeaders(headers, Response.ok()).build();
-	}
-    
+    public Response crossOriginForLead(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    }
+
     @OPTIONS
     public Response crossOriginForLeads(@Context HttpHeaders headers) {
-		return appendPreflightResponseHeaders(headers, Response.ok()).build();
-	}
-    
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    }
+
     @POST
     @Consumes("application/json")
     @Secure("admin")
@@ -157,32 +157,32 @@ public class LeadEndpoint {
         }
         leadSender.sendLeads(aliases, entity);
     }
-    
+
     protected ResponseBuilder appendPreflightResponseHeaders(HttpHeaders headers,
-			ResponseBuilder response) {
-		// add response headers for the preflight request
-		// required
-		response.header("Access-Control-Allow-Origin",
-				headers.getRequestHeader("Origin").get(0))
-				.header("Access-Control-Allow-Methods",
-						"POST,DELETE,GET,PUT")
-				.header("Access-Control-Allow-Headers",
-						"accept, origin, content-type, authorization")
-				.header("Access-Control-Allow-Credentials", "true");
+            ResponseBuilder response) {
+        // add response headers for the preflight request
+        // required
+        response.header("Access-Control-Allow-Origin",
+                headers.getRequestHeader("Origin").get(0))
+                .header("Access-Control-Allow-Methods",
+                        "POST,DELETE,GET,PUT")
+                .header("Access-Control-Allow-Headers",
+                        "accept, origin, content-type, authorization")
+                .header("Access-Control-Allow-Credentials", "true");
 
-		return response;
-	}
+        return response;
+    }
 
-	/**
-	 * This convenient method will append to the response headers the needed
-	 * CORS headers
-	 */
-	protected Response appendAllowOriginHeader(ResponseBuilder rb,
-			HttpServletRequest request) {
+    /**
+     * This convenient method will append to the response headers the needed
+     * CORS headers
+     */
+    protected Response appendAllowOriginHeader(ResponseBuilder rb,
+            HttpServletRequest request) {
 
-		return rb
-				.header("Access-Control-Allow-Origin",
-						request.getHeader("Origin")) // return submitted origin
-				.header("Access-Control-Allow-Credentials", "true").build();
-	}
+        return rb
+                .header("Access-Control-Allow-Origin",
+                        request.getHeader("Origin")) // return submitted origin
+                .header("Access-Control-Allow-Credentials", "true").build();
+    }
 }

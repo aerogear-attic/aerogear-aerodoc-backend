@@ -49,7 +49,7 @@ public class LeadSender {
     public void sendLeads(List<String> users, Lead lead) {
 
         Map categories = new HashMap();
-       
+
         categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
         UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                 .pushApplicationId(getActivePushConfig().getPushApplicationId())

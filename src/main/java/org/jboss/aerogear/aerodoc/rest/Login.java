@@ -44,14 +44,14 @@ import java.util.logging.Logger;
 @Path("/")
 public class Login extends AerodocBaseEndpoint {
 
-	private static final Logger LOGGER = Logger.getLogger(Login.class
-			.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(Login.class
+            .getSimpleName());
 
-	@Inject
-	private AuthenticationManager authenticationManager;
+    @Inject
+    private AuthenticationManager authenticationManager;
 
-	@Inject
-	private IdentityManager identityManager;
+    @Inject
+    private IdentityManager identityManager;
 
     @POST
     @Path("/login")
@@ -63,7 +63,7 @@ public class Login extends AerodocBaseEndpoint {
         } catch (AeroGearSecurityException agse) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
-        return appendAllowOriginHeader(Response.ok(user),request);
+        return appendAllowOriginHeader(Response.ok(user), request);
     }
 
     @POST
@@ -81,14 +81,12 @@ public class Login extends AerodocBaseEndpoint {
         saleAgent.setStatus(user.getAttribute("status").getValue().toString());
         saleAgent.setId(user.getId());
     }
-    
+
     @OPTIONS
     @Path("/login")
-	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-    	return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    public Response crossOriginForInstallations(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
 
-	}
-
-	
+    }
 
 }
