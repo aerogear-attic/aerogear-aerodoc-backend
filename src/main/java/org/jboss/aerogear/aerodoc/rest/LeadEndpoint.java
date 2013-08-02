@@ -104,6 +104,7 @@ public class LeadEndpoint {
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces("application/json")
+    @Secure("simple")
     public Response findById(@PathParam("id") Long id, @Context HttpServletRequest request) {
         TypedQuery<Lead> findByIdQuery = em
                 .createQuery(
@@ -119,6 +120,7 @@ public class LeadEndpoint {
 
     @GET
     @Produces("application/json")
+    @Secure("simple")
     public Response listAll(@Context HttpServletRequest request) {
         final List<Lead> results = em.createQuery(
                 "SELECT l FROM Lead l where l.saleAgent = null", Lead.class)
@@ -129,6 +131,7 @@ public class LeadEndpoint {
     @PUT
     @Path("/{id:[0-9][0-9]*}")
     @Consumes("application/json")
+    @Secure("simple")
     public Response update(@PathParam("id") Long id, Lead entity, @Context HttpServletRequest request) {
         entity.setId(id);
         entity = em.merge(entity);

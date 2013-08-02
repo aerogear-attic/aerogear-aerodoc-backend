@@ -25,6 +25,7 @@ function LoginController($scope, $routeParams, $location, dataService) {
 		sessionStorage.removeItem("access");
 		var user = $scope.user;
 		restAuth.login(user, {
+			contentType: "application/json",
 			success : function(data) {
 				var role = $.inArray("admin", data.roles) >= 0 ? 1 : 0;
 				sessionStorage.setItem("username", data.loginName);

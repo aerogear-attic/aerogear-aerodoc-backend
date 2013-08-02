@@ -78,6 +78,12 @@
             <artifactId>unified-push-java-client</artifactId>
             <version>${aerogear.unifiedpush.sender.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>2.3.4.Final</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>aerodoc</finalName>
