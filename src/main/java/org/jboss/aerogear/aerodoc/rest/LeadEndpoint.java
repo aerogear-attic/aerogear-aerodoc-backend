@@ -37,6 +37,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import org.jboss.aerogear.aerodoc.cdi.qualifiers.AeroDocDB;
 import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.service.LeadSender;
 import org.jboss.aerogear.security.authz.Secure;
@@ -56,7 +57,7 @@ public class LeadEndpoint {
     @Inject
     private LeadSender leadSender;
 
-    @PersistenceContext(unitName = "aerodoc-default")
+    @Inject @AeroDocDB
     private EntityManager em;
 
     @POST
