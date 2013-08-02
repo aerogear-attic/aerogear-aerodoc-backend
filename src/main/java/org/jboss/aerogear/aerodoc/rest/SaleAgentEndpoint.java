@@ -16,31 +16,25 @@
  */
 package org.jboss.aerogear.aerodoc.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.TypedQuery;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
-
-import org.jboss.aerogear.aerodoc.model.Lead;
+import org.jboss.aerogear.aerodoc.cdi.qualifiers.PicketlinkDB;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
-import org.jboss.aerogear.aerodoc.service.LeadSender;
-import org.jboss.aerogear.aerodoc.utility.SaleAgentCriteria;
 import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.model.User;
 import org.picketlink.idm.query.IdentityQuery;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -53,7 +47,7 @@ public class SaleAgentEndpoint {
     @Inject
     private IdentityManager identityManager;
 
-    @PersistenceContext(unitName = "picketlink-default")
+    @Inject @PicketlinkDB
     private EntityManager em;
 
     @POST

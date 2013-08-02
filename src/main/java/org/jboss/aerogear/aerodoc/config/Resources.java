@@ -16,6 +16,8 @@
  */
 package org.jboss.aerogear.aerodoc.config;
 
+import org.jboss.aerogear.aerodoc.cdi.qualifiers.AeroDocDB;
+import org.jboss.aerogear.aerodoc.cdi.qualifiers.PicketlinkDB;
 import org.picketlink.annotations.PicketLink;
 
 import javax.enterprise.inject.Produces;
@@ -39,28 +41,19 @@ import java.util.logging.Logger;
  */
 public class Resources {
 
-    @SuppressWarnings("unused")
+    @Produces
     @PersistenceContext(unitName = "aerodoc-default")
-    private EntityManager em;
+    @AeroDocDB
+    private EntityManager aerodocEm;
 
-    @SuppressWarnings("unused")
+    @Produces
     @PicketLink
     @PersistenceContext(unitName = "picketlink-default")
-    @Produces
-    private EntityManager picketLinkEntityManager;
+    @PicketlinkDB
+    private EntityManager picketLinkEm;
 
     @Produces
     public Logger produceLog(InjectionPoint injectionPoint) {
         return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
-    }
-
-    @Produces
-    public EntityManager produceEm() {
-        return em;
-    }
-
-    @Produces
-    EntityManager producePicketLinkEntityManager() {
-        return picketLinkEntityManager;
     }
 }

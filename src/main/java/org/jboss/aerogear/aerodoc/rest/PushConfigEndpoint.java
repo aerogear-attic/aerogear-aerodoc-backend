@@ -20,6 +20,7 @@ package org.jboss.aerogear.aerodoc.rest;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import org.jboss.aerogear.aerodoc.cdi.qualifiers.AeroDocDB;
 import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.model.PushConfig;
 import org.jboss.aerogear.security.authz.Secure;
@@ -45,7 +47,7 @@ import org.jboss.aerogear.security.authz.Secure;
 @Secure("admin")
 public class PushConfigEndpoint {
 
-    @PersistenceContext(unitName = "aerodoc-default")
+    @Inject @AeroDocDB
     private EntityManager em;
 
     @POST
