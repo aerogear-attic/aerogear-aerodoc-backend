@@ -41,14 +41,10 @@ function SearchLeadController($scope, $location, $filter, dataService) {
         }
         $scope.$apply();
       },
-      error : {
-        401 : function(jqXHR) {
-          var restAuth = dataService.restAuth;
-          restAuth.logout();
+      error : function(jqXHR) {
           sessionStorage.removeItem("username");
           sessionStorage.removeItem("access");
           $scope.$apply();
-        }
       }
     });
   };
