@@ -17,13 +17,11 @@
     limitations under the License.
 
 -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-  <display-name>aerodoc</display-name>
-  <session-config>
-    <session-timeout>30</session-timeout>
-  </session-config>
-  <context-param>
-    <param-name>resteasy.providers</param-name>
-    <param-value>org.jboss.aerogear.aerodoc.rest.CorsExceptionHandler</param-value>
-</context-param>
-</web-app>
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd">
+
+    <interceptors>
+        <class>org.jboss.aerogear.security.interceptor.SecurityInterceptor</class>
+    </interceptors>
+</beans>

@@ -25,21 +25,27 @@ import org.picketlink.idm.model.User;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import java.util.logging.Logger;
 
 @Stateless
 @Path("/")
-public class Login {
+public class Login extends AerodocBaseEndpoint {
 
-    private static final Logger LOGGER = Logger.getLogger(Login.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(Login.class
+            .getSimpleName());
 
     @Inject
     private AuthenticationManager authenticationManager;
@@ -51,13 +57,13 @@ public class Login {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(final SaleAgent user) {
+    public Response login(final SaleAgent user, @Context HttpServletRequest request) {
         try {
             performLogin(user);
         } catch (AeroGearSecurityException agse) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
-        return Response.ok(user).build();
+        return appendAllowOriginHeader(Response.ok(user), request);
     }
 
     @POST
@@ -74,6 +80,13 @@ public class Login {
         saleAgent.setLocation(user.getAttribute("location").getValue().toString());
         saleAgent.setStatus(user.getAttribute("status").getValue().toString());
         saleAgent.setId(user.getId());
+    }
+
+    @OPTIONS
+    @Path("/login")
+    public Response crossOriginForInstallations(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+
     }
 
 }

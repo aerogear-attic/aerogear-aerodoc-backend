@@ -25,15 +25,20 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
@@ -47,7 +52,6 @@ import org.picketlink.idm.IdentityManager;
  */
 @Stateless
 @Path("/leads")
-@Secure("simple")
 public class LeadEndpoint {
 
     @Inject
@@ -58,6 +62,22 @@ public class LeadEndpoint {
 
     @PersistenceContext(unitName = "aerodoc-default")
     private EntityManager em;
+
+    @OPTIONS
+    public Response crossOriginForInstallations(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    }
+
+    @OPTIONS
+    @Path("/{token}")
+    public Response crossOriginForLead(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    }
+
+    @OPTIONS
+    public Response crossOriginForLeads(@Context HttpHeaders headers) {
+        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+    }
 
     @POST
     @Consumes("application/json")
@@ -84,7 +104,8 @@ public class LeadEndpoint {
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces("application/json")
-    public Response findById(@PathParam("id") Long id) {
+    @Secure("simple")
+    public Response findById(@PathParam("id") Long id, @Context HttpServletRequest request) {
         TypedQuery<Lead> findByIdQuery = em
                 .createQuery(
                         "SELECT l FROM Lead l WHERE l.id = :entityId",
@@ -94,31 +115,34 @@ public class LeadEndpoint {
         if (entity == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
-        return Response.ok(entity).build();
+        return appendAllowOriginHeader(Response.ok(entity), request);
     }
 
     @GET
     @Produces("application/json")
-    public List<Lead> listAll() {
+    @Secure("simple")
+    public Response listAll(@Context HttpServletRequest request) {
         final List<Lead> results = em.createQuery(
                 "SELECT l FROM Lead l where l.saleAgent = null", Lead.class)
                 .getResultList();
-        return results;
+        return appendAllowOriginHeader(Response.ok(results), request);
     }
 
     @PUT
     @Path("/{id:[0-9][0-9]*}")
     @Consumes("application/json")
-    public Response update(@PathParam("id") Long id, Lead entity) {
+    @Secure("simple")
+    public Response update(@PathParam("id") Long id, Lead entity, @Context HttpServletRequest request) {
         entity.setId(id);
         entity = em.merge(entity);
         //Broadcast the change to everyone
         leadSender.sendBroadCast(entity);
-        return Response.noContent().build();
+        return appendAllowOriginHeader(Response.noContent(), request);
     }
 
     @POST
     @Path("/sendleads/{id:[0-9][0-9]*}")
+    @Secure("simple")
     public void sendLead(@PathParam("id") Long id, List<LinkedHashMap> agents) {
         TypedQuery<Lead> findByIdQuery = em
                 .createQuery(
@@ -132,5 +156,33 @@ public class LeadEndpoint {
 
         }
         leadSender.sendLeads(aliases, entity);
+    }
+
+    protected ResponseBuilder appendPreflightResponseHeaders(HttpHeaders headers,
+            ResponseBuilder response) {
+        // add response headers for the preflight request
+        // required
+        response.header("Access-Control-Allow-Origin",
+                headers.getRequestHeader("Origin").get(0))
+                .header("Access-Control-Allow-Methods",
+                        "POST,DELETE,GET,PUT")
+                .header("Access-Control-Allow-Headers",
+                        "accept, origin, content-type, authorization")
+                .header("Access-Control-Allow-Credentials", "true");
+
+        return response;
+    }
+
+    /**
+     * This convenient method will append to the response headers the needed
+     * CORS headers
+     */
+    protected Response appendAllowOriginHeader(ResponseBuilder rb,
+            HttpServletRequest request) {
+
+        return rb
+                .header("Access-Control-Allow-Origin",
+                        request.getHeader("Origin")) // return submitted origin
+                .header("Access-Control-Allow-Credentials", "true").build();
     }
 }

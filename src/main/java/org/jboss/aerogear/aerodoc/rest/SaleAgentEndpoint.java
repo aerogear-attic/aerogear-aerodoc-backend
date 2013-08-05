@@ -20,21 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
-import org.jboss.aerogear.aerodoc.service.LeadSender;
-import org.jboss.aerogear.aerodoc.utility.SaleAgentCriteria;
 import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Attribute;
@@ -48,7 +54,7 @@ import org.picketlink.idm.query.IdentityQuery;
 @Stateless
 @Path("/saleagents")
 @Secure("admin")
-public class SaleAgentEndpoint {
+public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @Inject
     private IdentityManager identityManager;
@@ -103,20 +109,23 @@ public class SaleAgentEndpoint {
     @Path("/{id}")
     @Consumes("application/json")
     @Secure("simple")
-    public Response update(@PathParam("id") String id, SaleAgent entity) {
+    public Response update(@PathParam("id") String id, SaleAgent entity,
+            @Context HttpServletRequest request) {
         User user = identityManager.getUser(entity.getLoginName());
         Attribute<String> attributeStatus = user.getAttribute("status");
         attributeStatus.setValue(entity.getStatus());
         Attribute<String> attributeLocation = user.getAttribute("location");
         attributeLocation.setValue(entity.getLocation());
         identityManager.update(user);
-        return Response.noContent().build();
+        return appendAllowOriginHeader(Response.noContent(), request);
     }
 
     @GET
     @Path("/searchAgents")
     @Produces("application/json")
-    public List<SaleAgent> listByCriteria(@DefaultValue("") @QueryParam("status") String status, @DefaultValue("") @QueryParam("location") String location) {
+    public List<SaleAgent> listByCriteria(
+            @DefaultValue("") @QueryParam("status") String status,
+            @DefaultValue("") @QueryParam("location") String location) {
 
         IdentityQuery<User> query = identityManager
                 .createIdentityQuery(User.class);

@@ -19,6 +19,7 @@ package org.jboss.aerogear.aerodoc.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -30,6 +31,8 @@ import org.jboss.aerogear.unifiedpush.SenderClient;
 import org.jboss.aerogear.unifiedpush.message.UnifiedMessage;
 
 public class LeadSender {
+
+    private static final Logger logger = Logger.getLogger(LeadSender.class.getName());
 
     @Inject
     PushConfigEndpoint pushConfigEndpoint;
@@ -46,38 +49,45 @@ public class LeadSender {
     }
 
     public void sendLeads(List<String> users, Lead lead) {
+        if (getActivePushConfig() != null) {
+            Map categories = new HashMap();
+            categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
+            UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
+                    .pushApplicationId(getActivePushConfig().getPushApplicationId())
+                    .masterSecret(getActivePushConfig().getMasterSecret())
+                    .aliases(users)
+                    .simplePush(categories)
+                    .attribute("id", lead.getId().toString())
+                    .attribute("messageType", "pushed_lead")
+                    .attribute("name", lead.getName())
+                    .attribute("location", lead.getLocation())
+                    .attribute("phone", lead.getPhoneNumber()).sound("default")
+                    .alert("A new lead has been created").build();
 
-        Map categories = new HashMap();
-        categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
-        UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
-                .pushApplicationId(getActivePushConfig().getPushApplicationId())
-                .masterSecret(getActivePushConfig().getMasterSecret())
-                .aliases(users).simplePush(categories)
-                .attribute("id", lead.getId().toString())
-                .attribute("messageType", "pushed_lead")
-                .attribute("name", lead.getName())
-                .attribute("location", lead.getLocation())
-                .attribute("phone", lead.getPhoneNumber()).sound("default")
-                .alert("A new lead has been created").build();
-
-        javaSender.sendTo(unifiedMessage);
+            javaSender.sendTo(unifiedMessage);
+        } else {
+            logger.severe("not PushConfig configured, can not send message");
+        }
     }
 
     public void sendBroadCast(Lead lead) {
+        if (getActivePushConfig() != null) {
+            UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
+                    .pushApplicationId(getActivePushConfig().getPushApplicationId())
+                    .masterSecret(getActivePushConfig().getMasterSecret())
+                    .simplePush("version=" + broadcastVersion++)
+                    .attribute("id", lead.getId().toString())
+                    .attribute("messageType", "pushed_lead")
+                    .attribute("name", lead.getName())
+                    .attribute("location", lead.getLocation())
+                    .attribute("phone", lead.getPhoneNumber())
+                    .attribute("messageType", "accepted_lead").sound("default")
+                    .alert("A new lead has been accepted").build();
 
-        UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
-                .pushApplicationId(getActivePushConfig().getPushApplicationId())
-                .masterSecret(getActivePushConfig().getMasterSecret())
-                .simplePush("version=" + broadcastVersion++)
-                .attribute("id", lead.getId().toString())
-                .attribute("messageType", "pushed_lead")
-                .attribute("name", lead.getName())
-                .attribute("location", lead.getLocation())
-                .attribute("phone", lead.getPhoneNumber())
-                .attribute("messageType", "accepted_lead").sound("default")
-                .alert("A new lead has been accepted").build();
-
-        javaSender.broadcast(unifiedMessage);
+            javaSender.broadcast(unifiedMessage);
+        } else {
+            logger.severe("not PushConfig configured, can not send message");
+        }
     }
 
     public JavaSender getJavaSender() {
