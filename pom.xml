@@ -11,10 +11,10 @@
         <version>0.1.0</version>
     </parent>
     <repositories>
-    <repository>
-    <id>client</id>
-    <url>https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-1416/</url>
-    </repository>
+   		<repository>
+  	  		<id>client</id>
+   	 		<url>https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-1416/</url>
+    	</repository>
    </repositories>
     <dependencyManagement>
         <dependencies>
