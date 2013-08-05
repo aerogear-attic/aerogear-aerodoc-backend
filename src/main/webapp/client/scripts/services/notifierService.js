@@ -18,7 +18,7 @@
 
 aerodoc.factory("notifierService", function() {
   var leadEndpoint, leadRequest, broadcastRequest, broadcastEndpoint,
-      UPClient = AeroGear.UnifiedPushClient("ba3cfa4b-7f47-44a1-bdae-0dc36041bdb2", "1161fa49-2c5b-4101-8102-ea747606d333", "http://localhost:8080/ag-push/rest/registry/device");
+      UPClient = AeroGear.UnifiedPushClient(aeroConfig.variantID, aeroConfig.variantSecret, aeroConfig.pushServerURL+ "/rest/registry/device");
 
   return {
     connector : function(){

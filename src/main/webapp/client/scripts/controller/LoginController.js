@@ -30,7 +30,7 @@ function LoginController($scope, $routeParams, $location,$rootScope, dataService
 				var role = $.inArray("admin", data.roles) >= 0 ? 1 : 0;
 				sessionStorage.setItem("username", data.loginName);
 				sessionStorage.setItem("access", role);
-                AeroGear.SimplePushClient({ simplePushServerURL: "http://localhost:7777/simplepush", onConnect: function() {
+                AeroGear.SimplePushClient({ simplePushServerURL: aeroConfig.simplePushServerURL, onConnect: function() {
                   var message = "loginDone";
                   $rootScope.$broadcast('loginDone', message);
                   notifierService.connector();

@@ -17,7 +17,7 @@
 "use strict";
 
 aerodoc.factory("dataService", function() {
-	var serverUrl = "http://localhost:8080";
+	var serverUrl = aeroConfig.serverURL;
 	return {
 		restAuth : AeroGear.Auth({
 			name : "auth",
