@@ -83,7 +83,7 @@ public class LeadEndpoint {
     @Consumes("application/json")
     @Secure("admin")
     public Response create(Lead entity) {
-        em.persist(entity);
+      	em.persist(entity);
         return Response.created(
                 UriBuilder.fromResource(LeadEndpoint.class)
                         .path(String.valueOf(entity.getId())).build()).build();
