@@ -220,8 +220,8 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 		leadPipe.read({
 			id : $routeParams.LeadId,
 			success : function(data) {
-				self.original = data.entity;
-				$scope.lead = data.entity;
+				self.original = data;
+				$scope.lead = data;
 				$scope.$apply();
 			},
 			statusCode : {
