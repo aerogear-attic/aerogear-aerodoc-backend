@@ -1,0 +1,67 @@
+<!--
+
+    JBoss, Home of Professional Open Source
+    Copyright Red Hat, Inc., and individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    	http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<form id="new-Lead" name="newLead" class="form-horizontal">
+    <div class="control-group">
+    </div>
+    <div class="control-group">
+    </div>
+    <div class="control-group">
+            <label for="name" class="control-label">Name</label>
+
+            <div class="controls">
+                    <input id="name" name="name" type="text"
+                           
+                           ng-model="lead.name"
+                           placeholder="Enter the Lead name"></input>
+            </div>
+    </div>
+    <div class="control-group">
+            <label for="location" class="control-label">Location</label>
+
+            <div class="controls">
+                    <input id="location" name="location" type="text"
+                           
+                           ng-model="lead.location"
+                           placeholder="Enter the Lead location"></input>
+            </div>
+    </div>
+    <div class="control-group">
+            <label for="phoneNumber" class="control-label">PhoneNumber</label>
+
+            <div class="controls">
+                    <input id="phoneNumber" name="phoneNumber" type="text"
+                           
+                           ng-model="lead.phoneNumber"
+                           placeholder="Enter the Lead phoneNumber"></input>
+            </div>
+    </div>
+     <div class="control-group">
+        <div class="controls">
+            <button id="saveLead" name="saveLead" class="btn btn-primary"
+                    ng-disabled="isClean() || newLead.$invalid" ng-click="save()"><i
+                    class="icon-ok-sign icon-white"></i> Save
+            </button>
+            <button id="cancel" name="cancel" class="btn" ng-click="cancel()"><i class="icon-remove-sign"></i> Cancel
+            </button>
+            <button id="deleteLead" name="deleteLead" class="btn"
+                    ng-show="lead.id" ng-click="remove()"><i class="icon-trash"></i> Delete
+            </button>
+        </div>
+        <div>
+</form>

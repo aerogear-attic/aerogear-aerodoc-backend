@@ -1,0 +1,97 @@
+<!--
+
+    JBoss, Home of Professional Open Source
+    Copyright Red Hat, Inc., and individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    	http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!doctype html>
+<html lang="en" ng-app="aerodoc">
+<head>
+<meta charset="UTF-8">
+<title>aerodoc</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css"
+	href="css/topcoat-desktop-dark.css">
+<link rel="stylesheet" type="text/css" href="css/topcoat-notification.min.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<script src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+<script src='http://cdn.sockjs.org/sockjs-0.3.min.js'></script>
+<script src='http://cdn.sockjs.org/sockjs-0.3.min.js'></script>
+<script src="scripts/vendor/aerogear.js"></script>
+<script src="scripts/vendor/angular.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/services/dataService.js"></script>
+<script src="scripts/services/notifierService.js"></script>
+<script src="scripts/controller/LeadControllers.js"></script>
+<script src="scripts/controller/SaleAgentControllers.js"></script>
+<script src="scripts/controller/LoginController.js"></script>
+<script src="scripts/controller/NotificationController.js"></script>
+
+
+<script src="scripts/filters.js"></script>
+
+<script>
+   localStorage.removeItem("ag-push-store");
+</script>
+</head>
+<body>
+
+	<div class="topcoat-navigation-bar">
+
+		<div class="topcoat-navigation-bar__item left quarter">
+			<h1 class="topcoat-navigation-bar__title">AeroDoc</h1>
+		</div>
+		<div class="topcoat-navigation-bar__item center half"></div>
+
+	</div>
+	<div class="topcoat-overlay-bg" ng-controller="LoginController"
+		ng-show="!isLoggedIn()"></div>
+	<form>
+		<aside class="topcoat-overlay" id="auth-error-box"
+			ng-controller="LoginController" ng-show="!isLoggedIn()">
+			<h1>Login</h1>
+			<input type="text" class="input-small" name="username" id="username"
+				ng-model="user.loginName" placeholder="username"></input> <input
+				type="password" class="input-small" name="password" id="password"
+				ng-model="user.password" placeholder="password"></input>
+
+			<div class="topcoat-overlay-buttons">
+				<button id="login" name="login" role="button" class="topcoat-button"
+					ng-click="login()">Sign in</button>
+
+			</div>
+		</aside>
+	</form>
+	<span class="topcoat-notification" ng-show="showNotification()" ng-controller="ShowNotificationController">The lead list has been refreshed</span>
+	<div ng-view>
+		
+	</div>
+	<div class="bar bottom">
+	<div class="settings container">
+		<a href="#/Leads">
+   			 <img src='img/listview.svg'/>
+   		</a>
+   		<a href="#/Leads/accepted">
+   			 <img src='img/page.svg'/>
+   		</a>
+   		<a id="logout" name="logout" role="button"
+					ng-click="logout()" ng-controller="LoginController">
+   			 <img src='img/cancel.svg'/>
+   		</a>
+   		
+	</div>
+	</div>
+</body>
+</html>
