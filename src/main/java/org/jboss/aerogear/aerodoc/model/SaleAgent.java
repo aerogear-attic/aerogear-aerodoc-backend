@@ -16,23 +16,16 @@
  */
 package org.jboss.aerogear.aerodoc.model;
 
-import javax.persistence.Entity;
-import java.io.Serializable;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.Version;
-import java.lang.Override;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.SimpleUser;
+import org.picketlink.idm.model.sample.User;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @XmlRootElement
-@JsonIgnoreProperties( { "attributes" })
-public class SaleAgent extends SimpleUser implements Serializable {
+@JsonIgnoreProperties({"attributes"})
+public class SaleAgent extends User implements Serializable {
 
     private String status;
 
