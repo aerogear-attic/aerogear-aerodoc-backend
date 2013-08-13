@@ -56,11 +56,7 @@ public class Login extends AerodocBaseEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(final SaleAgent user, @Context HttpServletRequest request) {
-        try {
-            performLogin(user);
-        } catch (AeroGearSecurityException agse) {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
+        performLogin(user);
         return appendAllowOriginHeader(Response.ok(user), request);
     }
 
@@ -74,7 +70,7 @@ public class Login extends AerodocBaseEndpoint {
     private void performLogin(SaleAgent saleAgent) {
         authenticationManager.login(saleAgent, saleAgent.getPassword());
         //workaround to load the extra attributes, maybe a bug ??
-        User user = identityManager.getUser(saleAgent.getLoginName());
+        User user = SampleModel.getUser(identityManager, saleAgent.getLoginName());
         saleAgent.setLocation(user.getAttribute("location").getValue().toString());
         saleAgent.setStatus(user.getAttribute("status").getValue().toString());
         saleAgent.setId(user.getId());
