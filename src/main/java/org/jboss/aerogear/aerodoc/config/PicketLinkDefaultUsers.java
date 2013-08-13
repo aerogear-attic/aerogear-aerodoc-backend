@@ -18,10 +18,12 @@ package org.jboss.aerogear.aerodoc.config;
 
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.PartitionManager;
+import org.picketlink.idm.RelationshipManager;
 import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.SimpleRole;
-import org.picketlink.idm.model.User;
+import org.picketlink.idm.model.sample.Role;
+import org.picketlink.idm.model.sample.SampleModel;
+import org.picketlink.idm.model.sample.User;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -32,69 +34,82 @@ import javax.inject.Inject;
 @Startup
 public class PicketLinkDefaultUsers {
 
-	@Inject
-	private IdentityManager identityManager;
+    public static final String DEFAULT_USER = "john";
 
-	/**
-	 * <p>
-	 * Loads some users during the first construction.
-	 * </p>
-	 */
-	@PostConstruct
-	public void create() {
-		User adminUser = identityManager.getUser("john");
-		//TODO hack to see if the idm db has been created or not
-		if (adminUser == null) {
-			SaleAgent john = new SaleAgent();
-			john.setLocation("New York");
-			john.setStatus("PTO");
-			john.setLoginName("john");
+    @Inject
+    private PartitionManager partitionManager;
 
-			SaleAgent bob = new SaleAgent();
-			bob.setLocation("New York");
-			bob.setStatus("STANDBY");
-			bob.setLoginName("bob");
+    private IdentityManager identityManager;
+    private RelationshipManager relationshipManager;
 
-			SaleAgent maria = new SaleAgent();
-			maria.setLocation("New York");
-			maria.setStatus("STANDBY");
-			maria.setLoginName("maria");
+    /**
+     * <p>
+     * Loads some users during the first construction.
+     * </p>
+     */
+    @PostConstruct
+    public void create() {
 
-			SaleAgent jake = new SaleAgent();
-			jake.setLocation("Boston");
-			jake.setStatus("STANDBY");
-			jake.setLoginName("jake");
+        this.identityManager = partitionManager.createIdentityManager();
+        this.relationshipManager = partitionManager.createRelationshipManager();
+
+        User adminUser = SampleModel.getUser(identityManager, DEFAULT_USER);
+        //TODO hack to see if the idm db has been created or not
+        if (adminUser == null) {
+            SaleAgent john = new SaleAgent();
+            john.setLocation("New York");
+            john.setStatus("PTO");
+            john.setLoginName("john");
+
+            SaleAgent bob = new SaleAgent();
+            bob.setLocation("New York");
+            bob.setStatus("STANDBY");
+            bob.setLoginName("bob");
+
+            SaleAgent maria = new SaleAgent();
+            maria.setLocation("New York");
+            maria.setStatus("STANDBY");
+            maria.setLoginName("maria");
+
+            SaleAgent jake = new SaleAgent();
+            jake.setLocation("Boston");
+            jake.setStatus("STANDBY");
+            jake.setLoginName("jake");
 
 			/*
-			 * Note: Password will be encoded in SHA-512 with SecureRandom-1024
+             * Note: Password will be encoded in SHA-512 with SecureRandom-1024
 			 * salt See
 			 * http://lists.jboss.org/pipermail/security-dev/2013-January
 			 * /000650. html for more information
 			 */
-			this.identityManager.add(john);
-			this.identityManager.updateCredential(john, new Password("123"));
+            this.identityManager.add(john);
+            this.identityManager.updateCredential(john, new Password("123"));
 
-			this.identityManager.add(bob);
-			this.identityManager.updateCredential(bob, new Password("123"));
+            this.identityManager.add(bob);
+            this.identityManager.updateCredential(bob, new Password("123"));
 
-			this.identityManager.add(maria);
-			this.identityManager.updateCredential(maria, new Password("123"));
+            this.identityManager.add(maria);
+            this.identityManager.updateCredential(maria, new Password("123"));
 
-			this.identityManager.add(jake);
-			this.identityManager.updateCredential(jake, new Password("123"));
+            this.identityManager.add(jake);
+            this.identityManager.updateCredential(jake, new Password("123"));
 
-			Role admin = new SimpleRole("admin");
-			this.identityManager.add(admin);
+            Role admin = new Role("admin");
+            this.identityManager.add(admin);
 
-			Role simple = new SimpleRole("simple");
-			this.identityManager.add(simple);
-			identityManager.grantRole(john, admin);
-			identityManager.grantRole(john, simple);
+            Role simple = new Role("simple");
+            this.identityManager.add(simple);
+            grantRoles(john, admin);
+            grantRoles(john, simple);
 
-			identityManager.grantRole(bob, simple);
-			identityManager.grantRole(maria, simple);
-			identityManager.grantRole(jake, simple);
-		}
-	}
+            grantRoles(bob, simple);
+            grantRoles(maria, simple);
+            grantRoles(jake, simple);
+        }
+    }
+
+    private void grantRoles(User user, Role role) {
+        SampleModel.grantRole(relationshipManager, user, role);
+    }
 
 }

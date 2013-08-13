@@ -20,10 +20,10 @@ import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
 import org.jboss.aerogear.security.exception.AeroGearSecurityException;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.User;
+import org.picketlink.idm.model.sample.SampleModel;
+import org.picketlink.idm.model.sample.User;
 
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -35,9 +35,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-
 import java.util.logging.Logger;
 
 @Stateless
