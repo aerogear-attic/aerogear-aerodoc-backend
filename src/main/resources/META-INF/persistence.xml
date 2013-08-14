@@ -17,35 +17,45 @@
     limitations under the License.
 
 -->
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <persistence-unit name="aerodoc-default" transaction-type="JTA">
-    <description>Forge Persistence Unit</description>
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.format_sql" value="true"/>
-      <property name="hibernate.transaction.flush_before_completion" value="true"/>
-    </properties>
-  </persistence-unit>
-  <persistence-unit name="picketlink-default">
-    <class>org.picketlink.idm.jpa.schema.IdentityObject</class>
-    <class>org.picketlink.idm.jpa.schema.PartitionObject</class>
-    <class>org.picketlink.idm.jpa.schema.RelationshipObject</class>
-    <class>org.picketlink.idm.jpa.schema.RelationshipIdentityObject</class>
-    <class>org.picketlink.idm.jpa.schema.RelationshipObjectAttribute</class>
-    <class>org.picketlink.idm.jpa.schema.IdentityObjectAttribute</class>
-    <class>org.picketlink.idm.jpa.schema.CredentialObject</class>
-    <class>org.picketlink.idm.jpa.schema.CredentialObjectAttribute</class>
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <properties>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.transaction.flush_before_completion" value="true"/>
-    </properties>
-  </persistence-unit>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="2.0"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="aerodoc-default" transaction-type="JTA">
+        <description>Forge Persistence Unit</description>
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.transaction.flush_before_completion" value="true"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="picketlink-default"
+                      transaction-type="JTA">
+        <description>PicketLink Persistence Unit</description>
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
+
+        <class>org.picketlink.idm.jpa.model.sample.simple.AttributedTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.AccountTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.RoleTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.GroupTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.IdentityTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.RelationshipTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.RelationshipIdentityTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.PartitionTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.PasswordCredentialTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.DigestCredentialTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.X509CredentialTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.OTPCredentialTypeEntity</class>
+        <class>org.picketlink.idm.jpa.model.sample.simple.AttributeTypeEntity</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.transaction.flush_before_completion" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>
