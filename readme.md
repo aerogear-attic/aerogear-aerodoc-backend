@@ -1,7 +1,7 @@
-# aerogear-push-quickstart-backend  [![Build Status](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend.png)](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend)
+# aerogear-aerodoc-backend  [![Build Status](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend.png)](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend)
 
-This backend application is a showcase / quickstart part of Aerogear's Unified Push facilities.
-This Application shows how a business specific App can interact with [aerogear-unified-push-server](https://github.com/aerogear/aerogear-unified-push-server) . It shows how it can use the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) to send Unified Messages to the push server.
+This backend application is a showcase / quickstart part of Aerogear's UnifiedPush facilities.
+This Application shows how a business specific App can interact with [aerogear-unifiedpush-server](https://github.com/aerogear/aerogear-unifiedpush-server) . It shows how it can use the  [aerogear-unifiedpush-java-client](https://github.com/aerogear/aerogear-unifiedpush-java-client) to send Unified Messages to the push server.
 
 # Description of the Application
 
@@ -67,9 +67,9 @@ AeroDoc uses the  [aerogear-unified-push-java-client](https://github.com/aerogea
 
 ## Clients
 
-* [aerogear-push-quickstart-ios](https://github.com/aerogear/aerogear-push-quickstart-ios)
-* [aerogear-push-quickstart-android](https://github.com/aerogear/aerogear-push-quickstart-android)
-* [aerogear-push-quickstart-web](https://github.com/aerogear/aerogear-push-quickstart-web)
+* [aerogear-aerodoc-ios](https://github.com/aerogear/aerogear-aerodoc-ios)
+* [aerogear-aerodoc-android](https://github.com/aerogear/aerogear-aerodoc-android	)
+* [aerogear-aerodoc-web](https://github.com/aerogear/aerogear-aerodoc-web)
 
 
 ### Available aliases
