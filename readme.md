@@ -1,4 +1,4 @@
-# aerogear-aerodoc-backend  [![Build Status](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend.png)](https://travis-ci.org/aerogear/aerogear-push-quickstart-backend)
+# aerogear-aerodoc-backend  [![Build Status](https://travis-ci.org/aerogear/aerogear-aerodoc-backend.png)](https://travis-ci.org/aerogear/aerogear-aerodoc-backend)
 
 This backend application is a showcase / quickstart part of Aerogear's UnifiedPush facilities.
 This Application shows how a business specific App can interact with [aerogear-unifiedpush-server](https://github.com/aerogear/aerogear-unifiedpush-server) . It shows how it can use the  [aerogear-unifiedpush-java-client](https://github.com/aerogear/aerogear-unifiedpush-java-client) to send Unified Messages to the push server.
@@ -56,13 +56,13 @@ In this highly competitive market of the tensiometers, be able to process a lead
 
 ## Prerequisites
 
-## aerogear-unified-push-server
+## aerogear-unifiedpush-server
 
-Be sure to have a running instance of a Push Server. Intructions can be found [here](https://github.com/aerogear/aerogear-unified-push-server).
+Be sure to have a running instance of a Push Server. Intructions can be found [here](https://github.com/aerogear/aerogear-unifiedpush-server).
 
-## aerogear-unified-push-java-client 
+## aerogear-unifiedpush-java-client 
 
-AeroDoc uses the  [aerogear-unified-push-java-client](https://github.com/aerogear/aerogear-unified-push-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
+AeroDoc uses the  [aerogear-unifiedpush-java-client](https://github.com/aerogear/aerogear-unifiedpush-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
 
 
 ## Clients
