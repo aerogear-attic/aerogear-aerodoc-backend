@@ -60,11 +60,6 @@ In this highly competitive market of the tensiometers, be able to process a lead
 
 Be sure to have a running instance of a Push Server. Intructions can be found [here](https://github.com/aerogear/aerogear-unifiedpush-server).
 
-## aerogear-unifiedpush-java-client 
-
-AeroDoc uses the  [aerogear-unifiedpush-java-client](https://github.com/aerogear/aerogear-unifiedpush-java-client) library. This one is not yet released on the central maven repos, so you will have to clone the repo and install it ``` mvn clean install ```
-
-
 ## Clients
 
 * [aerogear-aerodoc-ios](https://github.com/aerogear/aerogear-aerodoc-ios)
