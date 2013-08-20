@@ -18,14 +18,14 @@ package org.jboss.aerogear.aerodoc.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.sample.User;
+import org.picketlink.idm.model.sample.Agent;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @XmlRootElement
 @JsonIgnoreProperties({"attributes"})
-public class SaleAgent extends User implements Serializable {
+public class SaleAgent extends Agent implements Serializable {
 
     private String status;
 

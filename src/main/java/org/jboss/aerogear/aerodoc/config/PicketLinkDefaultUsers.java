@@ -21,6 +21,7 @@ import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.PartitionManager;
 import org.picketlink.idm.RelationshipManager;
 import org.picketlink.idm.credential.Password;
+import org.picketlink.idm.model.sample.Agent;
 import org.picketlink.idm.model.sample.Role;
 import org.picketlink.idm.model.sample.SampleModel;
 import org.picketlink.idm.model.sample.User;
@@ -29,12 +30,13 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.util.List;
 
 @Singleton
 @Startup
 public class PicketLinkDefaultUsers {
 
-    public static final String DEFAULT_USER = "john";
+    private static final String DEFAULT_USER = "john";
 
     @Inject
     private PartitionManager partitionManager;
@@ -53,7 +55,7 @@ public class PicketLinkDefaultUsers {
         this.identityManager = partitionManager.createIdentityManager();
         this.relationshipManager = partitionManager.createRelationshipManager();
 
-        User adminUser = SampleModel.getUser(identityManager, DEFAULT_USER);
+        SaleAgent adminUser = findByUsername(DEFAULT_USER);
         //TODO hack to see if the idm db has been created or not
         if (adminUser == null) {
             SaleAgent john = new SaleAgent();
@@ -108,8 +110,13 @@ public class PicketLinkDefaultUsers {
         }
     }
 
-    private void grantRoles(User user, Role role) {
-        SampleModel.grantRole(relationshipManager, user, role);
+    private SaleAgent findByUsername(String username) {
+        List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
+                .setParameter(SaleAgent.LOGIN_NAME, username).getResultList();
+        return list.isEmpty() ? null : list.get(0);
+    }
+    private void grantRoles(Agent agent, Role role) {
+        SampleModel.grantRole(relationshipManager, agent, role);
     }
 
 }
