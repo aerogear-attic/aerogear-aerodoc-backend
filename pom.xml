@@ -84,6 +84,12 @@
             <groupId>org.jboss.aerogear</groupId>
             <artifactId>aerogear-security-picketlink</artifactId>
             <version>${aerogear.security.picketlink.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.picketlink</groupId>
+                <artifactId>picketlink-idm-simple-schema</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jboss.aerogear.unifiedpush</groupId>
