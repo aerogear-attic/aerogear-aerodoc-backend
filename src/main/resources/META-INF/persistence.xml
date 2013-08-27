@@ -38,19 +38,20 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
 
-        <class>org.picketlink.idm.jpa.model.sample.simple.AttributedTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.AccountTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.RoleTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.GroupTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.IdentityTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.RelationshipTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.RelationshipIdentityTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.PartitionTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.PasswordCredentialTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.DigestCredentialTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.X509CredentialTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.OTPCredentialTypeEntity</class>
-        <class>org.picketlink.idm.jpa.model.sample.simple.AttributeTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.AttributedTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.AccountTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.RoleTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.GroupTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.IdentityTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.RelationshipTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.RelationshipIdentityTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.PartitionTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.PasswordCredentialTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.DigestCredentialTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.X509CredentialTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.OTPCredentialTypeEntity</class>
+      <class>org.jboss.aerogear.aerodoc.model.entity.AttributeTypeEntity</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
