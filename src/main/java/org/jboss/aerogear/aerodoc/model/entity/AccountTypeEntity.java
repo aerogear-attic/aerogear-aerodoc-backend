@@ -19,8 +19,8 @@ package org.jboss.aerogear.aerodoc.model.entity;
 
 import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
-import org.picketlink.idm.model.sample.Agent;
-import org.picketlink.idm.model.sample.User;
+import org.picketlink.idm.model.basic.Agent;
+import org.picketlink.idm.model.basic.User;
 
 import javax.persistence.Entity;
 

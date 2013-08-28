@@ -19,7 +19,7 @@ package org.jboss.aerogear.aerodoc.model.entity;
 
 import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
-import org.picketlink.idm.model.sample.Role;
+import org.picketlink.idm.model.basic.Role;
 
 import javax.persistence.Entity;
 
