@@ -21,10 +21,9 @@ import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.PartitionManager;
 import org.picketlink.idm.RelationshipManager;
 import org.picketlink.idm.credential.Password;
-import org.picketlink.idm.model.sample.Agent;
-import org.picketlink.idm.model.sample.Role;
-import org.picketlink.idm.model.sample.SampleModel;
-import org.picketlink.idm.model.sample.User;
+import org.picketlink.idm.model.basic.Agent;
+import org.picketlink.idm.model.basic.BasicModel;
+import org.picketlink.idm.model.basic.Role;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -115,8 +114,9 @@ public class PicketLinkDefaultUsers {
                 .setParameter(SaleAgent.LOGIN_NAME, username).getResultList();
         return list.isEmpty() ? null : list.get(0);
     }
+
     private void grantRoles(Agent agent, Role role) {
-        SampleModel.grantRole(relationshipManager, agent, role);
+        BasicModel.grantRole(relationshipManager, agent, role);
     }
 
 }

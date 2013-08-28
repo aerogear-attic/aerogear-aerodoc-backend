@@ -21,8 +21,8 @@ import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.IdentityType;
-import org.picketlink.idm.model.sample.SampleModel;
-import org.picketlink.idm.model.sample.User;
+import org.picketlink.idm.model.basic.BasicModel;
+import org.picketlink.idm.model.basic.User;
 import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
@@ -111,7 +111,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity,
             @Context HttpServletRequest request) {
-        User user = SampleModel.getUser(identityManager, entity.getLoginName());
+        User user = BasicModel.getUser(identityManager, entity.getLoginName());
         Attribute<String> attributeStatus = user.getAttribute("status");
         attributeStatus.setValue(entity.getStatus());
         Attribute<String> attributeLocation = user.getAttribute("location");

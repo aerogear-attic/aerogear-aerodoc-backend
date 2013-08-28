@@ -18,7 +18,7 @@ package org.jboss.aerogear.aerodoc.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.sample.Agent;
+import org.picketlink.idm.model.basic.Agent;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
