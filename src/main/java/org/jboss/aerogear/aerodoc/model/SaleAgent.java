@@ -34,15 +34,17 @@ public class SaleAgent extends Agent implements Serializable {
     private String location;
 
     public String getStatus() {
-        return this.getAttribute("status").getValue().toString();
+        Attribute<String> attribute = this.getAttribute("status");
+        return attribute != null ? attribute.getValue() : null;
     }
 
     public void setStatus(final String status) {
-        this.setAttribute(new Attribute("status", status));
+        this.setAttribute(new Attribute<String>("status", status));
     }
 
     public String getLocation() {
-        return this.getAttribute("location").getValue().toString();
+        Attribute<String> attribute = this.getAttribute("location");
+        return attribute != null ? attribute.getValue() : null;
     }
 
     public void setLocation(final String location) {

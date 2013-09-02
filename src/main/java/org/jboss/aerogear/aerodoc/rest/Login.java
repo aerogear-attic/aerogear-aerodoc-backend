@@ -18,6 +18,8 @@ package org.jboss.aerogear.aerodoc.rest;
 
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
+import org.picketlink.Identity;
+import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
 
 import javax.ejb.Stateless;
@@ -47,13 +49,27 @@ public class Login extends AerodocBaseEndpoint {
     @Inject
     private IdentityManager identityManager;
 
+    @Inject
+    private Identity identity;
+
+    @Inject
+    private DefaultLoginCredentials credentials;
+
+
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(final SaleAgent user, @Context HttpServletRequest request) {
 
-        authenticationManager.login(user, user.getPassword());
+        if (!this.identity.isLoggedIn()) {
+            this.credentials.setUserId(user.getLoginName());
+            this.credentials.setPassword(user.getPassword());
+            this.identity.login();
+        } else {
+            throw new RuntimeException("Authentication failed");
+        }
+
 
         return appendAllowOriginHeader(Response.ok(user), request);
     }
