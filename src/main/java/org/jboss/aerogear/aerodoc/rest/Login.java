@@ -19,8 +19,14 @@ package org.jboss.aerogear.aerodoc.rest;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
 import org.picketlink.Identity;
+import org.picketlink.Identity.AuthenticationResult;
 import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.IdentityType;
+import org.picketlink.idm.model.basic.Agent;
+import org.picketlink.idm.model.basic.BasicModel;
+import org.picketlink.idm.model.basic.User;
+import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -40,52 +46,59 @@ import java.util.logging.Logger;
 @Path("/")
 public class Login extends AerodocBaseEndpoint {
 
-    private static final Logger LOGGER = Logger.getLogger(Login.class
-            .getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(Login.class
+			.getSimpleName());
 
-    @Inject
-    private AuthenticationManager authenticationManager;
+	@Inject
+	private AuthenticationManager authenticationManager;
 
-    @Inject
-    private IdentityManager identityManager;
+	@Inject
+	private IdentityManager identityManager;
 
-    @Inject
-    private Identity identity;
+	@Inject
+	private Identity identity;
 
-    @Inject
-    private DefaultLoginCredentials credentials;
+	@Inject
+	private DefaultLoginCredentials credentials;
 
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(final SaleAgent user,
+			@Context HttpServletRequest request) {
+		SaleAgent saleAgent = null;
+		String id = user.getLoginName();
+		if (!this.identity.isLoggedIn()) {
+			this.credentials.setUserId(user.getLoginName());
+			this.credentials.setPassword(user.getPassword());
+			AuthenticationResult result = this.identity.login();
+			LOGGER.info("Login result : " + result);
+			if(result==AuthenticationResult.SUCCESS){
+				saleAgent = (SaleAgent) BasicModel.getAgent(identityManager, user.getLoginName());
+			}
+			else {
+				LOGGER.severe("Login failed !");
+			}
+		} else {
+			throw new RuntimeException("Authentication failed");
+		}
 
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response login(final SaleAgent user, @Context HttpServletRequest request) {
+		return appendAllowOriginHeader(Response.ok(saleAgent), request);
+	}
 
-        if (!this.identity.isLoggedIn()) {
-            this.credentials.setUserId(user.getLoginName());
-            this.credentials.setPassword(user.getPassword());
-            this.identity.login();
-        } else {
-            throw new RuntimeException("Authentication failed");
-        }
+	@POST
+	@Path("/logout")
+	public void logout() {
+		LOGGER.info("User logout!");
+		authenticationManager.logout();
+	}
 
+	@OPTIONS
+	@Path("/login")
+	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
+		return appendPreflightResponseHeaders(headers, Response.ok()).build();
 
-        return appendAllowOriginHeader(Response.ok(user), request);
-    }
-
-    @POST
-    @Path("/logout")
-    public void logout() {
-        LOGGER.info("User logout!");
-        authenticationManager.logout();
-    }
-
-    @OPTIONS
-    @Path("/login")
-    public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-        return appendPreflightResponseHeaders(headers, Response.ok()).build();
-
-    }
+	}
 
 }
