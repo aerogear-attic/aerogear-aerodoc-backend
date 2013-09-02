@@ -80,6 +80,11 @@
             <version>${aerogear.security.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-impl</artifactId>
+            <version>2.5.0.Final</version>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.aerogear</groupId>
             <artifactId>aerogear-security-picketlink</artifactId>
             <version>${aerogear.security.picketlink.version}</version>
