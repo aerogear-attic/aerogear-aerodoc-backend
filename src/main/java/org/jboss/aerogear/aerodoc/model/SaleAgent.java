@@ -16,23 +16,16 @@
  */
 package org.jboss.aerogear.aerodoc.model;
 
-import javax.persistence.Entity;
-import java.io.Serializable;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.Version;
-import java.lang.Override;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.SimpleUser;
+import org.picketlink.idm.model.basic.Agent;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @XmlRootElement
-@JsonIgnoreProperties( { "attributes" })
-public class SaleAgent extends SimpleUser implements Serializable {
+@JsonIgnoreProperties({"attributes"})
+public class SaleAgent extends Agent implements Serializable {
 
     private String status;
 
@@ -41,15 +34,17 @@ public class SaleAgent extends SimpleUser implements Serializable {
     private String location;
 
     public String getStatus() {
-        return this.getAttribute("status").getValue().toString();
+        Attribute<String> attribute = this.getAttribute("status");
+        return attribute != null ? attribute.getValue() : null;
     }
 
     public void setStatus(final String status) {
-        this.setAttribute(new Attribute("status", status));
+        this.setAttribute(new Attribute<String>("status", status));
     }
 
     public String getLocation() {
-        return this.getAttribute("location").getValue().toString();
+        Attribute<String> attribute = this.getAttribute("location");
+        return attribute != null ? attribute.getValue() : null;
     }
 
     public void setLocation(final String location) {

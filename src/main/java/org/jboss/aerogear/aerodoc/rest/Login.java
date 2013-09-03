@@ -18,12 +18,17 @@ package org.jboss.aerogear.aerodoc.rest;
 
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.security.auth.AuthenticationManager;
-import org.jboss.aerogear.security.exception.AeroGearSecurityException;
+import org.picketlink.Identity;
+import org.picketlink.Identity.AuthenticationResult;
+import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.User;
+import org.picketlink.idm.model.IdentityType;
+import org.picketlink.idm.model.basic.Agent;
+import org.picketlink.idm.model.basic.BasicModel;
+import org.picketlink.idm.model.basic.User;
+import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -35,58 +40,69 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.Response.Status;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Stateless
 @Path("/")
 public class Login extends AerodocBaseEndpoint {
 
-    private static final Logger LOGGER = Logger.getLogger(Login.class
-            .getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(Login.class
+			.getSimpleName());
 
-    @Inject
-    private AuthenticationManager authenticationManager;
+	@Inject
+	private AuthenticationManager authenticationManager;
 
-    @Inject
-    private IdentityManager identityManager;
+	@Inject
+	private IdentityManager identityManager;
 
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response login(final SaleAgent user, @Context HttpServletRequest request) {
-        try {
-            performLogin(user);
-        } catch (AeroGearSecurityException agse) {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-        return appendAllowOriginHeader(Response.ok(user), request);
-    }
+	@Inject
+	private Identity identity;
 
-    @POST
-    @Path("/logout")
-    public void logout() {
-        LOGGER.info("User logout!");
-        authenticationManager.logout();
-    }
+	@Inject
+	private DefaultLoginCredentials credentials;
 
-    private void performLogin(SaleAgent saleAgent) {
-        authenticationManager.login(saleAgent, saleAgent.getPassword());
-        //workaround to load the extra attributes, maybe a bug ??
-        User user = identityManager.getUser(saleAgent.getLoginName());
-        saleAgent.setLocation(user.getAttribute("location").getValue().toString());
-        saleAgent.setStatus(user.getAttribute("status").getValue().toString());
-        saleAgent.setId(user.getId());
-    }
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(final SaleAgent user,
+			@Context HttpServletRequest request) {
+		SaleAgent saleAgent = null;
+		String id = user.getLoginName();
+		if (!this.identity.isLoggedIn()) {
+			this.credentials.setUserId(user.getLoginName());
+			this.credentials.setPassword(user.getPassword());
+			AuthenticationResult result = this.identity.login();
+			LOGGER.info("Login result : " + result);
+			if(result==AuthenticationResult.SUCCESS){
+				 List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
+			                .setParameter(SaleAgent.LOGIN_NAME, user.getLoginName()).getResultList();
+				saleAgent = list.get(0);
+			}
+			else {
+				LOGGER.severe("Login failed !");
+			}
+		} else {
+			throw new RuntimeException("Authentication failed");
+		}
 
-    @OPTIONS
-    @Path("/login")
-    public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-        return appendPreflightResponseHeaders(headers, Response.ok()).build();
+		return appendAllowOriginHeader(Response.ok(saleAgent), request);
+	}
 
-    }
+	@POST
+	@Path("/logout")
+	public void logout() {
+		LOGGER.info("User logout!");
+		authenticationManager.logout();
+	}
+
+	@OPTIONS
+	@Path("/login")
+	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
+		return appendPreflightResponseHeaders(headers, Response.ok()).build();
+
+	}
 
 }
