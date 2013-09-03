@@ -40,6 +40,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
 import java.util.logging.Logger;
 
 @Stateless
@@ -75,7 +77,10 @@ public class Login extends AerodocBaseEndpoint {
 			AuthenticationResult result = this.identity.login();
 			LOGGER.info("Login result : " + result);
 			if(result==AuthenticationResult.SUCCESS){
-				saleAgent = (SaleAgent) BasicModel.getAgent(identityManager, user.getLoginName());
+				 List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
+			                .setParameter(SaleAgent.LOGIN_NAME, user.getLoginName()).getResultList();
+				saleAgent = list.get(0);
+				LOGGER.info("Sale agent: " + saleAgent.getStatus());
 			}
 			else {
 				LOGGER.severe("Login failed !");

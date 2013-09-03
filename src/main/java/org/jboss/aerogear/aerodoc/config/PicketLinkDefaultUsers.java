@@ -50,14 +50,13 @@ public class PicketLinkDefaultUsers {
      */
     @PostConstruct
     public void create() {
-
         this.identityManager = partitionManager.createIdentityManager();
         this.relationshipManager = partitionManager.createRelationshipManager();
 
         SaleAgent adminUser = findByUsername(DEFAULT_USER);
         //TODO hack to see if the idm db has been created or not
         if (adminUser == null) {
-            SaleAgent john = new SaleAgent();
+        	SaleAgent john = new SaleAgent();
             john.setLocation("New York");
             john.setStatus("PTO");
             john.setLoginName("john");
