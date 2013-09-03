@@ -80,7 +80,6 @@ public class Login extends AerodocBaseEndpoint {
 				 List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
 			                .setParameter(SaleAgent.LOGIN_NAME, user.getLoginName()).getResultList();
 				saleAgent = list.get(0);
-				LOGGER.info("Sale agent: " + saleAgent.getStatus());
 			}
 			else {
 				LOGGER.severe("Login failed !");
