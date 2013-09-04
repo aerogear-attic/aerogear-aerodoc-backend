@@ -18,6 +18,7 @@ package org.jboss.aerogear.aerodoc.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.picketlink.idm.model.Attribute;
+import org.picketlink.idm.model.annotation.AttributeProperty;
 import org.picketlink.idm.model.basic.Agent;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,28 +28,28 @@ import java.io.Serializable;
 @JsonIgnoreProperties({"attributes"})
 public class SaleAgent extends Agent implements Serializable {
 
+    @AttributeProperty
     private String status;
 
     private String password;
 
+    @AttributeProperty
     private String location;
 
     public String getStatus() {
-        Attribute<String> attribute = this.getAttribute("status");
-        return attribute != null ? attribute.getValue() : null;
+        return this.status;
     }
 
     public void setStatus(final String status) {
-        this.setAttribute(new Attribute<String>("status", status));
+        this.status = status;
     }
 
     public String getLocation() {
-        Attribute<String> attribute = this.getAttribute("location");
-        return attribute != null ? attribute.getValue() : null;
+        return this.location;
     }
 
     public void setLocation(final String location) {
-        this.setAttribute(new Attribute("location", location));
+        this.location = location;
     }
 
     public String getPassword() {

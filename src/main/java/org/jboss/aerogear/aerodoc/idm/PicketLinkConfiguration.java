@@ -1,19 +1,15 @@
 package org.jboss.aerogear.aerodoc.idm;
 
 import org.jboss.aerogear.aerodoc.idm.credential.UserPasswordCredentialHandler;
-import org.jboss.aerogear.aerodoc.model.entity.AccountTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.AttributeTypeEntity;
-import org.jboss.aerogear.aerodoc.model.entity.DigestCredentialTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.GroupTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.IdentityTypeEntity;
-import org.jboss.aerogear.aerodoc.model.entity.OTPCredentialTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.PartitionTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.PasswordCredentialTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.RelationshipIdentityTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.RelationshipTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.RoleTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity;
-import org.jboss.aerogear.aerodoc.model.entity.X509CredentialTypeEntity;
 import org.picketlink.IdentityConfigurationEvent;
 import org.picketlink.annotations.PicketLink;
 import org.picketlink.idm.config.IdentityConfigurationBuilder;
@@ -47,16 +43,11 @@ public class PicketLinkConfiguration {
                                 PartitionTypeEntity.class,
                                 RoleTypeEntity.class,
                                 GroupTypeEntity.class,
-                                IdentityTypeEntity.class,
                                 SalesAgentEntity.class,
                                 RelationshipTypeEntity.class,
                                 RelationshipIdentityTypeEntity.class,
                                 PasswordCredentialTypeEntity.class,
-                                DigestCredentialTypeEntity.class,
-                                X509CredentialTypeEntity.class,
-                                OTPCredentialTypeEntity.class,
-                                AttributeTypeEntity.class,
-                                AccountTypeEntity.class
+                                AttributeTypeEntity.class
                         )
                         .addContextInitializer(this.contextInitializer)
                         .addCredentialHandler(UserPasswordCredentialHandler.class)

@@ -20,8 +20,6 @@ package org.jboss.aerogear.aerodoc.model.entity;
 import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.IdentityClass;
 import org.picketlink.idm.jpa.annotations.OwnerReference;
-import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
-import org.picketlink.idm.model.IdentityType;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -32,10 +30,9 @@ import java.util.Date;
 /**
  * @author pedroigor
  */
-@IdentityManaged(IdentityType.class)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class IdentityTypeEntity extends AttributedTypeEntity {
+public abstract class IdentityTypeEntity extends AttributedTypeEntity {
 
     private static final long serialVersionUID = -6533395974259723600L;
 
