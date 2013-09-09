@@ -20,7 +20,7 @@
 	xsi:schemaLocation="
       http://java.sun.com/xml/ns/javaee
       http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
- <interceptors>
-        <class>org.jboss.aerogear.security.interceptor.SecurityInterceptor</class>
-    </interceptors>	
+    <interceptors>
+        <class>org.jboss.aerogear.aerodoc.interceptor.SecurityInterceptor</class>
+    </interceptors>
 </beans>
