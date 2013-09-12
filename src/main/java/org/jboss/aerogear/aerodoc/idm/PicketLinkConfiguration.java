@@ -47,7 +47,8 @@ public class PicketLinkConfiguration {
                                 RelationshipTypeEntity.class,
                                 RelationshipIdentityTypeEntity.class,
                                 PasswordCredentialTypeEntity.class,
-                                AttributeTypeEntity.class
+                                AttributeTypeEntity.class,
+                                IdentityTypeEntity.class
                         )
                         .addContextInitializer(this.contextInitializer)
                         .addCredentialHandler(UserPasswordCredentialHandler.class)
