@@ -16,8 +16,6 @@
  */
 package org.jboss.aerogear.aerodoc.config;
 
-import org.picketlink.annotations.PicketLink;
-
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
@@ -43,11 +41,6 @@ public class Resources {
     @PersistenceContext(unitName = "aerodoc-default")
     private EntityManager em;
 
-    @SuppressWarnings("unused")
-    @PicketLink
-    @PersistenceContext(unitName = "picketlink-default")
-    @Produces
-    private EntityManager picketLinkEntityManager;
 
     @Produces
     public Logger produceLog(InjectionPoint injectionPoint) {
@@ -59,8 +52,4 @@ public class Resources {
         return em;
     }
 
-    @Produces
-    EntityManager producePicketLinkEntityManager() {
-        return picketLinkEntityManager;
-    }
 }

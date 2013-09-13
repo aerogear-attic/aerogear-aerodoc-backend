@@ -16,8 +16,14 @@
  */
 package org.jboss.aerogear.aerodoc.rest;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.jboss.aerogear.aerodoc.model.SaleAgent;
+import org.jboss.aerogear.security.authz.Secure;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Attribute;
+import org.picketlink.idm.model.IdentityType;
+import org.picketlink.idm.model.basic.BasicModel;
+import org.picketlink.idm.model.basic.User;
+import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -39,17 +45,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
-
-import org.jboss.aerogear.aerodoc.model.SaleAgent;
-import org.jboss.aerogear.security.authz.Secure;
-import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.Attribute;
-import org.picketlink.idm.model.IdentityType;
-import org.picketlink.idm.model.User;
-import org.picketlink.idm.query.IdentityQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 
+ *
  */
 @Stateless
 @Path("/saleagents")
@@ -111,7 +111,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity,
             @Context HttpServletRequest request) {
-        User user = identityManager.getUser(entity.getLoginName());
+        User user = BasicModel.getUser(identityManager, entity.getLoginName());
         Attribute<String> attributeStatus = user.getAttribute("status");
         attributeStatus.setValue(entity.getStatus());
         Attribute<String> attributeLocation = user.getAttribute("location");
@@ -131,12 +131,12 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
                 .createIdentityQuery(User.class);
 
         if (!status.isEmpty()) {
-            query.setParameter(IdentityType.ATTRIBUTE.byName("status"),
-                    new Object[] { status });
+            query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("status"),
+                    new Object[]{status});
         }
         if (!location.isEmpty()) {
-            query.setParameter(IdentityType.ATTRIBUTE.byName("location"),
-                    new Object[] { location });
+            query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("location"),
+                    new Object[]{location});
         }
         List<User> users = query.getResultList();
         List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
