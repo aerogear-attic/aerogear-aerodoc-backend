@@ -127,8 +127,8 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
             @DefaultValue("") @QueryParam("status") String status,
             @DefaultValue("") @QueryParam("location") String location) {
 
-        IdentityQuery<User> query = identityManager
-                .createIdentityQuery(User.class);
+        IdentityQuery<SaleAgent> query = identityManager
+                .createIdentityQuery(SaleAgent.class);
 
         if (!status.isEmpty()) {
             query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("status"),
@@ -138,16 +138,8 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
             query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("location"),
                     new Object[]{location});
         }
-        List<User> users = query.getResultList();
-        List<SaleAgent> saleAgents = new ArrayList<SaleAgent>();
-        for (User user : users) {
-            SaleAgent agent = new SaleAgent();
-            agent.setLoginName(user.getLoginName());
-            agent.setAttribute(user.getAttribute("location"));
-            agent.setAttribute(user.getAttribute("status"));
-            saleAgents.add(agent);
-        }
-        return saleAgents;
+        List<SaleAgent> users = query.getResultList();
+        return users;
 
     }
 
