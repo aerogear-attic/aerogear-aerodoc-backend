@@ -134,8 +134,8 @@ function EditPushConfigController($scope, $routeParams, $location, dataService) 
 		pushPipe.read({
 			id : $routeParams.PushConfigId,
 			success : function(data) {
-				self.original = data.entity;
-				$scope.pushConfig = data.entity;
+				self.original = data;
+				$scope.pushConfig = data;
 				$scope.$apply();
 			},
 			statusCode : {
