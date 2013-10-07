@@ -111,11 +111,12 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity,
             @Context HttpServletRequest request) {
-        User user = BasicModel.getUser(identityManager, entity.getLoginName());
-        Attribute<String> attributeStatus = user.getAttribute("status");
-        attributeStatus.setValue(entity.getStatus());
-        Attribute<String> attributeLocation = user.getAttribute("location");
-        attributeLocation.setValue(entity.getLocation());
+    	SaleAgent user; 
+    	List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
+	                .setParameter(SaleAgent.LOGIN_NAME, entity.getLoginName()).getResultList();
+    	user = list.get(0);
+    	user.setLocation(entity.getLocation());
+    	user.setStatus(entity.getStatus());
         identityManager.update(user);
         return appendAllowOriginHeader(Response.noContent(), request);
     }

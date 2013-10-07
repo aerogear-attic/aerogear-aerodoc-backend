@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @XmlRootElement
-@JsonIgnoreProperties({"attributes"})
+@JsonIgnoreProperties({"attributes","partition"})
 public class SaleAgent extends Agent implements Serializable {
 
     @AttributeProperty
