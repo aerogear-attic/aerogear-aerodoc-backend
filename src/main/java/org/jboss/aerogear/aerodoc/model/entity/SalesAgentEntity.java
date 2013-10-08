@@ -1,5 +1,9 @@
 package org.jboss.aerogear.aerodoc.model.entity;
 
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Latitude;
+import org.hibernate.search.annotations.Longitude;
+import org.hibernate.search.annotations.Spatial;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.picketlink.idm.jpa.annotations.AttributeValue;
 import org.picketlink.idm.jpa.annotations.entity.IdentityManaged;
@@ -13,6 +17,8 @@ import javax.persistence.Entity;
  */
 @IdentityManaged (SaleAgent.class)
 @Entity
+@Spatial
+@Indexed
 public class SalesAgentEntity extends IdentityTypeEntity {
 
     @Unique
@@ -33,6 +39,14 @@ public class SalesAgentEntity extends IdentityTypeEntity {
 
     @AttributeValue
     private String location;
+
+    @AttributeValue
+    @Latitude
+    private Double latitude;
+
+    @AttributeValue
+    @Longitude
+    private Double longitude;
 
     public String getLoginName() {
         return this.loginName;
@@ -80,5 +94,21 @@ public class SalesAgentEntity extends IdentityTypeEntity {
 
     public void setLocation(final String location) {
         this.location = location;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -41,6 +41,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search</artifactId>
+      <version>4.3.0.Final</version>
+    </dependency>
+    <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
       <scope>provided</scope>
@@ -143,7 +148,7 @@
 
   <properties>
     <aerogear.security.version>1.2.1</aerogear.security.version>
-    <aerogear.security.picketlink.version>1.2.2-SNAPSHOT</aerogear.security.picketlink.version>
+    <aerogear.security.picketlink.version>1.2.2</aerogear.security.picketlink.version>
     <aerogear.controller.version>1.0.1</aerogear.controller.version>
     <aerogear.unifiedpush.sender.version>0.2.1</aerogear.unifiedpush.sender.version>
   </properties>
