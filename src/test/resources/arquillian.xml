@@ -13,6 +13,8 @@
 
   <extension qualifier="persistence">
     <property name="defaultDataSource">java:jboss/datasources/ExampleDS</property>
+    <!--<property name="dumpData">true</property>-->
+    <!--<property name="dumpDirectory">/tmp</property>-->
   </extension>
 
   <extension qualifier="transaction">
