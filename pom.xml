@@ -134,12 +134,6 @@
     </dependency>
     <dependency>
       <groupId>org.jboss.arquillian.extension</groupId>
-      <artifactId>arquillian-persistence-api</artifactId>
-      <version>1.0.0.Alpha6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.arquillian.extension</groupId>
       <artifactId>arquillian-persistence-impl</artifactId>
       <version>1.0.0.Alpha6</version>
       <scope>test</scope>
@@ -155,12 +149,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.7.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>2.2.9</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
