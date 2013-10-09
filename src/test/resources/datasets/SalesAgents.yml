@@ -1,0 +1,13 @@
+SalesAgentEntity:
+  - id: "1"
+    latitude: 52.1193662
+    longitude: 5.4048443
+  - id: "2"
+    latitude: 52.1226336
+    longitude: 5.4160023
+  - id: "3"
+    latitude: 52.1228444
+    longitude: 5.3938580
+  - id: "4"
+    latitude: 52.1241091
+    longitude: 5.4369450

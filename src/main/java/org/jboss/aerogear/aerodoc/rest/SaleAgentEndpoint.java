@@ -21,6 +21,7 @@ import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.search.query.dsl.Unit;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
+import org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity;
 import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.IdentityType;
@@ -154,7 +155,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
       FullTextEntityManager fullText = Search.getFullTextEntityManager(em);
       QueryBuilder builder = fullText.getSearchFactory()
-          .buildQueryBuilder().forEntity( SaleAgent.class ).get();
+          .buildQueryBuilder().forEntity( SalesAgentEntity.class ).get();
 
       org.apache.lucene.search.Query luceneQuery = builder.spatial()
           .onDefaultCoordinates()
@@ -163,7 +164,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
           .andLongitude(longitude)
           .createQuery();
 
-      Query query = fullText.createFullTextQuery(luceneQuery, SaleAgent.class);
+      Query query = fullText.createFullTextQuery(luceneQuery, SalesAgentEntity.class);
       return query.getResultList();
     }
 
