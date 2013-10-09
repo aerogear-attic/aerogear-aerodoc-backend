@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -29,65 +28,53 @@ import static junit.framework.Assert.assertNotNull;
  * @author edewit@redhat.com
  */
 @RunWith(Arquillian.class)
+@UsingDataSet("SalesAgents.yml")
 public class SaleAgentEndpointTest {
 
   @Deployment
   public static Archive<?> createDeployment() {
     return ShrinkWrap.create(WebArchive.class, "test.war")
         .addPackage(SalesAgentEntity.class.getPackage())
-//        .addClass(AerodocBaseEndpoint.class)
-//        .addClass(SaleAgentEndpoint.class)
+        .addClass(AerodocBaseEndpoint.class)
+        .addClass(SaleAgentEndpoint.class)
         .addClass(SaleAgent.class)
         .addAsLibraries(
             Maven.resolver()
                 .loadPomFromFile("pom.xml").resolve(
                 "org.picketlink:picketlink-impl:2.5.2.Final",
-                "org.picketlink:picketlink-idm-simple-schema:2.5.2.Final"//,
-//                "org.hibernate:hibernate-search"
+                "org.picketlink:picketlink-idm-simple-schema:2.5.2.Final",
+                "org.hibernate:hibernate-search"
             ).withTransitivity().asFile()
         )
         .addAsResource("persistence-test.xml", "META-INF/persistence.xml")
         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
   }
 
-//  @Inject
-//  private SaleAgentEndpoint saleAgentEndpoint;
+  @Inject
+  private SaleAgentEndpoint saleAgentEndpoint;
 
   @PersistenceContext
   private EntityManager entityManager;
 
-//  @Inject
-//  UserTransaction utx;
-//
-//  @Before
-//  public void insertData() throws Exception {
-//    utx.begin();
-//    entityManager.joinTransaction();
-//    System.out.println("Inserting records...");
-//    SalesAgentEntity salesAgentEntity = new SalesAgentEntity();
-//    salesAgentEntity.setId("1");
-//    salesAgentEntity.setLongitude(12.5);
-//    salesAgentEntity.setLatitude(11.5);
-//    entityManager.persist(salesAgentEntity);
-//    utx.commit();
-//    // clear the persistence context (first-level cache)
-//    entityManager.clear();
-//  }
+  @Before
+  public void setupGeoSpatialSearchIndex() throws InterruptedException {
+    FullTextEntityManager fullText = Search.getFullTextEntityManager(entityManager);
+    final List<SalesAgentEntity> entities = entityManager.createQuery("from SalesAgentEntity",
+        SalesAgentEntity.class).getResultList();
 
-
-  @Test
-  @UsingDataSet("SalesAgents.yml")
-  public void shouldFindSalesAgentInGeoRegion() {
-//    FullTextEntityManager fullText = Search.getFullTextEntityManager(entityManager);
-    final List<SalesAgentEntity> entities = entityManager.createQuery("select u from SalesAgentEntity u", SalesAgentEntity.class).getResultList();
     for (SalesAgentEntity entity : entities) {
       System.out.println("entity = " + entity.getId());
-//      fullText.index(entity);
+      fullText.index(entity);
     }
 
-//    final List<SaleAgent> saleAgents = saleAgentEndpoint.listByCriteria(52.1193662,	5.4048443, 1D);
+    fullText.createIndexer().startAndWait();
+  }
 
-//    assertNotNull(saleAgents);
-//    assertEquals(3, saleAgents.size());
+  @Test
+  public void shouldFindSalesAgentInGeoRegion() {
+    final List<SaleAgent> saleAgents = saleAgentEndpoint.listByCriteria(52.1193662,	5.4048443, 1D);
+
+    assertNotNull(saleAgents);
+    assertEquals(3, saleAgents.size());
   }
 }
