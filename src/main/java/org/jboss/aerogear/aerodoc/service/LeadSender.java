@@ -64,7 +64,7 @@ public class LeadSender {
                     .attribute("phone", lead.getPhoneNumber()).sound("default")
                     .alert("A new lead has been created").build();
             ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
-            javaSender.sendTo(unifiedMessage);
+            javaSender.send(unifiedMessage);
         } else {
             logger.severe("not PushConfig configured, can not send message");
         }
@@ -72,10 +72,12 @@ public class LeadSender {
 
     public void sendBroadCast(Lead lead) {
         if (getActivePushConfig() != null) {
+        	Map categories = new HashMap();
+            categories.put("broadcast", "version=" + broadcastVersion++); //TODO manage the version properly
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
                     .masterSecret(getActivePushConfig().getMasterSecret())
-                    .simplePush("version=" + broadcastVersion++)
+                    .simplePush(categories)
                     .attribute("id", lead.getId().toString())
                     .attribute("messageType", "pushed_lead")
                     .attribute("name", lead.getName())
@@ -84,7 +86,7 @@ public class LeadSender {
                     .attribute("messageType", "accepted_lead").sound("default")
                     .alert("A new lead has been accepted").build();
             ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
-            javaSender.broadcast(unifiedMessage);
+            javaSender.send(unifiedMessage);
         } else {
             logger.severe("not PushConfig configured, can not send message");
         }
