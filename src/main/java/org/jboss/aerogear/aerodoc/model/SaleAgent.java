@@ -17,7 +17,6 @@
 package org.jboss.aerogear.aerodoc.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.picketlink.idm.model.Attribute;
 import org.picketlink.idm.model.annotation.AttributeProperty;
 import org.picketlink.idm.model.basic.Agent;
 
@@ -36,6 +35,11 @@ public class SaleAgent extends Agent implements Serializable {
     @AttributeProperty
     private String location;
 
+    @AttributeProperty
+    private Double latitude;
+
+    private Double longitude;
+
     public String getStatus() {
         return this.status;
     }
@@ -50,6 +54,22 @@ public class SaleAgent extends Agent implements Serializable {
 
     public void setLocation(final String location) {
         this.location = location;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public String getPassword() {
