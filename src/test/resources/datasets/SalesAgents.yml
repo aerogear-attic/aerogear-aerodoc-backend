@@ -1,0 +1,33 @@
+AttributedTypeEntity:
+  - id: "1"
+  - id: "2"
+  - id: "3"
+  - id: "4"
+
+IdentityTypeEntity:
+  - id: "1"
+    enabled: false
+  - id: "2"
+    enabled: false
+  - id: "3"
+    enabled: false
+  - id: "4"
+    enabled: false
+
+SalesAgentEntity:
+  - id: "1"
+    loginname: "one"
+    latitude: 52.1193662
+    longitude: 5.4048443
+  - id: "2"
+    loginname: "two"
+    latitude: 52.1226336
+    longitude: 5.4160023
+  - id: "3"
+    loginname: "three"
+    latitude: 52.1228444
+    longitude: 5.3938580
+  - id: "4"
+    loginname: "four"
+    latitude: 52.1241091
+    longitude: 5.4369450
