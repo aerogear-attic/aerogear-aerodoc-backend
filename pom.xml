@@ -253,6 +253,18 @@
   </profile>
   </profiles>
 
+  <repositories>
+    <repository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Maven Repository Group</name>
+      <layout>default</layout>
+      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>  
+
   <properties>
     <aerogear.security.version>1.2.1</aerogear.security.version>
     <aerogear.security.picketlink.version>1.2.2</aerogear.security.picketlink.version>
