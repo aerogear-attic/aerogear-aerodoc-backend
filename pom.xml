@@ -218,9 +218,10 @@
         <scope>provided</scope>
         <exclusions>
           <exclusion>
-            <groupId>org.apache.xalan</groupId>
+            <!-- JBoss specific exclusion -->
+            <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
-          </exclusion>
+	      </exclusion>
         </exclusions>
       </dependency>
     </dependencies>
@@ -267,18 +268,6 @@
     </build>
   </profile>
   </profiles>
-
-  <repositories>
-    <repository>
-      <id>jboss-public-repository-group</id>
-      <name>JBoss Public Maven Repository Group</name>
-      <layout>default</layout>
-      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>  
 
   <properties>
     <aerogear.security.version>1.2.1</aerogear.security.version>
