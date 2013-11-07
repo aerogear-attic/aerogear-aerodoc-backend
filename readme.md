@@ -81,6 +81,8 @@ For all these aliases the password is ``` 123 ```
 
 ``` mvn clean install jboss-as:deploy ```
 
+There is also a lucene index created with the location of sales agents default location is '.' you can change to a more permanent location in the persistence.xml
+
 # AeroDoc Admin Application
 
 Browse to ``` localhost:8080/aerodoc ```
