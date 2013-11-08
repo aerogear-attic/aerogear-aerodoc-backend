@@ -50,13 +50,12 @@ public class LeadSender {
 
     public void sendLeads(List<String> users, Lead lead) {
         if (getActivePushConfig() != null) {
-            Map categories = new HashMap();
-            categories.put("lead", "version=" + leadVersion++); //TODO manage the version properly
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
                     .masterSecret(getActivePushConfig().getMasterSecret())
+                    .categories("lead")
                     .aliases(users)
-                    .simplePush(categories)
+                    .simplePush("version=" + leadVersion++)
                     .attribute("id", lead.getId().toString())
                     .attribute("messageType", "pushed_lead")
                     .attribute("name", lead.getName())
@@ -72,14 +71,12 @@ public class LeadSender {
 
     public void sendBroadCast(Lead lead) {
         if (getActivePushConfig() != null) {
-        	Map categories = new HashMap();
-            categories.put("broadcast", "version=" + broadcastVersion++); //TODO manage the version properly
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
                     .masterSecret(getActivePushConfig().getMasterSecret())
-                    .simplePush(categories)
                     .attribute("id", lead.getId().toString())
                     .attribute("messageType", "pushed_lead")
+                    .simplePush("version=" + broadcastVersion++)
                     .attribute("name", lead.getName())
                     .attribute("location", lead.getLocation())
                     .attribute("phone", lead.getPhoneNumber())
