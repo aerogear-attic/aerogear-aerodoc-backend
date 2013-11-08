@@ -155,7 +155,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
       FullTextEntityManager fullText = Search.getFullTextEntityManager(em);
       QueryBuilder builder = fullText.getSearchFactory()
-          .buildQueryBuilder().forEntity( SaleAgent.class ).get();
+          .buildQueryBuilder().forEntity( SalesAgentEntity.class ).get();
 
       org.apache.lucene.search.Query luceneQuery = builder.spatial()
           .onDefaultCoordinates()
@@ -164,7 +164,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
           .andLongitude(longitude)
           .createQuery();
 
-      Query query = fullText.createFullTextQuery(luceneQuery, SaleAgent.class);
+      Query query = fullText.createFullTextQuery(luceneQuery, SalesAgentEntity.class);
       return query.getResultList();
     }
 

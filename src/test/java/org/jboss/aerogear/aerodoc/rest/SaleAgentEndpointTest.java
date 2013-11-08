@@ -30,7 +30,6 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
@@ -87,7 +86,7 @@ public class SaleAgentEndpointTest {
     fullText.createIndexer().startAndWait();
   }
 
-  @Test @Ignore
+  @Test
   public void shouldFindSalesAgentInGeoRegion() {
     final List<SaleAgent> saleAgents = saleAgentEndpoint.listByCriteria(52.1193662,	5.4048443, 1D);
 
