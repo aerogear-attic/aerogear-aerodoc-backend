@@ -28,13 +28,14 @@ aerodoc.factory("notifierService", function() {
 
       // first registration?
       if ( broadcastEndpoint.pushEndpoint ) {
-        var broadCastMetadata = {
-          deviceToken: broadcastEndpoint.channelID,
-          category: "broadcast",
-          simplePushEndpoint: broadcastEndpoint.pushEndpoint
+        var broadCastSettings = {
+          metadata: {
+        	  deviceToken: broadcastEndpoint.channelID,
+              simplePushEndpoint: broadcastEndpoint.pushEndpoint  
+          }          
         }
 
-        UPClient.registerWithPushServer(broadCastMetadata);
+        UPClient.registerWithPushServer(broadCastSettings);
         console.log("Subscribed to Broadcast messages on " + broadcastEndpoint.channelID);
         console.log(localStorage.getItem(broadcastEndpoint.channelID) || 1);
       } else {
@@ -48,14 +49,16 @@ aerodoc.factory("notifierService", function() {
 
       // first registration?
       if ( broadcastEndpoint.pushEndpoint ) {
-        var leadMetadata = {
-          deviceToken: leadEndpoint.channelID,
-          alias: sessionStorage.getItem("username"),
-          category: "lead",
-          simplePushEndpoint: broadcastEndpoint.pushEndpoint
+        var leadSettings = {
+          metadata: {
+        	  deviceToken: leadEndpoint.channelID,
+              alias: sessionStorage.getItem("username"),
+              categories: ["lead"],
+              simplePushEndpoint: broadcastEndpoint.pushEndpoint  
+          }
         }
 
-        UPClient.registerWithPushServer(leadMetadata);
+        UPClient.registerWithPushServer(leadSettings);
         console.log("Subscribed to lead messages on " + leadEndpoint.channelID);
         console.log(localStorage.getItem(leadEndpoint.channelID) || 1);
       } else {
