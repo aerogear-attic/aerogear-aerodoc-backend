@@ -16,6 +16,7 @@
  */
 package org.jboss.aerogear.aerodoc.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +38,6 @@ public class LeadSender {
     @Inject
     PushConfigEndpoint pushConfigEndpoint;
 
-    // TODO we don't want this
-    private int leadVersion = 1;
-    private int broadcastVersion = 1;
-
     private JavaSender javaSender;
 
     public LeadSender() {
@@ -55,7 +52,7 @@ public class LeadSender {
                     .masterSecret(getActivePushConfig().getMasterSecret())
                     .categories("lead")
                     .aliases(users)
-                    .simplePush("version=" + leadVersion++)
+                    .simplePush("version=" + new Date().getTime())
                     .attribute("id", lead.getId().toString())
                     .attribute("messageType", "pushed_lead")
                     .attribute("name", lead.getName())
@@ -76,7 +73,7 @@ public class LeadSender {
                     .masterSecret(getActivePushConfig().getMasterSecret())
                     .attribute("id", lead.getId().toString())
                     .attribute("messageType", "pushed_lead")
-                    .simplePush("version=" + broadcastVersion++)
+                    .simplePush("version=" + new Date().getTime())
                     .attribute("name", lead.getName())
                     .attribute("location", lead.getLocation())
                     .attribute("phone", lead.getPhoneNumber())
