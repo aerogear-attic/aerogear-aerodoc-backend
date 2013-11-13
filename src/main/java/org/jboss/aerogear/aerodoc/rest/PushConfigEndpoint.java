@@ -43,7 +43,7 @@ import org.jboss.aerogear.security.authz.Secure;
 @Path("/pushconfig")
 public class PushConfigEndpoint {
 
-    @PersistenceContext(unitName = "aerodoc-default")
+    @PersistenceContext
     private EntityManager em;
 
     @POST

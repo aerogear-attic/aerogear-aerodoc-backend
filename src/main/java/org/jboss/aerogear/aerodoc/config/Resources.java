@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class Resources {
 
     @SuppressWarnings("unused")
-    @PersistenceContext(unitName = "aerodoc-default")
+    @PersistenceContext
     private EntityManager em;
 
 
