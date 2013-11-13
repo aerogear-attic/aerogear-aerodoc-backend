@@ -20,35 +20,12 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              version="2.0"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="aerodoc-default" transaction-type="JTA">
-        <description>Forge Persistence Unit</description>
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.transaction.flush_before_completion" value="true"/>
-        </properties>
-    </persistence-unit>
-    <persistence-unit name="picketlink-default"
+    <persistence-unit name="aerodoc-default"
                       transaction-type="JTA">
         <description>PicketLink Persistence Unit</description>
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:jboss/datasources/AerodocDS</jta-data-source>
 
-      <class>org.jboss.aerogear.aerodoc.model.entity.AttributedTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.RoleTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.GroupTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.IdentityTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.RelationshipTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.RelationshipIdentityTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.PartitionTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.PasswordCredentialTypeEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity</class>
-      <class>org.jboss.aerogear.aerodoc.model.entity.AttributeTypeEntity</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>

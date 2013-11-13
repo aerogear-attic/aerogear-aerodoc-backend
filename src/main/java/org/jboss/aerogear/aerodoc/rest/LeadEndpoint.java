@@ -60,7 +60,7 @@ public class LeadEndpoint {
     @Inject
     private LeadSender leadSender;
 
-    @PersistenceContext(unitName = "aerodoc-default")
+    @PersistenceContext
     private EntityManager em;
 
     @OPTIONS

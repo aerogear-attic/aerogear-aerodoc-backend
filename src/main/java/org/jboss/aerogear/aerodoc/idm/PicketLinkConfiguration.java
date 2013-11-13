@@ -25,7 +25,7 @@ public class PicketLinkConfiguration {
 
     @SuppressWarnings("unused")
     @PicketLink
-    @PersistenceContext(unitName = "picketlink-default")
+    @PersistenceContext
     @Produces
     private EntityManager picketLinkEntityManager;
 

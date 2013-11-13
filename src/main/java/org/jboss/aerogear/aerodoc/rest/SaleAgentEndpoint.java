@@ -61,7 +61,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @Inject
     private IdentityManager identityManager;
 
-    @PersistenceContext(unitName = "picketlink-default")
+    @PersistenceContext
     private EntityManager em;
 
     @POST
