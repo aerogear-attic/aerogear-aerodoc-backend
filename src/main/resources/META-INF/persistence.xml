@@ -55,7 +55,7 @@
             <property name="hibernate.transaction.flush_before_completion" value="true"/>
             <property name="hibernate.search.default.directory_provider" value="filesystem"/>
             <!-- add this property if you want your index stored somewhere else then on "." -->
-            <!-- property name="hibernate.search.default.indexBase" value="/var/lucene/indexes"/ -->
+            <property name="hibernate.search.default.indexBase" value="~/lucene/indexes"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -17,11 +17,11 @@
 'use strict';
 
 var aeroConfig = {
-	serverURL : "http://192.168.1.19:8080",
-	simplePushServerURL : "http://192.168.1.19:7777/simplepush",
-	pushServerURL : "http://192.168.1.19:8080/ag-push",
-	variantID : "ba3cfa4b-7f47-44a1-bdae-0dc36041bdb2",
-	variantSecret : "1161fa49-2c5b-4101-8102-ea747606d333"
+	serverURL : "http://localhost:8080",
+	simplePushServerURL : "http://localhost:7777/simplepush",
+	pushServerURL : "http://localhost:8080/ag-push",
+	variantID : "dfa299ad-14d5-4158-aa04-938a070e034a",
+	variantSecret : "129afdf5-ad5c-40a3-9255-d35d973cdc16"
 }
 
 var aerodoc = angular.module('aerodoc', [ 'aerodoc.filters' ]).config(
@@ -42,4 +42,20 @@ var aerodoc = angular.module('aerodoc', [ 'aerodoc.filters' ]).config(
 				templateUrl : 'partials/Lead/search.html',
 				controller : SearchLeadController
 			});
-		} ]);
+		} ]).run(function($rootScope, notifierService, dataService) {
+	var leadPipe = dataService.leadPipe;
+	leadPipe.read({
+		success : function(data) {
+			AeroGear.SimplePushClient({
+				simplePushServerURL : aeroConfig.simplePushServerURL,
+				onConnect : function() {
+					var message = "loginDone";
+					$rootScope.$broadcast('loginDone', message);
+					notifierService.connector();
+				}
+			});
+
+		}
+
+	});
+});
