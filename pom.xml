@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.aerogear.aerodoc</groupId>
   <artifactId>aerodoc</artifactId>
-  <version>0.8.1</version>
+  <version>0.9.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <parent>
     <groupId>org.jboss.aerogear</groupId>
@@ -113,8 +113,8 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.jboss.aerogear.unifiedpush</groupId>
-      <artifactId>unified-push-java-client</artifactId>
+      <groupId>org.jboss.aerogear</groupId>
+      <artifactId>unifiedpush-java-client</artifactId>
       <version>${aerogear.unifiedpush.sender.version}</version>
     </dependency>
     <dependency> 
@@ -187,6 +187,17 @@
           </archive>
         </configuration>
       </plugin>
+      <!-- we really do not need javadocs for the server, there are no Java APIs exposed -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -249,6 +260,6 @@
     <aerogear.security.version>1.2.1</aerogear.security.version>
     <aerogear.security.picketlink.version>1.2.2</aerogear.security.picketlink.version>
     <aerogear.controller.version>1.0.1</aerogear.controller.version>
-    <aerogear.unifiedpush.sender.version>0.3.0</aerogear.unifiedpush.sender.version>
+    <aerogear.unifiedpush.sender.version>0.4.0-SNAPSHOT</aerogear.unifiedpush.sender.version>
   </properties>
 </project>

@@ -1,4 +1,4 @@
-/*! AeroGear JavaScript Library - v1.2.0-dev - 2013-08-15
+/*! AeroGear JavaScript Library - v1.3.0-dev - 2013-11-08
 * https://github.com/aerogear/aerogear-js
 * JBoss, Home of Professional Open Source
 * Copyright Red Hat, Inc., and individual contributors
@@ -43,26 +43,50 @@ AeroGear.Core = function() {
         var i,
             current,
             collection = this[ this.collectionName ] || {};
+        this[ this.collectionName ] = collection;
 
         if ( !config ) {
             return this;
         } else if ( typeof config === "string" ) {
             // config is a string so use default adapter type
-            collection[ config ] = AeroGear[ this.lib ].adapters[ this.type ]( config );
+            collection[ config ] = AeroGear[ this.lib ].adapters[ this.type ]( config, this.config );
         } else if ( AeroGear.isArray( config ) ) {
             // config is an array so loop through each item in the array
             for ( i = 0; i < config.length; i++ ) {
                 current = config[ i ];
 
                 if ( typeof current === "string" ) {
-                    collection[ current ] = AeroGear[ this.lib ].adapters[ this.type ]( current );
+                    collection[ current ] = AeroGear[ this.lib ].adapters[ this.type ]( current, this.config );
                 } else {
-                    collection[ current.name ] = AeroGear[ this.lib ].adapters[ current.type || this.type ]( current.name, current.settings || {} );
+                    if( current.name ) {
+
+                        // Merge the Module( pipeline, datamanger, ... )config with the adapters settings
+                        current.settings = AeroGear.extend( current.settings || {}, this.config );
+
+                        // Compatibility fix for deprecation of recordId in Pipeline and DataManager constructors
+                        // Added in 1.3 to remove in 1.4
+                        current.settings.recordId = current.settings.recordId || current.recordId;
+                        // End compat fix
+
+                        collection[ current.name ] = AeroGear[ this.lib ].adapters[ current.type || this.type ]( current.name, current.settings );
+                    }
                 }
             }
         } else {
+            if( !config.name ) {
+                return this;
+            }
+
+            // Merge the Module( pipeline, datamanger, ... )config with the adapters settings
             // config is an object so use that signature
-            collection[ config.name ] = AeroGear[ this.lib ].adapters[ config.type || this.type ]( config.name, config.settings || {} );
+            config.settings = AeroGear.extend( config.settings || {}, this.config );
+
+            // Compatibility fix for deprecation of recordId in Pipeline and DataManager constructors
+            // Added in 1.3 to remove in 1.4
+            config.settings.recordId = config.settings.recordId || config.recordId;
+            // End compat fix
+
+            collection[ config.name ] = AeroGear[ this.lib ].adapters[ config.type || this.type ]( config.name, config.settings );
         }
 
         // reset the collection instance
@@ -119,6 +143,21 @@ AeroGear.isArray = function( obj ) {
 };
 
 /**
+    Utility function to merge 2 Objects together.
+    @private
+    @method
+    @param {Object} obj1 - An Object to be merged.
+    @param {Object} obj2 - An Object to be merged.  This Objects Value takes precendence.
+*/
+AeroGear.extend = function( obj1, obj2 ) {
+    var name;
+    for( name in obj2 ) {
+        obj1[ name ] = obj2[ name ];
+    }
+    return obj1;
+};
+
+/**
     This callback is executed when an HTTP request completes whether it was successful or not.
     @callback AeroGear~completeCallbackREST
     @param {Object} jqXHR - The jQuery specific XHR object
@@ -137,6 +176,11 @@ AeroGear.isArray = function( obj ) {
     @param {Object} data - The data, if any, returned in the response
     @param {String} textStatus - The text status message returned from the server
     @param {Object} jqXHR - The jQuery specific XHR object
+ */
+ /**
+    This callback is executed when an HTTP progress message is returned during a request.
+    @callback AeroGear~progressCallbackREST
+    @param {Object} XMLHttpRequestProgressEvent - The progress event
  */
 /**
     This callback is executed when an error is encountered saving to local or session storage.
@@ -456,6 +500,71 @@ AeroGear.isArray = function( obj ) {
 
 }());
 
+"use strict";var r=void 0,t=!0,u=!1;var sjcl={cipher:{},hash:{},keyexchange:{},mode:{},misc:{},codec:{},exception:{corrupt:function(a){this.toString=function(){return"CORRUPT: "+this.message};this.message=a},invalid:function(a){this.toString=function(){return"INVALID: "+this.message};this.message=a},bug:function(a){this.toString=function(){return"BUG: "+this.message};this.message=a},notReady:function(a){this.toString=function(){return"NOT READY: "+this.message};this.message=a}}};
+"undefined"!=typeof module&&module.exports&&(module.exports=sjcl);
+sjcl.cipher.aes=function(a){this.n[0][0][0]||this.K();var b,c,d,e,f=this.n[0][4],g=this.n[1];b=a.length;var h=1;if(4!==b&&6!==b&&8!==b)throw new sjcl.exception.invalid("invalid aes key size");this.c=[d=a.slice(0),e=[]];for(a=b;a<4*b+28;a++){c=d[a-1];if(0===a%b||8===b&&4===a%b)c=f[c>>>24]<<24^f[c>>16&255]<<16^f[c>>8&255]<<8^f[c&255],0===a%b&&(c=c<<8^c>>>24^h<<24,h=h<<1^283*(h>>7));d[a]=d[a-b]^c}for(b=0;a;b++,a--)c=d[b&3?a:a-4],e[b]=4>=a||4>b?c:g[0][f[c>>>24]]^g[1][f[c>>16&255]]^g[2][f[c>>8&255]]^g[3][f[c&
+255]]};
+sjcl.cipher.aes.prototype={encrypt:function(a){return w(this,a,0)},decrypt:function(a){return w(this,a,1)},n:[[[],[],[],[],[]],[[],[],[],[],[]]],K:function(){var a=this.n[0],b=this.n[1],c=a[4],d=b[4],e,f,g,h=[],l=[],k,p,n,m;for(e=0;0x100>e;e++)l[(h[e]=e<<1^283*(e>>7))^e]=e;for(f=g=0;!c[f];f^=k||1,g=l[g]||1){n=g^g<<1^g<<2^g<<3^g<<4;n=n>>8^n&255^99;c[f]=n;d[n]=f;p=h[e=h[k=h[f]]];m=0x1010101*p^0x10001*e^0x101*k^0x1010100*f;p=0x101*h[n]^0x1010100*n;for(e=0;4>e;e++)a[e][f]=p=p<<24^p>>>8,b[e][n]=m=m<<24^m>>>8}for(e=
+0;5>e;e++)a[e]=a[e].slice(0),b[e]=b[e].slice(0)}};
+function w(a,b,c){if(4!==b.length)throw new sjcl.exception.invalid("invalid aes block size");var d=a.c[c],e=b[0]^d[0],f=b[c?3:1]^d[1],g=b[2]^d[2];b=b[c?1:3]^d[3];var h,l,k,p=d.length/4-2,n,m=4,s=[0,0,0,0];h=a.n[c];a=h[0];var q=h[1],v=h[2],x=h[3],y=h[4];for(n=0;n<p;n++)h=a[e>>>24]^q[f>>16&255]^v[g>>8&255]^x[b&255]^d[m],l=a[f>>>24]^q[g>>16&255]^v[b>>8&255]^x[e&255]^d[m+1],k=a[g>>>24]^q[b>>16&255]^v[e>>8&255]^x[f&255]^d[m+2],b=a[b>>>24]^q[e>>16&255]^v[f>>8&255]^x[g&255]^d[m+3],m+=4,e=h,f=l,g=k;for(n=
+0;4>n;n++)s[c?3&-n:n]=y[e>>>24]<<24^y[f>>16&255]<<16^y[g>>8&255]<<8^y[b&255]^d[m++],h=e,e=f,f=g,g=b,b=h;return s}
+sjcl.bitArray={bitSlice:function(a,b,c){a=sjcl.bitArray.U(a.slice(b/32),32-(b&31)).slice(1);return c===r?a:sjcl.bitArray.clamp(a,c-b)},extract:function(a,b,c){var d=Math.floor(-b-c&31);return((b+c-1^b)&-32?a[b/32|0]<<32-d^a[b/32+1|0]>>>d:a[b/32|0]>>>d)&(1<<c)-1},concat:function(a,b){if(0===a.length||0===b.length)return a.concat(b);var c=a[a.length-1],d=sjcl.bitArray.getPartial(c);return 32===d?a.concat(b):sjcl.bitArray.U(b,d,c|0,a.slice(0,a.length-1))},bitLength:function(a){var b=a.length;return 0===
+b?0:32*(b-1)+sjcl.bitArray.getPartial(a[b-1])},clamp:function(a,b){if(32*a.length<b)return a;a=a.slice(0,Math.ceil(b/32));var c=a.length;b&=31;0<c&&b&&(a[c-1]=sjcl.bitArray.partial(b,a[c-1]&2147483648>>b-1,1));return a},partial:function(a,b,c){return 32===a?b:(c?b|0:b<<32-a)+0x10000000000*a},getPartial:function(a){return Math.round(a/0x10000000000)||32},equal:function(a,b){if(sjcl.bitArray.bitLength(a)!==sjcl.bitArray.bitLength(b))return u;var c=0,d;for(d=0;d<a.length;d++)c|=a[d]^b[d];return 0===
+c},U:function(a,b,c,d){var e;e=0;for(d===r&&(d=[]);32<=b;b-=32)d.push(c),c=0;if(0===b)return d.concat(a);for(e=0;e<a.length;e++)d.push(c|a[e]>>>b),c=a[e]<<32-b;e=a.length?a[a.length-1]:0;a=sjcl.bitArray.getPartial(e);d.push(sjcl.bitArray.partial(b+a&31,32<b+a?c:d.pop(),1));return d},ba:function(a,b){return[a[0]^b[0],a[1]^b[1],a[2]^b[2],a[3]^b[3]]}};
+sjcl.codec.utf8String={fromBits:function(a){var b="",c=sjcl.bitArray.bitLength(a),d,e;for(d=0;d<c/8;d++)0===(d&3)&&(e=a[d/4]),b+=String.fromCharCode(e>>>24),e<<=8;return decodeURIComponent(escape(b))},toBits:function(a){a=unescape(encodeURIComponent(a));var b=[],c,d=0;for(c=0;c<a.length;c++)d=d<<8|a.charCodeAt(c),3===(c&3)&&(b.push(d),d=0);c&3&&b.push(sjcl.bitArray.partial(8*(c&3),d));return b}};
+sjcl.codec.hex={fromBits:function(a){var b="",c;for(c=0;c<a.length;c++)b+=((a[c]|0)+0xf00000000000).toString(16).substr(4);return b.substr(0,sjcl.bitArray.bitLength(a)/4)},toBits:function(a){var b,c=[],d;a=a.replace(/\s|0x/g,"");d=a.length;a+="00000000";for(b=0;b<a.length;b+=8)c.push(parseInt(a.substr(b,8),16)^0);return sjcl.bitArray.clamp(c,4*d)}};sjcl.hash.sha256=function(a){this.c[0]||this.K();a?(this.u=a.u.slice(0),this.p=a.p.slice(0),this.k=a.k):this.reset()};sjcl.hash.sha256.hash=function(a){return(new sjcl.hash.sha256).update(a).finalize()};
+sjcl.hash.sha256.prototype={blockSize:512,reset:function(){this.u=this.R.slice(0);this.p=[];this.k=0;return this},update:function(a){"string"===typeof a&&(a=sjcl.codec.utf8String.toBits(a));var b,c=this.p=sjcl.bitArray.concat(this.p,a);b=this.k;a=this.k=b+sjcl.bitArray.bitLength(a);for(b=512+b&-512;b<=a;b+=512)z(this,c.splice(0,16));return this},finalize:function(){var a,b=this.p,c=this.u,b=sjcl.bitArray.concat(b,[sjcl.bitArray.partial(1,1)]);for(a=b.length+2;a&15;a++)b.push(0);b.push(Math.floor(this.k/
+4294967296));for(b.push(this.k|0);b.length;)z(this,b.splice(0,16));this.reset();return c},R:[],c:[],K:function(){function a(a){return 0x100000000*(a-Math.floor(a))|0}var b=0,c=2,d;a:for(;64>b;c++){for(d=2;d*d<=c;d++)if(0===c%d)continue a;8>b&&(this.R[b]=a(Math.pow(c,0.5)));this.c[b]=a(Math.pow(c,1/3));b++}}};
+function z(a,b){var c,d,e,f=b.slice(0),g=a.u,h=a.c,l=g[0],k=g[1],p=g[2],n=g[3],m=g[4],s=g[5],q=g[6],v=g[7];for(c=0;64>c;c++)16>c?d=f[c]:(d=f[c+1&15],e=f[c+14&15],d=f[c&15]=(d>>>7^d>>>18^d>>>3^d<<25^d<<14)+(e>>>17^e>>>19^e>>>10^e<<15^e<<13)+f[c&15]+f[c+9&15]|0),d=d+v+(m>>>6^m>>>11^m>>>25^m<<26^m<<21^m<<7)+(q^m&(s^q))+h[c],v=q,q=s,s=m,m=n+d|0,n=p,p=k,k=l,l=d+(k&p^n&(k^p))+(k>>>2^k>>>13^k>>>22^k<<30^k<<19^k<<10)|0;g[0]=g[0]+l|0;g[1]=g[1]+k|0;g[2]=g[2]+p|0;g[3]=g[3]+n|0;g[4]=g[4]+m|0;g[5]=g[5]+s|0;g[6]=
+g[6]+q|0;g[7]=g[7]+v|0}
+sjcl.mode.gcm={name:"gcm",encrypt:function(a,b,c,d,e){var f=b.slice(0);b=sjcl.bitArray;d=d||[];a=sjcl.mode.gcm.O(t,a,f,d,c,e||128);return b.concat(a.data,a.tag)},decrypt:function(a,b,c,d,e){var f=b.slice(0),g=sjcl.bitArray,h=g.bitLength(f);e=e||128;d=d||[];e<=h?(b=g.bitSlice(f,h-e),f=g.bitSlice(f,0,h-e)):(b=f,f=[]);a=sjcl.mode.gcm.O(u,a,f,d,c,e);if(!g.equal(a.tag,b))throw new sjcl.exception.corrupt("gcm: tag doesn't match");return a.data},aa:function(a,b){var c,d,e,f,g,h=sjcl.bitArray.ba;e=[0,0,0,
+0];f=b.slice(0);for(c=0;128>c;c++){(d=0!==(a[Math.floor(c/32)]&1<<31-c%32))&&(e=h(e,f));g=0!==(f[3]&1);for(d=3;0<d;d--)f[d]=f[d]>>>1|(f[d-1]&1)<<31;f[0]>>>=1;g&&(f[0]^=-0x1f000000)}return e},j:function(a,b,c){var d,e=c.length;b=b.slice(0);for(d=0;d<e;d+=4)b[0]^=0xffffffff&c[d],b[1]^=0xffffffff&c[d+1],b[2]^=0xffffffff&c[d+2],b[3]^=0xffffffff&c[d+3],b=sjcl.mode.gcm.aa(b,a);return b},O:function(a,b,c,d,e,f){var g,h,l,k,p,n,m,s,q=sjcl.bitArray;n=c.length;m=q.bitLength(c);s=q.bitLength(d);h=q.bitLength(e);
+g=b.encrypt([0,0,0,0]);96===h?(e=e.slice(0),e=q.concat(e,[1])):(e=sjcl.mode.gcm.j(g,[0,0,0,0],e),e=sjcl.mode.gcm.j(g,e,[0,0,Math.floor(h/0x100000000),h&0xffffffff]));h=sjcl.mode.gcm.j(g,[0,0,0,0],d);p=e.slice(0);d=h.slice(0);a||(d=sjcl.mode.gcm.j(g,h,c));for(k=0;k<n;k+=4)p[3]++,l=b.encrypt(p),c[k]^=l[0],c[k+1]^=l[1],c[k+2]^=l[2],c[k+3]^=l[3];c=q.clamp(c,m);a&&(d=sjcl.mode.gcm.j(g,h,c));a=[Math.floor(s/0x100000000),s&0xffffffff,Math.floor(m/0x100000000),m&0xffffffff];d=sjcl.mode.gcm.j(g,d,a);l=b.encrypt(e);
+d[0]^=l[0];d[1]^=l[1];d[2]^=l[2];d[3]^=l[3];return{tag:q.bitSlice(d,0,f),data:c}}};sjcl.misc.hmac=function(a,b){this.Q=b=b||sjcl.hash.sha256;var c=[[],[]],d,e=b.prototype.blockSize/32;this.q=[new b,new b];a.length>e&&(a=b.hash(a));for(d=0;d<e;d++)c[0][d]=a[d]^909522486,c[1][d]=a[d]^1549556828;this.q[0].update(c[0]);this.q[1].update(c[1])};sjcl.misc.hmac.prototype.encrypt=sjcl.misc.hmac.prototype.mac=function(a){a=(new this.Q(this.q[0])).update(a).finalize();return(new this.Q(this.q[1])).update(a).finalize()};
+sjcl.misc.pbkdf2=function(a,b,c,d,e){c=c||1E3;if(0>d||0>c)throw sjcl.exception.invalid("invalid params to pbkdf2");"string"===typeof a&&(a=sjcl.codec.utf8String.toBits(a));"string"===typeof b&&(b=sjcl.codec.utf8String.toBits(b));e=e||sjcl.misc.hmac;a=new e(a);var f,g,h,l,k=[],p=sjcl.bitArray;for(l=1;32*k.length<(d||1);l++){e=f=a.encrypt(p.concat(b,[l]));for(g=1;g<c;g++){f=a.encrypt(f);for(h=0;h<f.length;h++)e[h]^=f[h]}k=k.concat(e)}d&&(k=p.clamp(k,d));return k};
+sjcl.prng=function(a){this.e=[new sjcl.hash.sha256];this.l=[0];this.L=0;this.B={};this.J=0;this.N={};this.T=this.g=this.m=this.$=0;this.c=[0,0,0,0,0,0,0,0];this.h=[0,0,0,0];this.H=r;this.I=a;this.s=u;this.F={progress:{},seeded:{}};this.o=this.Z=0;this.C=1;this.D=2;this.X=0x10000;this.M=[0,48,64,96,128,192,0x100,384,512,768,1024];this.Y=3E4;this.W=80};
+sjcl.prng.prototype={randomWords:function(a,b){var c=[],d;d=this.isReady(b);var e;if(d===this.o)throw new sjcl.exception.notReady("generator isn't seeded");if(d&this.D){d=!(d&this.C);e=[];var f=0,g;this.T=e[0]=(new Date).valueOf()+this.Y;for(g=0;16>g;g++)e.push(0x100000000*Math.random()|0);for(g=0;g<this.e.length&&!(e=e.concat(this.e[g].finalize()),f+=this.l[g],this.l[g]=0,!d&&this.L&1<<g);g++);this.L>=1<<this.e.length&&(this.e.push(new sjcl.hash.sha256),this.l.push(0));this.g-=f;f>this.m&&(this.m=
+f);this.L++;this.c=sjcl.hash.sha256.hash(this.c.concat(e));this.H=new sjcl.cipher.aes(this.c);for(d=0;4>d&&!(this.h[d]=this.h[d]+1|0,this.h[d]);d++);}for(d=0;d<a;d+=4)0===(d+1)%this.X&&A(this),e=B(this),c.push(e[0],e[1],e[2],e[3]);A(this);return c.slice(0,a)},setDefaultParanoia:function(a){this.I=a},addEntropy:function(a,b,c){c=c||"user";var d,e,f=(new Date).valueOf(),g=this.B[c],h=this.isReady(),l=0;d=this.N[c];d===r&&(d=this.N[c]=this.$++);g===r&&(g=this.B[c]=0);this.B[c]=(this.B[c]+1)%this.e.length;
+switch(typeof a){case "number":b===r&&(b=1);this.e[g].update([d,this.J++,1,b,f,1,a|0]);break;case "object":c=Object.prototype.toString.call(a);if("[object Uint32Array]"===c){e=[];for(c=0;c<a.length;c++)e.push(a[c]);a=e}else{"[object Array]"!==c&&(l=1);for(c=0;c<a.length&&!l;c++)"number"!=typeof a[c]&&(l=1)}if(!l){if(b===r)for(c=b=0;c<a.length;c++)for(e=a[c];0<e;)b++,e>>>=1;this.e[g].update([d,this.J++,2,b,f,a.length].concat(a))}break;case "string":b===r&&(b=a.length);this.e[g].update([d,this.J++,
+3,b,f,a.length]);this.e[g].update(a);break;default:l=1}if(l)throw new sjcl.exception.bug("random: addEntropy only supports number, array of numbers or string");this.l[g]+=b;this.g+=b;h===this.o&&(this.isReady()!==this.o&&C("seeded",Math.max(this.m,this.g)),C("progress",this.getProgress()))},isReady:function(a){a=this.M[a!==r?a:this.I];return this.m&&this.m>=a?this.l[0]>this.W&&(new Date).valueOf()>this.T?this.D|this.C:this.C:this.g>=a?this.D|this.o:this.o},getProgress:function(a){a=this.M[a?a:this.I];
+return this.m>=a?1:this.g>a?1:this.g/a},startCollectors:function(){if(!this.s){if(window.addEventListener)window.addEventListener("load",this.v,u),window.addEventListener("mousemove",this.w,u);else if(document.attachEvent)document.attachEvent("onload",this.v),document.attachEvent("onmousemove",this.w);else throw new sjcl.exception.bug("can't attach event");this.s=t}},stopCollectors:function(){this.s&&(window.removeEventListener?(window.removeEventListener("load",this.v,u),window.removeEventListener("mousemove",
+this.w,u)):window.detachEvent&&(window.detachEvent("onload",this.v),window.detachEvent("onmousemove",this.w)),this.s=u)},addEventListener:function(a,b){this.F[a][this.Z++]=b},removeEventListener:function(a,b){var c,d,e=this.F[a],f=[];for(d in e)e.hasOwnProperty(d)&&e[d]===b&&f.push(d);for(c=0;c<f.length;c++)d=f[c],delete e[d]},w:function(a){sjcl.random.addEntropy([a.x||a.clientX||a.offsetX||0,a.y||a.clientY||a.offsetY||0],2,"mouse")},v:function(){sjcl.random.addEntropy((new Date).valueOf(),2,"loadtime")}};
+function C(a,b){var c,d=sjcl.random.F[a],e=[];for(c in d)d.hasOwnProperty(c)&&e.push(d[c]);for(c=0;c<e.length;c++)e[c](b)}function A(a){a.c=B(a).concat(B(a));a.H=new sjcl.cipher.aes(a.c)}function B(a){for(var b=0;4>b&&!(a.h[b]=a.h[b]+1|0,a.h[b]);b++);return a.H.encrypt(a.h)}sjcl.random=new sjcl.prng(6);
+try{if("undefined"!==typeof module&&module.exports){var D=require("crypto").randomBytes(128);sjcl.random.addEntropy(D,1024,"crypto['randomBytes']")}else if(window&&window.crypto&&window.crypto.getRandomValues){var E=new Uint32Array(32);window.crypto.getRandomValues(E);sjcl.random.addEntropy(E,1024,"crypto['getRandomValues']")}}catch(F){}sjcl.bn=function(a){this.initWith(a)};
+sjcl.bn.prototype={radix:24,maxMul:8,d:sjcl.bn,copy:function(){return new this.d(this)},initWith:function(a){var b=0,c;switch(typeof a){case "object":this.limbs=a.limbs.slice(0);break;case "number":this.limbs=[a];this.normalize();break;case "string":a=a.replace(/^0x/,"");this.limbs=[];c=this.radix/4;for(b=0;b<a.length;b+=c)this.limbs.push(parseInt(a.substring(Math.max(a.length-b-c,0),a.length-b),16));break;default:this.limbs=[0]}return this},equals:function(a){"number"===typeof a&&(a=new this.d(a));
+var b=0,c;this.fullReduce();a.fullReduce();for(c=0;c<this.limbs.length||c<a.limbs.length;c++)b|=this.getLimb(c)^a.getLimb(c);return 0===b},getLimb:function(a){return a>=this.limbs.length?0:this.limbs[a]},greaterEquals:function(a){"number"===typeof a&&(a=new this.d(a));var b=0,c=0,d,e,f;for(d=Math.max(this.limbs.length,a.limbs.length)-1;0<=d;d--)e=this.getLimb(d),f=a.getLimb(d),c|=f-e&~b,b|=e-f&~c;return(c|~b)>>>31},toString:function(){this.fullReduce();var a="",b,c,d=this.limbs;for(b=0;b<this.limbs.length;b++){for(c=
+d[b].toString(16);b<this.limbs.length-1&&6>c.length;)c="0"+c;a=c+a}return"0x"+a},addM:function(a){"object"!==typeof a&&(a=new this.d(a));var b=this.limbs,c=a.limbs;for(a=b.length;a<c.length;a++)b[a]=0;for(a=0;a<c.length;a++)b[a]+=c[a];return this},doubleM:function(){var a,b=0,c,d=this.radix,e=this.radixMask,f=this.limbs;for(a=0;a<f.length;a++)c=f[a],c=c+c+b,f[a]=c&e,b=c>>d;b&&f.push(b);return this},halveM:function(){var a,b=0,c,d=this.radix,e=this.limbs;for(a=e.length-1;0<=a;a--)c=e[a],e[a]=c+b>>
+1,b=(c&1)<<d;e[e.length-1]||e.pop();return this},subM:function(a){"object"!==typeof a&&(a=new this.d(a));var b=this.limbs,c=a.limbs;for(a=b.length;a<c.length;a++)b[a]=0;for(a=0;a<c.length;a++)b[a]-=c[a];return this},mod:function(a){var b=!this.greaterEquals(new sjcl.bn(0));a=(new sjcl.bn(a)).normalize();var c=(new sjcl.bn(this)).normalize(),d=0;for(b&&(c=(new sjcl.bn(0)).subM(c).normalize());c.greaterEquals(a);d++)a.doubleM();for(b&&(c=a.sub(c).normalize());0<d;d--)a.halveM(),c.greaterEquals(a)&&
+c.subM(a).normalize();return c.trim()},inverseMod:function(a){var b=new sjcl.bn(1),c=new sjcl.bn(0),d=new sjcl.bn(this),e=new sjcl.bn(a),f,g=1;if(!(a.limbs[0]&1))throw new sjcl.exception.invalid("inverseMod: p must be odd");do{d.limbs[0]&1&&(d.greaterEquals(e)||(f=d,d=e,e=f,f=b,b=c,c=f),d.subM(e),d.normalize(),b.greaterEquals(c)||b.addM(a),b.subM(c));d.halveM();b.limbs[0]&1&&b.addM(a);b.normalize();b.halveM();for(f=g=0;f<d.limbs.length;f++)g|=d.limbs[f]}while(g);if(!e.equals(1))throw new sjcl.exception.invalid("inverseMod: p and x must be relatively prime");
+return c},add:function(a){return this.copy().addM(a)},sub:function(a){return this.copy().subM(a)},mul:function(a){"number"===typeof a&&(a=new this.d(a));var b,c=this.limbs,d=a.limbs,e=c.length,f=d.length,g=new this.d,h=g.limbs,l,k=this.maxMul;for(b=0;b<this.limbs.length+a.limbs.length+1;b++)h[b]=0;for(b=0;b<e;b++){l=c[b];for(a=0;a<f;a++)h[b+a]+=l*d[a];--k||(k=this.maxMul,g.cnormalize())}return g.cnormalize().reduce()},square:function(){return this.mul(this)},power:function(a){"number"===typeof a?
+a=[a]:a.limbs!==r&&(a=a.normalize().limbs);var b,c,d=new this.d(1),e=this;for(b=0;b<a.length;b++)for(c=0;c<this.radix;c++)a[b]&1<<c&&(d=d.mul(e)),e=e.square();return d},mulmod:function(a,b){return this.mod(b).mul(a.mod(b)).mod(b)},powermod:function(a,b){for(var c=new sjcl.bn(1),d=new sjcl.bn(this),e=new sjcl.bn(a);;){e.limbs[0]&1&&(c=c.mulmod(d,b));e.halveM();if(e.equals(0))break;d=d.mulmod(d,b)}return c.normalize().reduce()},trim:function(){var a=this.limbs,b;do b=a.pop();while(a.length&&0===b);
+a.push(b);return this},reduce:function(){return this},fullReduce:function(){return this.normalize()},normalize:function(){var a=0,b,c=this.ipv,d,e=this.limbs,f=e.length,g=this.radixMask;for(b=0;b<f||0!==a&&-1!==a;b++)a=(e[b]||0)+a,d=e[b]=a&g,a=(a-d)*c;-1===a&&(e[b-1]-=this.placeVal);return this},cnormalize:function(){var a=0,b,c=this.ipv,d,e=this.limbs,f=e.length,g=this.radixMask;for(b=0;b<f-1;b++)a=e[b]+a,d=e[b]=a&g,a=(a-d)*c;e[b]+=a;return this},toBits:function(a){this.fullReduce();a=a||this.exponent||
+this.bitLength();var b=Math.floor((a-1)/24),c=sjcl.bitArray,d=[c.partial((a+7&-8)%this.radix||this.radix,this.getLimb(b))];for(b--;0<=b;b--)d=c.concat(d,[c.partial(Math.min(this.radix,a),this.getLimb(b))]),a-=this.radix;return d},bitLength:function(){this.fullReduce();for(var a=this.radix*(this.limbs.length-1),b=this.limbs[this.limbs.length-1];b;b>>>=1)a++;return a+7&-8}};
+sjcl.bn.fromBits=function(a){var b=new this,c=[],d=sjcl.bitArray,e=this.prototype,f=Math.min(this.bitLength||0x100000000,d.bitLength(a)),g=f%e.radix||e.radix;for(c[0]=d.extract(a,0,g);g<f;g+=e.radix)c.unshift(d.extract(a,g,e.radix));b.limbs=c;return b};sjcl.bn.prototype.ipv=1/(sjcl.bn.prototype.placeVal=Math.pow(2,sjcl.bn.prototype.radix));sjcl.bn.prototype.radixMask=(1<<sjcl.bn.prototype.radix)-1;
+sjcl.bn.pseudoMersennePrime=function(a,b){function c(a){this.initWith(a)}var d=c.prototype=new sjcl.bn,e,f;e=d.modOffset=Math.ceil(f=a/d.radix);d.exponent=a;d.offset=[];d.factor=[];d.minOffset=e;d.fullMask=0;d.fullOffset=[];d.fullFactor=[];d.modulus=c.modulus=new sjcl.bn(Math.pow(2,a));d.fullMask=0|-Math.pow(2,a%d.radix);for(e=0;e<b.length;e++)d.offset[e]=Math.floor(b[e][0]/d.radix-f),d.fullOffset[e]=Math.ceil(b[e][0]/d.radix-f),d.factor[e]=b[e][1]*Math.pow(0.5,a-b[e][0]+d.offset[e]*d.radix),d.fullFactor[e]=
+b[e][1]*Math.pow(0.5,a-b[e][0]+d.fullOffset[e]*d.radix),d.modulus.addM(new sjcl.bn(Math.pow(2,b[e][0])*b[e][1])),d.minOffset=Math.min(d.minOffset,-d.offset[e]);d.d=c;d.modulus.cnormalize();d.reduce=function(){var a,b,c,d=this.modOffset,e=this.limbs,f=this.offset,m=this.offset.length,s=this.factor,q;for(a=this.minOffset;e.length>d;){c=e.pop();q=e.length;for(b=0;b<m;b++)e[q+f[b]]-=s[b]*c;a--;a||(e.push(0),this.cnormalize(),a=this.minOffset)}this.cnormalize();return this};d.V=-1===d.fullMask?d.reduce:
+function(){var a=this.limbs,b=a.length-1,c,d;this.reduce();if(b===this.modOffset-1){d=a[b]&this.fullMask;a[b]-=d;for(c=0;c<this.fullOffset.length;c++)a[b+this.fullOffset[c]]-=this.fullFactor[c]*d;this.normalize()}};d.fullReduce=function(){var a,b;this.V();this.addM(this.modulus);this.addM(this.modulus);this.normalize();this.V();for(b=this.limbs.length;b<this.modOffset;b++)this.limbs[b]=0;a=this.greaterEquals(this.modulus);for(b=0;b<this.limbs.length;b++)this.limbs[b]-=this.modulus.limbs[b]*a;this.cnormalize();
+return this};d.inverse=function(){return this.power(this.modulus.sub(2))};c.fromBits=sjcl.bn.fromBits;return c};var G=sjcl.bn.pseudoMersennePrime;
+sjcl.bn.prime={p127:G(127,[[0,-1]]),p25519:G(255,[[0,-19]]),p192k:G(192,[[32,-1],[12,-1],[8,-1],[7,-1],[6,-1],[3,-1],[0,-1]]),p224k:G(224,[[32,-1],[12,-1],[11,-1],[9,-1],[7,-1],[4,-1],[1,-1],[0,-1]]),p256k:G(0x100,[[32,-1],[9,-1],[8,-1],[7,-1],[6,-1],[4,-1],[0,-1]]),p192:G(192,[[0,-1],[64,-1]]),p224:G(224,[[0,1],[96,-1]]),p256:G(0x100,[[0,-1],[96,1],[192,1],[224,-1]]),p384:G(384,[[0,-1],[32,1],[96,-1],[128,-1]]),p521:G(521,[[0,-1]])};
+sjcl.bn.random=function(a,b){"object"!==typeof a&&(a=new sjcl.bn(a));for(var c,d,e=a.limbs.length,f=a.limbs[e-1]+1,g=new sjcl.bn;;){do c=sjcl.random.randomWords(e,b),0>c[e-1]&&(c[e-1]+=0x100000000);while(Math.floor(c[e-1]/f)===Math.floor(0x100000000/f));c[e-1]%=f;for(d=0;d<e-1;d++)c[d]&=a.radixMask;g.limbs=c;if(!g.greaterEquals(a))return g}};sjcl.ecc={};sjcl.ecc.point=function(a,b,c){b===r?this.isIdentity=t:(this.x=b,this.y=c,this.isIdentity=u);this.curve=a};
+sjcl.ecc.point.prototype={toJac:function(){return new sjcl.ecc.pointJac(this.curve,this.x,this.y,new this.curve.field(1))},mult:function(a){return this.toJac().mult(a,this).toAffine()},mult2:function(a,b,c){return this.toJac().mult2(a,this,b,c).toAffine()},multiples:function(){var a,b,c;if(this.S===r){c=this.toJac().doubl();a=this.S=[new sjcl.ecc.point(this.curve),this,c.toAffine()];for(b=3;16>b;b++)c=c.add(this),a.push(c.toAffine())}return this.S},isValid:function(){return this.y.square().equals(this.curve.b.add(this.x.mul(this.curve.a.add(this.x.square()))))},
+toBits:function(){return sjcl.bitArray.concat(this.x.toBits(),this.y.toBits())}};sjcl.ecc.pointJac=function(a,b,c,d){b===r?this.isIdentity=t:(this.x=b,this.y=c,this.z=d,this.isIdentity=u);this.curve=a};
+sjcl.ecc.pointJac.prototype={add:function(a){var b,c,d,e;if(this.curve!==a.curve)throw"sjcl['ecc']['add'](): Points must be on the same curve to add them!";if(this.isIdentity)return a.toJac();if(a.isIdentity)return this;b=this.z.square();c=a.x.mul(b).subM(this.x);if(c.equals(0))return this.y.equals(a.y.mul(b.mul(this.z)))?this.doubl():new sjcl.ecc.pointJac(this.curve);b=a.y.mul(b.mul(this.z)).subM(this.y);d=c.square();a=b.square();e=c.square().mul(c).addM(this.x.add(this.x).mul(d));a=a.subM(e);b=
+this.x.mul(d).subM(a).mul(b);d=this.y.mul(c.square().mul(c));b=b.subM(d);c=this.z.mul(c);return new sjcl.ecc.pointJac(this.curve,a,b,c)},doubl:function(){if(this.isIdentity)return this;var a=this.y.square(),b=a.mul(this.x.mul(4)),c=a.square().mul(8),a=this.z.square(),d=this.curve.a.toString()==(new sjcl.bn(-3)).toString()?this.x.sub(a).mul(3).mul(this.x.add(a)):this.x.square().mul(3).add(a.square().mul(this.curve.a)),a=d.square().subM(b).subM(b),b=b.sub(a).mul(d).subM(c),c=this.y.add(this.y).mul(this.z);
+return new sjcl.ecc.pointJac(this.curve,a,b,c)},toAffine:function(){if(this.isIdentity||this.z.equals(0))return new sjcl.ecc.point(this.curve);var a=this.z.inverse(),b=a.square();return new sjcl.ecc.point(this.curve,this.x.mul(b).fullReduce(),this.y.mul(b.mul(a)).fullReduce())},mult:function(a,b){"number"===typeof a?a=[a]:a.limbs!==r&&(a=a.normalize().limbs);var c,d,e=(new sjcl.ecc.point(this.curve)).toJac(),f=b.multiples();for(c=a.length-1;0<=c;c--)for(d=sjcl.bn.prototype.radix-4;0<=d;d-=4)e=e.doubl().doubl().doubl().doubl().add(f[a[c]>>
+d&15]);return e},mult2:function(a,b,c,d){"number"===typeof a?a=[a]:a.limbs!==r&&(a=a.normalize().limbs);"number"===typeof c?c=[c]:c.limbs!==r&&(c=c.normalize().limbs);var e,f=(new sjcl.ecc.point(this.curve)).toJac();b=b.multiples();var g=d.multiples(),h,l;for(d=Math.max(a.length,c.length)-1;0<=d;d--){h=a[d]|0;l=c[d]|0;for(e=sjcl.bn.prototype.radix-4;0<=e;e-=4)f=f.doubl().doubl().doubl().doubl().add(b[h>>e&15]).add(g[l>>e&15])}return f},isValid:function(){var a=this.z.square(),b=a.square(),a=b.mul(a);
+return this.y.square().equals(this.curve.b.mul(a).add(this.x.mul(this.curve.a.mul(b).add(this.x.square()))))}};sjcl.ecc.curve=function(a,b,c,d,e,f){this.field=a;this.r=new sjcl.bn(b);this.a=new a(c);this.b=new a(d);this.G=new sjcl.ecc.point(this,new a(e),new a(f))};
+sjcl.ecc.curve.prototype.fromBits=function(a){var b=sjcl.bitArray,c=this.field.prototype.exponent+7&-8;a=new sjcl.ecc.point(this,this.field.fromBits(b.bitSlice(a,0,c)),this.field.fromBits(b.bitSlice(a,c,2*c)));if(!a.isValid())throw new sjcl.exception.corrupt("not on the curve!");return a};
+sjcl.ecc.curves={c192:new sjcl.ecc.curve(sjcl.bn.prime.p192,"0xffffffffffffffffffffffff99def836146bc9b1b4d22831",-3,"0x64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1","0x188da80eb03090f67cbf20eb43a18800f4ff0afd82ff1012","0x07192b95ffc8da78631011ed6b24cdd573f977a11e794811"),c224:new sjcl.ecc.curve(sjcl.bn.prime.p224,"0xffffffffffffffffffffffffffff16a2e0b8f03e13dd29455c5c2a3d",-3,"0xb4050a850c04b3abf54132565044b0b7d7bfd8ba270b39432355ffb4","0xb70e0cbd6bb4bf7f321390b94a03c1d356c21122343280d6115c1d21",
+"0xbd376388b5f723fb4c22dfe6cd4375a05a07476444d5819985007e34"),c256:new sjcl.ecc.curve(sjcl.bn.prime.p256,"0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551",-3,"0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b","0x6b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c296","0x4fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5"),c384:new sjcl.ecc.curve(sjcl.bn.prime.p384,"0xffffffffffffffffffffffffffffffffffffffffffffffffc7634d81f4372ddf581a0db248b0a77aecec196accc52973",
+-3,"0xb3312fa7e23ee7e4988e056be3f82d19181d9c6efe8141120314088f5013875ac656398d8a2ed19d2a85c8edd3ec2aef","0xaa87ca22be8b05378eb1c71ef320ad746e1d3b628ba79b9859f741e082542a385502f25dbf55296c3a545e3872760ab7","0x3617de4a96262c6f5d9e98bf9292dc29f8f41dbd289a147ce9da3113b5f0b8c00a60b1ce1d7e819d7a431d7c90ea0e5f"),k192:new sjcl.ecc.curve(sjcl.bn.prime.p192k,"0xfffffffffffffffffffffffe26f2fc170f69466a74defd8d",0,3,"0xdb4ff10ec057e9ae26b07d0280b7f4341da5d1b1eae06c7d","0x9b2f2f6d9c5628a7844163d015be86344082aa88d95e2f9d"),
+k224:new sjcl.ecc.curve(sjcl.bn.prime.p224k,"0x010000000000000000000000000001dce8d2ec6184caf0a971769fb1f7",0,5,"0xa1455b334df099df30fc28a169a467e9e47075a90f7e650eb6b7a45c","0x7e089fed7fba344282cafbd6f7e319f7c0b0bd59e2ca4bdb556d61a5"),k256:new sjcl.ecc.curve(sjcl.bn.prime.p256k,"0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",0,7,"0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798","0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8")};
+sjcl.ecc.P=function(a){sjcl.ecc[a]={publicKey:function(a,c){this.f=a;this.i=a.r.bitLength();this.A=c instanceof Array?a.fromBits(c):c;this.get=function(){var a=this.A.toBits(),b=sjcl.bitArray.bitLength(a),c=sjcl.bitArray.bitSlice(a,0,b/2),a=sjcl.bitArray.bitSlice(a,b/2);return{x:c,y:a}}},secretKey:function(a,c){this.f=a;this.i=a.r.bitLength();this.t=c;this.get=function(){return this.t.toBits()}},generateKeys:function(b,c,d){b===r&&(b=0x100);if("number"===typeof b&&(b=sjcl.ecc.curves["c"+b],b===r))throw new sjcl.exception.invalid("no such curve");
+d===r&&(d=sjcl.bn.random(b.r,c));c=b.G.mult(d);return{pub:new sjcl.ecc[a].publicKey(b,c),sec:new sjcl.ecc[a].secretKey(b,d)}}}};sjcl.ecc.P("elGamal");sjcl.ecc.elGamal.publicKey.prototype={kem:function(a){a=sjcl.bn.random(this.f.r,a);var b=this.f.G.mult(a).toBits();return{key:sjcl.hash.sha256.hash(this.A.mult(a).toBits()),tag:b}}};sjcl.ecc.elGamal.secretKey.prototype={unkem:function(a){return sjcl.hash.sha256.hash(this.f.fromBits(a).mult(this.t).toBits())},dh:function(a){return sjcl.hash.sha256.hash(a.A.mult(this.t).toBits())}};
+sjcl.ecc.P("ecdsa");sjcl.ecc.ecdsa.secretKey.prototype={sign:function(a,b,c,d){sjcl.bitArray.bitLength(a)>this.i&&(a=sjcl.bitArray.clamp(a,this.i));var e=this.f.r,f=e.bitLength();d=d||sjcl.bn.random(e.sub(1),b).add(1);b=this.f.G.mult(d).x.mod(e);a=sjcl.bn.fromBits(a).add(b.mul(this.t));c=c?a.inverseMod(e).mul(d).mod(e):a.mul(d.inverseMod(e)).mod(e);return sjcl.bitArray.concat(b.toBits(f),c.toBits(f))}};
+sjcl.ecc.ecdsa.publicKey.prototype={verify:function(a,b,c){sjcl.bitArray.bitLength(a)>this.i&&(a=sjcl.bitArray.clamp(a,this.i));var d=sjcl.bitArray,e=this.f.r,f=this.i,g=sjcl.bn.fromBits(d.bitSlice(b,0,f)),d=sjcl.bn.fromBits(d.bitSlice(b,f,2*f)),h=c?d:d.inverseMod(e),f=sjcl.bn.fromBits(a).mul(h).mod(e),h=g.mul(h).mod(e),f=this.f.G.mult2(f,h,this.A).x;if(g.equals(0)||d.equals(0)||g.greaterEquals(e)||d.greaterEquals(e)||!f.equals(g)){if(c===r)return this.verify(a,b,t);throw new sjcl.exception.corrupt("signature didn't check out");
+}return t}};
+
 /**
     The AeroGear.Pipeline provides a persistence API that is protocol agnostic and does not depend on any certain data model. Through the use of adapters, this library provides common methods like read, save and delete that will just work.
     @status Stable
@@ -463,8 +572,9 @@ AeroGear.isArray = function( obj ) {
     @augments AeroGear.Core
     @param {String|Array|Object} [config] - A configuration for the pipe(s) being created along with the Pipeline. If an object or array containing objects is used, the objects can have the following properties:
     @param {String} config.name - the name that the pipe will later be referenced by
-    @param {String} [config.type="rest"] - the type of pipe as determined by the adapter used
-    @param {String} [config.recordId="id"] - the identifier used to denote the unique id for each record in the data associated with this pipe
+    @param {String} [config.type="Rest"] - the type of pipe as determined by the adapter used
+    @param {String} [config.recordId="id"] - @deprecated the identifier used to denote the unique id for each record in the data associated with this pipe
+    @param {Object} [config.authenticator=null] - the AeroGear.auth object used to pass credentials to a secure endpoint
     @param {Object} [config.settings={}] - the settings to be passed to the adapter. For specific settings, see the documentation for the adapter you are using.
     @returns {Object} pipeline - The created Pipeline containing any pipes that may have been created
     @example
@@ -481,7 +591,9 @@ var pl3 = AeroGear.Pipeline( [ "tasks", "projects" ] );
 var pl4 = AeroGear.Pipeline({
     name: "customPipe",
     type: "rest",
-    recordId: "CustomID"
+    settings: {
+        recordId: "CustomID"
+    }
 });
 
 //Create multiple REST pipes using objects
@@ -489,12 +601,16 @@ var pl5 = AeroGear.Pipeline([
     {
         name: "customPipe",
         type: "rest",
-        recordId: "CustomID"
+        settings: {
+            recordId: "CustomID"
+        }
     },
     {
         name: "customPipe2",
         type: "rest",
-        recordId: "CustomID"
+        settings: {
+            recordId: "CustomID"
+        }
     }
 ]);
  */
@@ -506,6 +622,9 @@ AeroGear.Pipeline = function( config ) {
 
     // Super constructor
     AeroGear.Core.call( this );
+
+    // Save a reference to the Pipeline Config
+    this.config = config || {};
 
     this.lib = "Pipeline";
     this.type = config ? config.type || "Rest" : "Rest";
@@ -536,9 +655,8 @@ AeroGear.Pipeline.adapters = {};
     @status Stable
     @constructs AeroGear.Pipeline.adapters.Rest
     @param {String} pipeName - the name used to reference this particular pipe
-    @param {String} [type="Rest"] - the name used to reference this particular pipe
     @param {Object} [settings={}] - the settings to be passed to the adapter
-    @param {Object} [settings.authenticator=null] - the AeroGear.auth object used to pass credentials to a secure endpoint
+    @param {Object} [settings.authenticator=null] - @deprecated the AeroGear.auth object used to pass credentials to a secure endpoint
     @param {String} [settings.baseURL] - defines the base URL to use for an endpoint
     @param {String} [settings.contentType="application/json"] - the default type of content being sent to the server
     @param {String} [settings.dataType="json"] - the default type of data expected to be returned from the server
@@ -550,6 +668,7 @@ AeroGear.Pipeline.adapters = {};
     @param {Function} [settings.pageConfig.parameterProvider] - a function for handling custom parameter placement within header and body based paging - for header paging, the function receives a jqXHR object and for body paging, the function receives the JSON formatted body as an object. the function should then return an object containing keys named for the previous/nextIdentifier options and whos values are either a map of parameters and values or a properly formatted query string
     @param {String} [settings.recordId="id"] - the name of the field used to uniquely identify a "record" in the data
     @param {Number} [settings.timeout=60] - the amount of time, in seconds, to wait before timing out a connection and firing the complete callback for that request
+    @param {Object} [settings.xhrFields] - specify extra xhr options, like the withCredentials flag
     @returns {Object} The created pipe
     @example
     //Create an empty pipeline
@@ -586,7 +705,8 @@ AeroGear.Pipeline.adapters.Rest = function( pipeName, settings ) {
             // use the pipeName as the default rest endpoint
             url: settings.baseURL ? settings.baseURL + endpoint : endpoint,
             contentType: settings.contentType || "application/json",
-            dataType: settings.dataType || "json"
+            dataType: settings.dataType || "json",
+            xhrFields: settings.xhrFields
         },
         recordId = settings.recordId || "id",
         authenticator = settings.authenticator || null,
@@ -943,12 +1063,13 @@ AeroGear.Pipeline.adapters.Rest.prototype.read = function( options ) {
 
 /**
     Save data asynchronously to the server. If this is a new object (doesn't have a record identifier provided by the server), the data is created on the server (POST) and then that record is sent back to the client including the new server-assigned id, otherwise, the data on the server is updated (PUT).
-    @param {Object} data - For new data, this will be an object representing the data to be saved to the server. For updating data, a hash of key/value pairs one of which must be the `recordId` you set during creation of the pipe representing the identifier the server will use to update this record and then any other number of pairs representing the data. The data object is then stringified and passed to the server to be processed.
+    @param {Object} data - For new data, this will be an object representing the data to be saved to the server. For updating data, a hash of key/value pairs one of which must be the `recordId` you set during creation of the pipe representing the identifier the server will use to update this record and then any other number of pairs representing the data. The data object is then stringified and passed to the server to be processed.  To upload a File,  pass in a File or Blob object.  *IE Users - File Upload is only supported in IE 10 and above*
     @param {Object} [options={}] - Additional options
     @param {AeroGear~completeCallbackREST} [options.complete] - a callback to be called when the result of the request to the server is complete, regardless of success
     @param {AeroGear~errorCallbackREST} [options.error] - a callback to be called when the request to the server results in an error
     @param {Object} [options.statusCode] - a collection of status codes and callbacks to fire when the request to the server returns on of those codes. For more info see the statusCode option on the <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax page</a>.
     @param {AeroGear~successCallbackREST} [options.success] - a callback to be called when the result of the request to the server is successful
+    @param {AeroGear~progressCallbackREST} [options.progress] - a callback that is a hook to monitor the upload progress when uploading a File.( if available )
     @returns {Object} The jqXHR created by jQuery.ajax. To cancel the request, simply call the abort() method of the jqXHR object which will then trigger the error and complete callbacks for this request. For more info, see the <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax page</a>.
     @example
     var myPipe = AeroGear.Pipeline( "tasks" ).pipes[ 0 ];
@@ -990,7 +1111,9 @@ AeroGear.Pipeline.adapters.Rest.prototype.save = function( data, options ) {
         url,
         success,
         error,
-        extraOptions;
+        extraOptions,
+        formData,
+        key;
 
     data = data || {};
     options = options || {};
@@ -1025,6 +1148,36 @@ AeroGear.Pipeline.adapters.Rest.prototype.save = function( data, options ) {
         timeout: this.getTimeout()
     });
 
+    // Check to see if there is a file and create a FormData Object to upload
+    if( "FormData" in window ) {
+        formData = new FormData();
+        for( key in data ) {
+            formData.append( key, data[ key ] );
+
+            if( data[ key ] instanceof File || data[ key ] instanceof Blob ) {
+                //Options to tell jQuery not to process data or worry about content-type.
+                extraOptions.contentType = false;
+                extraOptions.processData = false;
+            }
+        }
+
+        if( extraOptions.contentType === false ) {
+            extraOptions.data = formData;
+        }
+
+        // the jqXHR doesn't expose upload progress, so we need to create a custom xhr object
+        extraOptions.xhr = function() {
+            var myXhr = jQuery.ajaxSettings.xhr();
+            if( myXhr.upload ){
+                myXhr.upload.addEventListener( "progress", function() {
+                    if( options.progress ) {
+                        options.progress.apply( this, arguments );
+                    }
+                }, false );
+            }
+            return myXhr;
+        };
+    }
     // Stringify data if we actually want to POST/PUT JSON data
     if ( extraOptions.contentType === "application/json" && extraOptions.data && typeof extraOptions.data !== "string" ) {
         extraOptions.data = JSON.stringify( extraOptions.data );
@@ -1123,11 +1276,11 @@ AeroGear.Pipeline.adapters.Rest.prototype.remove = function( toRemove, options )
     A collection of data connections (stores) and their corresponding data models. This object provides a standard way to interact with client side data no matter the data format or storage mechanism used.
     @status Stable
     @class
-    @augments AeroGear.Core
+    @augments AeroGear.DataManagerCore
     @param {String|Array|Object} [config] - A configuration for the store(s) being created along with the DataManager. If an object or array containing objects is used, the objects can have the following properties:
     @param {String} config.name - the name that the store will later be referenced by
-    @param {String} [config.type="memory"] - the type of store as determined by the adapter used
-    @param {String} [config.recordId="id"] - the identifier used to denote the unique id for each record in the data associated with this store
+    @param {String} [config.type="Memory"] - the type of store as determined by the adapter used
+    @param {String} [config.recordId="id"] - @deprecated the identifier used to denote the unique id for each record in the data associated with this store
     @param {Object} [config.settings={}] - the settings to be passed to the adapter. For specific settings, see the documentation for the adapter you are using.
     @returns {object} dataManager - The created DataManager containing any stores that may have been created
     @example
@@ -1168,10 +1321,69 @@ AeroGear.DataManager = function( config ) {
         return new AeroGear.DataManager( config );
     }
 
-    // Super Constructor
-    AeroGear.Core.call( this );
+    /**
+        This function is used by the AeroGear.DataManager to add a new Object to its respective collection.
+        @name AeroGear.add
+        @method
+        @param {String|Array|Object} config - This can be a variety of types specifying how to create the object. See the particular constructor for the object calling .add for more info.
+        @returns {Object} The object containing the collection that was updated
+     */
+    this.add = function( config ){
+        config = config || {};
+
+        var i, type;
+
+        config = AeroGear.isArray( config ) ? config : [ config ];
+
+        config = config.map( function( value, index, array ) {
+            if ( typeof value !== "string" ) {
+                type = value.type || "Memory";
+                if( !( type in AeroGear.DataManager.validAdapters ) ) {
+                    for( i = 0; i < AeroGear.DataManager.prefered.length; i++ ) {
+                        if( AeroGear.DataManager.prefered[ i ] in AeroGear.DataManager.validAdapters ) {
+                            //For Deprecation purposes in 1.3.0  will be removed in 1.4.0
+                            if( type === "IndexedDB" || type === "WebSQL" ) {
+                                value.settings = AeroGear.extend( value.settings || {}, { async: true } );
+                            }
+                            value.type = AeroGear.DataManager.prefered[ i ];
+                            return value;
+                        }
+                    }
+                }
+            }
+            return value;
+        }, this );
+
+        AeroGear.Core.call( this );
+        this.add( config );
+
+        //Put back DataManager.add
+        this.add = this._add;
+    };
+
+    //Save a reference to DataManager.add to put back later
+    this._add = this.add;
+
+    /**
+        This function is used internally by datamanager to remove an Object from the respective collection.
+        @name AeroGear.remove
+        @method
+        @param {String|String[]|Object[]|Object} config - This can be a variety of types specifying how to remove the object.
+        @returns {Object} The object containing the collection that was updated
+     */
+    this.remove = function( config ){
+        AeroGear.Core.call( this );
+        this.remove( config );
+
+        //Put back DataManager.remove
+        this.remove = this._remove;
+    };
+
+    //Save a reference to DataManager.remove to put back later
+    this._remove = this.remove;
 
     this.lib = "DataManager";
+
     this.type = config ? config.type || "Memory" : "Memory";
 
     /**
@@ -1189,6 +1401,25 @@ AeroGear.DataManager.prototype = AeroGear.Core;
 AeroGear.DataManager.constructor = AeroGear.DataManager;
 
 /**
+    Stores the valid adapters
+*/
+AeroGear.DataManager.validAdapters = {};
+
+/**
+    prefered adapters for the fallback strategy
+*/
+AeroGear.DataManager.prefered = [ "IndexedDB", "WebSQL", "SessionLocal", "Memory" ];
+
+/**
+    Method to determine and store what adapters are valid for this environment
+*/
+AeroGear.DataManager.validateAdapter = function( id, obj ) {
+    if( obj.isValid() ) {
+        AeroGear.DataManager.validAdapters[ id ] = obj;
+    }
+};
+
+/**
     The adapters object is provided so that adapters can be added to the AeroGear.DataManager namespace dynamically and still be accessible to the add method
     @augments AeroGear.DataManager
  */
@@ -1200,12 +1431,69 @@ AeroGear.DataManager.STATUS_MODIFIED = 2;
 AeroGear.DataManager.STATUS_REMOVED = 0;
 
 /**
+    The Base adapter that all other adapters will extend from.
+    Not to be Instantiated directly
+ */
+AeroGear.DataManager.adapters.base = function( storeName, settings ) {
+    if ( this instanceof AeroGear.DataManager.adapters.base ) {
+        throw "Invalid instantiation of base class AeroGear.DataManager.adapters.base";
+    }
+
+    settings = settings || {};
+
+    // Private Instance vars
+    var data = null,
+        recordId = settings.recordId ? settings.recordId : "id";
+
+    // Privileged Methods
+    /**
+        Returns the value of the private data var
+        @private
+        @augments base
+        @returns {Array}
+     */
+    this.getData = function() {
+        return data;
+    };
+
+    /**
+        Sets the value of the private data var
+        @private
+        @augments base
+     */
+    this.setData = function( newData ) {
+        data = newData;
+    };
+    /**
+        Returns the value of the private recordId var
+        @private
+        @augments base
+        @returns {String}
+     */
+    this.getRecordId = function() {
+        return recordId;
+    };
+
+    /**
+        A Function for a jQuery.Deferred to always call
+        @private
+        @augments base
+     */
+    this.always = function( value, status, callback ) {
+        if( callback ) {
+            callback.call( this, value, status );
+        }
+    };
+};
+
+/**
     The Memory adapter is the default type used when creating a new store. Data is simply stored in a data var and is lost on unload (close window, leave page, etc.)
     This constructor is instantiated when the "DataManager.add()" method is called
     @status Stable
     @constructs AeroGear.DataManager.adapters.Memory
     @param {String} storeName - the name used to reference this particular store
     @param {Object} [settings={}] - the settings to be passed to the adapter
+    @param {Boolean} [settings.async=false] -  If true, all operations will be simulated as asynchronous and return a promise. This is a compatibility option for the Memory and SessionLocal adapters only for 1.3.0 and will be removed in the 1.4.0 release
     @param {String} [settings.recordId="id"] - the name of the field used to uniquely identify a "record" in the data
     @returns {Object} The created store
     @example
@@ -1223,50 +1511,14 @@ AeroGear.DataManager.adapters.Memory = function( storeName, settings ) {
         return new AeroGear.DataManager.adapters.Memory( storeName, settings );
     }
 
-    settings = settings || {};
-
-    // Private Instance vars
-    var recordId = settings.recordId ? settings.recordId : "id",
-        type = "Memory",
-        data = null;
-
-    // Privileged Methods
-    /**
-        Returns the value of the private recordId var
-        @private
-        @augments Memory
-        @returns {String}
-     */
-    this.getRecordId = function() {
-        return recordId;
-    };
-
-    /**
-        Returns the value of the private data var
-        @private
-        @augments Memory
-        @returns {Array}
-     */
-    this.getData = function() {
-        return data;
-    };
-
-    /**
-        Sets the value of the private data var
-        @private
-        @augments Memory
-     */
-    this.setData = function( newData ) {
-        data = newData;
-    };
-
+    AeroGear.DataManager.adapters.base.apply( this, arguments );
     /**
         Empties the value of the private data var
         @private
         @augments Memory
      */
     this.emptyData = function() {
-        data = null;
+        this.setData( null );
     };
 
     /**
@@ -1275,8 +1527,7 @@ AeroGear.DataManager.adapters.Memory = function( storeName, settings ) {
         @augments Memory
      */
     this.addDataRecord = function( record ) {
-        data = data || [];
-        data.push( record );
+        this.getData().push( record );
     };
 
     /**
@@ -1285,7 +1536,7 @@ AeroGear.DataManager.adapters.Memory = function( storeName, settings ) {
         @augments Memory
      */
     this.updateDataRecord = function( index, record ) {
-        data[ index ] = record;
+        this.getData()[ index ] = record;
     };
 
     /**
@@ -1294,7 +1545,47 @@ AeroGear.DataManager.adapters.Memory = function( storeName, settings ) {
         @augments Memory
      */
     this.removeDataRecord = function( index ) {
-        data.splice( index, 1 );
+        this.getData().splice( index, 1 );
+    };
+
+    /**
+        A Function for a jQuery.Deferred to always call
+        @private
+        @augments Memory
+     */
+    this.always = function( value, status, callback ) {
+        if( callback ) {
+            callback.call( this, value, status );
+        }
+    };
+
+    /**
+        Returns the value of the async setting
+        @private
+        @augments Memory
+        Compatibility fix
+        Added in 1.3 to remove in 1.4
+    */
+    this.getAsync = function() {
+        return settings && settings.async ? true : false;
+    };
+
+    /**
+        Returns a synchronous jQuery.Deferred for api symmetry
+        @private
+        @augments base
+     */
+    this.open = function( options ) {
+        return jQuery.Deferred().resolve( undefined, "success", options && options.success );
+    };
+
+    /**
+        Returns a synchronous jQuery.Deferred for api symmetry
+        @private
+        @augments base
+    */
+    this.close = function() {
+        //purposefully left empty
     };
 
     /**
@@ -1327,9 +1618,19 @@ AeroGear.DataManager.adapters.Memory = function( storeName, settings ) {
 
 // Public Methods
 /**
+    Determine if this adapter is supported in the current environment
+*/
+AeroGear.DataManager.adapters.Memory.isValid = function() {
+    return true;
+};
+
+/**
     Read data from a store
     @param {String|Number} [id] - Usually a String or Number representing a single "record" in the data set or if no id is specified, all data is returned
-    @returns {Array} Returns data from the store, optionally filtered by an id
+    @param {Object} [options={}] - options
+    @param {AeroGear~successCallbackMEMORY} [options.success] - a callback to be called after successfully reading a Memory Store -  this read is synchronous but the callback is provided for API symmetry.
+    @returns {Object} A jQuery.Deferred promise
+    @returns {Array} @deprecated Returns data from the store, optionally filtered by an id
     @example
 var dm = AeroGear.DataManager( "tasks" ).stores[ 0 ];
 
@@ -1339,17 +1640,39 @@ var allData = dm.read();
 //Read a specific piece of data based on an id
 var justOne = dm.read( 12345 );
  */
-AeroGear.DataManager.adapters.Memory.prototype.read = function( id ) {
-    var filter = {};
+AeroGear.DataManager.adapters.Memory.prototype.read = function( id, options ) {
+    var filter = {},
+        data,
+        deferred = jQuery.Deferred(),
+        async = this.getAsync(); //added in 1.3.0,  will be removed in 1.4.0;
+
     filter[ this.getRecordId() ] = id;
-    return id ? this.filter( filter ) : this.getData();
+    if( id ) {
+        if( async ) {
+            this.filter( filter ).then( function( filtered ) { data = filtered; } );
+        } else {
+            data = this.filter( filter );
+        }
+    } else {
+        data = this.getData();
+    }
+    //data = id ? this.filter( filter ).then( function( data ) {  } ) : this.getData();
+    if( async ) {
+        deferred.always( this.always );
+        return deferred.resolve( data, "success", options ? options.success : undefined );
+    } else {
+        return data;
+    }
 };
 
 /**
     Saves data to the store, optionally clearing and resetting the data
     @param {Object|Array} data - An object or array of objects representing the data to be saved to the server. When doing an update, one of the key/value pairs in the object to update must be the `recordId` you set during creation of the store representing the unique identifier for a "record" in the data set.
-    @param {Boolean} [reset] - If true, this will empty the current data and set it to the data being saved
-    @returns {Array} Returns the updated data from the store
+    @param {Object} [options={}] - options
+    @param {Boolean} [options.reset] - If true, this will empty the current data and set it to the data being saved
+    @param {AeroGear~successCallbackMEMORY} [options.success] - a callback to be called after successfully saving data from a Memory Store -  this save is synchronous but the callback is provided for API symmetry.
+    @returns {Object} A jQuery.Deferred promise
+    @returns {Array} @deprecated Returns the updated data from the store
     @example
 var dm = AeroGear.DataManager( "tasks" ).stores[ 0 ];
 
@@ -1378,12 +1701,14 @@ var toUpdate = dm.read()[ 0 ];
 toUpdate.data.title = "Updated Task";
 dm.save( toUpdate );
  */
-AeroGear.DataManager.adapters.Memory.prototype.save = function( data, reset ) {
-    var itemFound = false;
+AeroGear.DataManager.adapters.Memory.prototype.save = function( data, options ) {
+    var itemFound = false,
+        deferred = jQuery.Deferred(),
+        async = this.getAsync(); //added in 1.3.0,  will be removed in 1.4.0
 
     data = AeroGear.isArray( data ) ? data : [ data ];
 
-    if ( reset ) {
+    if ( options && options.reset ) {
         this.setData( data );
     } else {
         if ( this.getData() ) {
@@ -1405,14 +1730,21 @@ AeroGear.DataManager.adapters.Memory.prototype.save = function( data, reset ) {
             this.setData( data );
         }
     }
-
-    return this.getData();
+    if( async ) {
+        deferred.always( this.always );
+        return deferred.resolve( this.getData(), "success", options ? options.success : undefined );
+    } else {
+        return this.getData();
+    }
 };
 
 /**
     Removes data from the store
     @param {String|Object|Array} toRemove - A variety of objects can be passed to remove to specify the item or if nothing is provided, all data is removed
-    @returns {Array} Returns the updated data from the store
+    @param {Object} [options={}] - options
+    @param {AeroGear~successCallbackMEMORY} [options.success] - a callback to be called after successfully removing data from a  Memory Store -  this remove is synchronous but the callback is provided for API symmetry.
+    @returns {Object} A jQuery.Deferred promise
+    @returns {Array} @deprecated Returns the updated data from the store
     @example
 var dm = AeroGear.DataManager( "tasks" ).stores[ 0 ];
 
@@ -1442,17 +1774,20 @@ dm.remove( toRemove );
 // Delete all remaining data from the store
 dm.remove();
  */
-AeroGear.DataManager.adapters.Memory.prototype.remove = function( toRemove ) {
+AeroGear.DataManager.adapters.Memory.prototype.remove = function( toRemove, options ) {
+    var delId, data, item,
+        deferred = jQuery.Deferred(),
+        async = this.getAsync(); //added in 1.3.0,  will be removed in 1.4.0
+
+    deferred.always( this.always );
+
     if ( !toRemove ) {
         // empty data array and return
         this.emptyData();
-        return this.getData();
+        return async ? deferred.resolve( this.getData(), "success", options ? options.success : undefined ) : this.getData();
     } else {
         toRemove = AeroGear.isArray( toRemove ) ? toRemove : [ toRemove ];
     }
-    var delId,
-        data,
-        item;
 
     for ( var i = 0; i < toRemove.length; i++ ) {
         if ( typeof toRemove[ i ] === "string" || typeof toRemove[ i ] === "number" ) {
@@ -1472,14 +1807,17 @@ AeroGear.DataManager.adapters.Memory.prototype.remove = function( toRemove ) {
         }
     }
 
-    return this.getData();
+    return async ? deferred.resolve( this.getData(), "success", options ? options.success : undefined ) : this.getData();
 };
 
 /**
     Filter the current store's data
     @param {Object} [filterParameters] - An object containing key value pairs on which to filter the store's data. To filter a single parameter on multiple values, the value can be an object containing a data key with an Array of values to filter on and its own matchAny key that will override the global matchAny for that specific filter parameter.
     @param {Boolean} [matchAny] - When true, an item is included in the output if any of the filter parameters is matched.
-    @returns {Array} Returns a filtered array of data objects based on the contents of the store's data object and the filter parameters. This method only returns a copy of the data and leaves the original data object intact.
+    @param {Object} [options={}] - options
+    @param {AeroGear~successCallbackMEMORY} [options.success] - a callback to be called after successfully filter data from a Memory Store -  this filter is synchronous but the callback is provided for API symmetry.
+    @return {Object} A jQuery.Deferred promise
+    @returns {Array} @deprecated Returns a filtered array of data objects based on the contents of the store's data object and the filter parameters. This method only returns a copy of the data and leaves the original data object intact.
     @example
 var dm = AeroGear.DataManager( "tasks" ).stores[ 0 ];
 
@@ -1497,13 +1835,19 @@ var filteredData = dm.filter({
     user: "admin"
 }, true);
  */
-AeroGear.DataManager.adapters.Memory.prototype.filter = function( filterParameters, matchAny ) {
+AeroGear.DataManager.adapters.Memory.prototype.filter = function( filterParameters, matchAny, options ) {
     var filtered, key, j, k, l, nestedKey, nestedFilter, nestedValue,
-        that = this;
+        that = this,
+        deferred = jQuery.Deferred(),
+        async = this.getAsync(); //Added in 1.3.0  Will Be Removed in 1.4.0
+
+    deferred.always( this.always );
 
     if ( !filterParameters ) {
         filtered = this.getData() || [];
-        return filtered;
+        //Added in 1.3.0  Will Be Removed in 1.4.0
+        return async ? deferred.resolve( filtered, "success", options ? options.success : undefined ) : filtered;
+        //return deferred.resolve( filtered, "success", options ? options.success : undefined );
     }
 
     filtered = this.getData().filter( function( value, index, array) {
@@ -1620,9 +1964,15 @@ AeroGear.DataManager.adapters.Memory.prototype.filter = function( filterParamete
 
         return match;
     });
-
-    return filtered;
+    //Added in 1.3.0  Will Be Removed in 1.4.0
+    return async ? deferred.resolve( filtered, "success", options ? options.success : undefined ) : filtered;
+    //return deferred.resolve( filtered, "success", options ? options.success : undefined );
 };
+
+/**
+    Validate this adapter and add it to AeroGear.DataManagerCore.adapters if valid
+*/
+AeroGear.DataManager.validateAdapter( "Memory", AeroGear.DataManager.adapters.Memory );
 
 /**
     The SessionLocal adapter extends the Memory adapter to store data in either session or local storage which makes it a little more persistent than memory
@@ -1632,6 +1982,7 @@ AeroGear.DataManager.adapters.Memory.prototype.filter = function( filterParamete
     @mixes AeroGear.DataManager.adapters.Memory
     @param {String} storeName - the name used to reference this particular store
     @param {Object} [settings={}] - the settings to be passed to the adapter
+    @param {Boolean} [settings.async=false] -  If true, all operations will be simulated as asynchronous and return a promise. This is a compatibility option for the Memory and SessionLocal adapters only for 1.3.0 and will be removed in the 1.4.0 release
     @param {String} [settings.recordId="id"] - the name of the field used to uniquely identify a "record" in the data
     @param {String} [settings.storageType="sessionStorage"] - the type of store can either be sessionStorage or localStorage
     @returns {Object} The created store
@@ -1654,9 +2005,7 @@ AeroGear.DataManager.adapters.SessionLocal = function( storeName, settings ) {
     AeroGear.DataManager.adapters.Memory.apply( this, arguments );
 
     // Private Instance vars
-    var data = null,
-        type = "SessionLocal",
-        storeType = settings.storageType || "sessionStorage",
+    var storeType = settings.storageType || "sessionStorage",
         name = storeName,
         appContext = document.location.pathname.replace(/[\/\.]/g,"-"),
         storeKey = name + appContext,
@@ -1690,6 +2039,13 @@ AeroGear.DataManager.adapters.SessionLocal = function( storeName, settings ) {
     };
 };
 
+/**
+    Determine if this adapter is supported in the current environment
+*/
+AeroGear.DataManager.adapters.SessionLocal.isValid = function() {
+    return !!(window.localStorage && window.sessionStorage);
+};
+
 // Inherit from the Memory adapter
 AeroGear.DataManager.adapters.SessionLocal.prototype = Object.create( new AeroGear.DataManager.adapters.Memory(), {
     // Public Methods
@@ -1699,10 +2055,11 @@ AeroGear.DataManager.adapters.SessionLocal.prototype = Object.create( new AeroGe
         @memberof AeroGear.DataManager.adapters.SessionLocal
         @param {Object|Array} data - An object or array of objects representing the data to be saved to the server. When doing an update, one of the key/value pairs in the object to update must be the `recordId` you set during creation of the store representing the unique identifier for a "record" in the data set.
         @param {Object} [options] - The options to be passed to the save method
-        @param {Function} [options.error] - A callback to be executed when an error is thrown trying to save data to the store. The most likely error is when the localStorage is full. The callback is passed the error object and the data that was attempted to be saved as arguments.
-        @param {AeroGear~errorCallbackStorage} [options.success] - A callback to be called if the save was successful. This probably isn't necessary since the save is synchronous but is provided for API symmetry.
-        @param {AeroGear~successCallbackStorage} [options.reset] - If true, this will empty the current data and set it to the data being saved
-        @returns {Array} Returns the updated data from the store or in the case of a storage error, returns the unchanged data
+        @param {Boolean} [options.reset] - If true, this will empty the current data and set it to the data being saved
+        @param {AeroGear~errorCallbackStorage} [options.error] - A callback to be executed when an error is thrown trying to save data to the store. The most likely error is when the localStorage is full. The callback is passed the error object and the data that was attempted to be saved as arguments.
+        @param {AeroGear~success} [options.success] - A callback to be called if the save was successful. This probably isn't necessary since the save is synchronous but is provided for API symmetry.
+        @returns {Object} A jQuery.Deferred promise
+        @returns {Array} @deprecated Returns the updated data from the store
         @example
 var dm = AeroGear.DataManager([{ name: "tasks", type: "SessionLocal" }]).stores[ 0 ];
 
@@ -1734,27 +2091,50 @@ dm.save( toUpdate );
     save: {
         value: function( data, options ) {
             // Call the super method
-            var reset = options && options.reset ? options.reset : false,
+            var newData,
+                deferred = jQuery.Deferred(),
+                reset = options && options.reset ? options.reset : false,
                 oldData = window[ this.getStoreType() ].getItem( this.getStoreKey() ),
-                newData = AeroGear.DataManager.adapters.Memory.prototype.save.apply( this, [ arguments[ 0 ], reset ] );
+                async = this.getAsync(); //added in 1.3.0,  will be removed in 1.4.0
+
+            if( async ) {
+                AeroGear.DataManager.adapters.Memory.prototype.save.apply( this, [ arguments[ 0 ], { reset: reset, async: async } ] ).then( function( data ) {
+                    newData = data;
+                });
+            } else {
+                newData = AeroGear.DataManager.adapters.Memory.prototype.save.apply( this, [ arguments[ 0 ], { reset: reset } ] );
+            }
+
+            deferred.always( this.always );
 
             // Sync changes to persistent store
             try {
                 window[ this.getStoreType() ].setItem( this.getStoreKey(), JSON.stringify( newData ) );
-                if ( options && options.storageSuccess ) {
+                if ( options && options.success ) {
                     options.storageSuccess( newData );
                 }
             } catch( error ) {
                 oldData = oldData ? JSON.parse( oldData ) : [];
-                newData = AeroGear.DataManager.adapters.Memory.prototype.save.apply( this, [ oldData, true ] );
-                if ( options && options.storageError ) {
-                    options.storageError( error, data );
+
+                if( async ) {
+                    AeroGear.DataManager.adapters.Memory.prototype.save.apply( this, [ oldData, { reset: reset, async: async } ] ).then( function( data ) {
+                        newData = data;
+                    });
                 } else {
+                    newData = AeroGear.DataManager.adapters.Memory.prototype.save.apply( this, [ oldData, { reset: reset } ] );
+                }
+
+                if ( options && options.error ) {
+                    return async ? deferred.reject( data, "error", options ? options.error : undefined ) : options.error( error, data );
+                } else {
+                    if( async ) {
+                        deferred.reject();
+                    }
                     throw error;
                 }
             }
 
-            return newData;
+            return async ? deferred.resolve( newData, "success", options ? options.success : undefined ) : newData;
         }, enumerable: true, configurable: true, writable: true
     },
     /**
@@ -1762,7 +2142,10 @@ dm.save( toUpdate );
         @method
         @memberof AeroGear.DataManager.adapters.SessionLocal
         @param {String|Object|Array} toRemove - A variety of objects can be passed to remove to specify the item or if nothing is provided, all data is removed
-        @returns {Array} Returns the updated data from the store
+        @param {Object} [options] - The options to be passed to the save method
+        @param {AeroGear~successrCallbackStorage} [options.success] - A callback to be called if the remove was successful. This probably isn't necessary since the remove is synchronous but is provided for API symmetry.
+        @returns {Object} A jQuery.Deferred promise
+        @returns {Array} @deprecated Returns the updated data from the store
         @example
 var dm = AeroGear.DataManager([{ name: "tasks", type: "SessionLocal" }]).stores[ 0 ];
 
@@ -1793,17 +2176,966 @@ dm.remove( toRemove );
 dm.remove();
      */
     remove: {
-        value: function( toRemove ) {
+        value: function( toRemove, options ) {
             // Call the super method
-            var newData = AeroGear.DataManager.adapters.Memory.prototype.remove.apply( this, arguments );
+            var newData,
+                deferred = jQuery.Deferred(),
+                async = this.getAsync();  //added in 1.3.0,  will be removed in 1.4.0;
+
+            if( async ) {
+                AeroGear.DataManager.adapters.Memory.prototype.remove.apply( this, [ arguments[ 0 ], { async: true } ] ).then( function( data ) {
+                    newData = data;
+                });
+            } else {
+                newData = AeroGear.DataManager.adapters.Memory.prototype.remove.apply( this, arguments );
+            }
 
             // Sync changes to persistent store
             window[ this.getStoreType() ].setItem( this.getStoreKey(), JSON.stringify( newData ) );
 
-            return newData;
+            if( async ) {
+                deferred.always( this.always );
+                return deferred.resolve( newData, status, options ? options.success : undefined );
+            } else {
+                return newData;
+            }
         }, enumerable: true, configurable: true, writable: true
     }
 });
+
+/**
+    Validate this adapter and add it to AeroGear.DataManagerCore.adapters if valid
+*/
+AeroGear.DataManager.validateAdapter( "SessionLocal", AeroGear.DataManager.adapters.SessionLocal );
+
+/**
+    The IndexedDB adapter stores data in an IndexedDB database for more persistent client side storage
+    This constructor is instantiated when the "DataManager.add()" method is called
+    @constructs AeroGear.DataManager.adapters.IndexedDB
+    @status Experimental
+    @param {String} storeName - the name used to reference this particular store
+    @param {Object} [settings={}] - the settings to be passed to the adapter
+    @param {String} [settings.recordId="id"] - the name of the field used to uniquely identify a "record" in the data
+    @returns {Object} The created store
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+ */
+AeroGear.DataManager.adapters.IndexedDB = function( storeName, settings ) {
+
+    if ( !window.indexedDB ) {
+        throw "Your browser doesn't support IndexedDB";
+    }
+
+    // Allow instantiation without using new
+    if ( !( this instanceof AeroGear.DataManager.adapters.IndexedDB ) ) {
+        return new AeroGear.DataManager.adapters.IndexedDB( storeName, settings );
+    }
+
+    AeroGear.DataManager.adapters.base.apply( this, arguments );
+
+    settings = settings || {};
+
+    // Private Instance vars
+    var request, database;
+
+    // Privileged Methods
+    /**
+        Returns the value of the private database var
+        @private
+        @augments IndexedDB
+        @returns {Object}
+     */
+    this.getDatabase = function() {
+        return database;
+    };
+
+    /**
+        Sets the value of the private database var
+        @private
+        @augments IndexedDB
+     */
+    this.setDatabase = function( db ) {
+        database = db;
+    };
+
+    /**
+        Returns the value of the private storeName var
+        @private
+        @augments IndexedDB
+        @returns {String}
+     */
+    this.getStoreName = function() {
+        return storeName;
+    };
+
+    /**
+        @private
+        @augments IndexedDB
+        Compatibility fix
+        Added in 1.3 to remove in 1.4
+    */
+    this.getAsync = function() {
+        return true;
+    };
+};
+// Public Methods
+/**
+    Determine if this adapter is supported in the current environment
+*/
+AeroGear.DataManager.adapters.IndexedDB.isValid = function() {
+    return !!window.indexedDB;
+};
+
+/**
+    Open the Database
+    @param {Object} [options={}] - options
+    @param {AeroGear~successCallbackINDEXEDDB} [settings.success] - a callback to be called after successfully opening an IndexedDB
+    @param {AeroGear~errorCallbackINDEXEDDB} [settings.error] - a callback to be called when there is an error with the opening of an IndexedDB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+*/
+AeroGear.DataManager.adapters.IndexedDB.prototype.open = function( options ) {
+    options = options || {};
+
+    var request, database,
+        that = this,
+        storeName = this.getStoreName(),
+        recordId = this.getRecordId(),
+        deferred = jQuery.Deferred();
+
+    //Attempt to open the indexedDB database
+    request = window.indexedDB.open( storeName );
+
+    request.onsuccess = function( event ) {
+        database = event.target.result;
+        that.setDatabase( database );
+        deferred.resolve( database, "success", options.success );
+    };
+
+    request.onerror = function( event ) {
+        deferred.reject( event, "error", options.error );
+    };
+
+    // Only called when the database doesn't exist and needs to be created
+    request.onupgradeneeded = function( event ) {
+        database = event.target.result;
+        database.createObjectStore( storeName, { keyPath: recordId } );
+    };
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+
+/**
+    Read data from a store
+    @param {String|Number} [id] - Usually a String or Number representing a single "record" in the data set or if no id is specified, all data is returned
+    @param {Object} [options={}] - additional options
+    @param {AeroGear~successCallbackINDEXEDDB} [options.success] - a callback to be called after the successful reading of an IndexedDB
+    @param {AeroGear~errorCallbackINDEXEDDB} [options.error] - a callback to be called when there is an error reading an IndexedDB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    dm.stores.test1.read( undefined, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+    //read a record with a particular id
+    dm.stores.test1.read( 5, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+ */
+AeroGear.DataManager.adapters.IndexedDB.prototype.read = function( id, options ) {
+    options = options || {};
+
+    var transaction, objectStore, cursor, request,
+        data = [],
+        database = this.getDatabase(),
+        storeName = this.getStoreName(),
+        deferred = jQuery.Deferred();
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    if( !database.objectStoreNames.contains( storeName ) ) {
+        deferred.resolve( [], "success", options.success );
+    }
+
+    transaction = database.transaction( storeName );
+    objectStore = transaction.objectStore( storeName );
+
+    if( id ) {
+        request = objectStore.get( id );
+
+        request.onsuccess = function( event ) {
+            data.push( request.result );
+        };
+
+    } else {
+        cursor = objectStore.openCursor();
+        cursor.onsuccess = function( event ) {
+            var result = event.target.result;
+            if( result ) {
+                data.push( result.value );
+                result.continue();
+            }
+        };
+    }
+
+    transaction.oncomplete = function( event ) {
+        deferred.resolve( data, "success", options.success );
+    };
+
+    transaction.onerror = function( event ) {
+        deferred.reject( event, "error", options.error );
+    };
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Saves data to the store, optionally clearing and resetting the data
+    @param {Object|Array} data - An object or array of objects representing the data to be saved to the server. When doing an update, one of the key/value pairs in the object to update must be the `recordId` you set during creation of the store representing the unique identifier for a "record" in the data set.
+    @param {Object} [options={}] - additional options
+    @param {Boolean} [options.reset] - If true, this will empty the current data and set it to the data being saved
+    @param {AeroGear~successCallbackINDEXEDDB} [options.success] - a callback to be called after the successful saving of a record into an IndexedDB
+    @param {AeroGear~errorCallbackINDEXEDDB} [options.error] - a callback to be called when there is an error with the saving of a record into an IndexedDB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    dm.stores.newStore.save( { "id": 3, "name": "Grace", "type": "Little Person" }, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+    //Save multiple Records
+    dm.stores.newStore.save(
+        [
+            { "id": 3, "name": "Grace", "type": "Little Person" },
+            { "id": 4, "name": "Graeham", "type": "Really Little Person" }
+        ],
+        {
+            success: function( data ) { ... },
+            error: function( error ) { ... }
+        }
+    );
+ */
+AeroGear.DataManager.adapters.IndexedDB.prototype.save = function( data, options ) {
+    options = options || {};
+
+    var transaction, objectStore,
+        that = this,
+        database = this.getDatabase(),
+        storeName = this.getStoreName(),
+        deferred = jQuery.Deferred(),
+        i = 0;
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    transaction = database.transaction( storeName, "readwrite" );
+    objectStore = transaction.objectStore( storeName );
+
+    if( options.reset ) {
+        objectStore.clear();
+    }
+
+    if( AeroGear.isArray( data ) ) {
+        for( i; i < data.length; i++ ) {
+            objectStore.put( data[ i ] );
+        }
+    } else {
+        objectStore.put( data );
+    }
+
+    transaction.oncomplete = function( event ) {
+        that.read().done( function( data, status ) {
+            if( status === "success" ) {
+                deferred.resolve( data, status, options.success );
+            } else {
+                deferred.reject( data, status, options.error );
+            }
+        });
+    };
+
+    transaction.onerror = function( event ) {
+        deferred.reject( event, "error", options.error );
+    };
+
+    deferred.always( this.always );
+
+    return deferred.promise();
+};
+
+/**
+    Removes data from the store
+    @param {String|Object|Array} toRemove - A variety of objects can be passed to remove to specify the item or if nothing is provided, all data is removed
+    @param {AeroGear~successCallbackINDEXEDDB} [options.success] - a callback to be called after successfully removing a record out of an IndexedDB
+    @param {AeroGear~errorCallbackINDEXEDDB} [options.error] - a callback to be called when there is an error removing a record out of an IndexedDB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    // Delete a record
+    dm.stores.newStore.remove( 1, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+    //Remove all data
+    dm.stores.newStore.remove( undefined, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+ */
+AeroGear.DataManager.adapters.IndexedDB.prototype.remove = function( toRemove, options ) {
+    options = options || {};
+
+    var objectStore, transaction,
+        that = this,
+        database = this.getDatabase(),
+        storeName = this.getStoreName(),
+        deferred = jQuery.Deferred(),
+        i = 0;
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    transaction = database.transaction( storeName, "readwrite" );
+    objectStore = transaction.objectStore( storeName );
+
+    if( !toRemove ) {
+        objectStore.clear();
+    } else  {
+        toRemove = AeroGear.isArray( toRemove ) ? toRemove: [ toRemove ];
+
+        for( i; i < toRemove.length; i++ ) {
+            if ( typeof toRemove[ i ] === "string" || typeof toRemove[ i ] === "number" ) {
+                objectStore.delete( toRemove[ i ] );
+            } else if ( toRemove ) {
+                objectStore.delete( toRemove[ i ][ this.getRecordId() ] );
+            } else {
+                continue;
+            }
+        }
+    }
+
+    transaction.oncomplete = function( event ) {
+        that.read().done( function( data, status ) {
+            if( status === "success" ) {
+                deferred.resolve( data, status, options.success );
+            } else {
+                deferred.reject( data, status, options.error );
+            }
+        });
+    };
+
+    transaction.onerror = function( event ) {
+        deferred.reject( event, "error", options.error );
+    };
+
+    deferred.always( this.always );
+
+    return deferred.promise();
+};
+
+/**
+    Filter the current store's data
+    @param {Object} [filterParameters] - An object containing key value pairs on which to filter the store's data. To filter a single parameter on multiple values, the value can be an object containing a data key with an Array of values to filter on and its own matchAny key that will override the global matchAny for that specific filter parameter.
+    @param {Boolean} [matchAny] - When true, an item is included in the output if any of the filter parameters is matched.
+    @param {AeroGear~successCallbackINDEXEDDB} [options.success] - a callback to be called after successful filtering of an IndexedDB
+    @param {AeroGear~errorCallbackINDEXEDDB} [options.error] - a callback to be calledd after an error filtering of an IndexedDB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    dm.stores.test1.filter( { "name": "Lucas" }, true, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+ */
+AeroGear.DataManager.adapters.IndexedDB.prototype.filter = function( filterParameters, matchAny, options ) {
+    options = options || {};
+
+    var that = this,
+        deferred = jQuery.Deferred(),
+        database = this.getDatabase();
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    this.read().then( function( data, status ) {
+        if( status !== "success" ) {
+            deferred.reject( data, status, options.error );
+            return;
+        }
+
+        AeroGear.DataManager.adapters.Memory.prototype.save.call( that, data, true );
+        AeroGear.DataManager.adapters.Memory.prototype.filter.call( that, filterParameters, matchAny ).then( function( data ) {
+            deferred.resolve( data, "success", options.success );
+        });
+    });
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Close the current store
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store and then delete a record
+    dm.add({
+        name: "newStore",
+        storageType: "IndexedDB"
+    });
+
+    dm.stores.newStore.close();
+ */
+AeroGear.DataManager.adapters.IndexedDB.prototype.close = function() {
+    var database = this.getDatabase();
+    if( database ) {
+        database.close();
+    }
+};
+
+/**
+    Validate this adapter and add it to AeroGear.DataManagerCore.adapters if valid
+*/
+AeroGear.DataManager.validateAdapter( "IndexedDB", AeroGear.DataManager.adapters.IndexedDB );
+
+/**
+    The WebSQL adapter stores data in a WebSQL database for more persistent client side storage
+    This constructor is instantiated when the "DataManager.add()" method is called
+    @constructs AeroGear.DataManager.adapters.WebSQL
+    @status Experimental
+    @param {String} storeName - the name used to reference this particular store
+    @param {Object} [settings={}] - the settings to be passed to the adapter
+    @param {String} [settings.recordId="id"] - the name of the field used to uniquely identify a "record" in the data
+    @returns {Object} The created store
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an WebSQL store
+    dm.add({
+        name: "newStore",
+        storageType: "WebSQL"
+    });
+
+ */
+AeroGear.DataManager.adapters.WebSQL = function( storeName, settings ) {
+
+    if ( !window.openDatabase ) {
+        throw "Your browser doesn't support WebSQL";
+    }
+
+    // Allow instantiation without using new
+    if ( !( this instanceof AeroGear.DataManager.adapters.WebSQL ) ) {
+        return new AeroGear.DataManager.adapters.WebSQL( storeName, settings );
+    }
+
+    AeroGear.DataManager.adapters.base.apply( this, arguments );
+
+    settings = settings || {};
+
+    // Private Instance vars
+    var database;
+
+    // Privileged Methods
+    /**
+        Returns the value of the private database var
+        @private
+        @augments WebSQL
+        @returns {Object}
+     */
+    this.getDatabase = function() {
+        return database;
+    };
+
+    /**
+        Sets the value of the private database var
+        @private
+        @augments WebSQL
+     */
+    this.setDatabase = function( db ) {
+        database = db;
+    };
+
+    /**
+        Returns the value of the private storeName var
+        @private
+        @augments WebSQL
+        @returns {String}
+     */
+    this.getStoreName = function() {
+        return storeName;
+    };
+
+    /**
+        @private
+        @augments WebSQL
+        Compatibility fix
+        Added in 1.3 to remove in 1.4
+    */
+    this.getAsync = function() {
+        return true;
+    };
+};
+
+// Public Methods
+/**
+    Determine if this adapter is supported in the current environment
+*/
+AeroGear.DataManager.adapters.WebSQL.isValid = function() {
+    return !!window.openDatabase;
+};
+
+/**
+    Open the Database
+    @param {Object} [options={}] - options
+    @param {AeroGear~successCallbackWEBSQL} [settings.success] - a callback to be called when after successful opening of a WebSQL DB
+    @param {AeroGear~errorCallbackWEBSQL} [settings.error] - a callback to be called when there is an error opening a WebSQL DB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an WebSQL store
+    dm.add({
+        name: "newStore",
+        storageType: "WebSQL"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+*/
+AeroGear.DataManager.adapters.WebSQL.prototype.open = function( options ) {
+    options = options || {};
+
+    var success, error, database,
+        that = this,
+        version = "1",
+        databaseSize = 2 * 1024 * 1024,
+        recordId = this.getRecordId(),
+        storeName = this.getStoreName(),
+        deferred = jQuery.Deferred();
+
+    //Do some creation and such
+    database = window.openDatabase( storeName, version, "AeroGear WebSQL Store", databaseSize );
+
+    error = function( transaction, error ) {
+        deferred.reject( error, "error", options.error );
+    };
+
+    success = function( transaction, result ) {
+        that.setDatabase( database );
+        deferred.resolve( database, "success", options.success );
+    };
+
+    database.transaction( function( transaction ) {
+        transaction.executeSql( "CREATE TABLE IF NOT EXISTS " + storeName + " ( " + recordId + " REAL UNIQUE, json)", [], success, error );
+    });
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Read data from a store
+    @param {String|Number} [id] - Usually a String or Number representing a single "record" in the data set or if no id is specified, all data is returned
+    @param {Object} [options={}] - additional options
+    @param {AeroGear~successCallbackWEBSQL} [options.success] - a callback to be called after successfully reading a WebSQL DB
+    @param {AeroGear~errorCallbackWEBSQL} [options.error] - a callback to be called when there is an error reading a WebSQL DB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an WebSQL store
+    dm.add({
+        name: "newStore",
+        storageType: "WebSQL"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    dm.stores.test1.read( undefined, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+    //read a record with a particular id
+    dm.stores.test1.read( 5, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+ */
+AeroGear.DataManager.adapters.WebSQL.prototype.read = function( id, options ) {
+    options = options || {};
+
+    var success, error, sql,
+        data = [],
+        storeName = this.getStoreName(),
+        database = this.getDatabase(),
+        deferred = jQuery.Deferred(),
+        i = 0;
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    error = function( transaction, error ) {
+        deferred.reject( error, "error", options.error );
+    };
+
+    success = function( transaction, result ) {
+        var rowLength = result.rows.length;
+        for( i; i < rowLength; i++ ) {
+            data.push( JSON.parse( result.rows.item( i ).json ) );
+        }
+        deferred.resolve( data, "success", options.success );
+    };
+
+    sql = "SELECT * FROM " + storeName;
+
+    if( id ) {
+        sql += " WHERE ID = " + id;
+    }
+
+    database.transaction( function( transaction ) {
+        transaction.executeSql( sql, [], success, error );
+    });
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Saves data to the store, optionally clearing and resetting the data
+    @param {Object|Array} data - An object or array of objects representing the data to be saved to the server. When doing an update, one of the key/value pairs in the object to update must be the `recordId` you set during creation of the store representing the unique identifier for a "record" in the data set.
+    @param {Object} [options={}] - additional options
+    @param {Boolean} [options.reset] - If true, this will empty the current data and set it to the data being saved
+    @param {AeroGear~successCallbackWEBSQL} [options.success] - a callback to be called after successfully saving records to a WebSQL DB
+    @param {AeroGear~errorCallbackWEBSQL} [options.error] - a callback to be called when there is an error saving records to a WebSQL DB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an WebSQL store
+    dm.add({
+        name: "newStore",
+        storageType: "WebSQL"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    dm.stores.newStore.save( { "id": 3, "name": "Grace", "type": "Little Person" }, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+    //Save multiple Records
+    dm.stores.newStore.save(
+        [
+            { "id": 3, "name": "Grace", "type": "Little Person" },
+            { "id": 4, "name": "Graeham", "type": "Really Little Person" }
+        ],
+        {
+            success: function( data ) { ... },
+            error: function( error ) { ... }
+        }
+    );
+ */
+AeroGear.DataManager.adapters.WebSQL.prototype.save = function( data, options ) {
+    options = options || {};
+
+    var error, success, readSuccess,
+        that = this,
+        recordId = this.getRecordId(),
+        database = this.getDatabase(),
+        storeName = this.getStoreName(),
+        deferred = jQuery.Deferred(),
+        i = 0;
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    error = function( transaction, error ) {
+        deferred.reject( error, "error", options.error );
+    };
+
+    success = function( transaction, result ) {
+        that.read().done( function( result, status ) {
+            if( status === "success" ) {
+                deferred.resolve( result, status, options.success );
+            } else {
+                deferred.reject( result, status, options.error );
+            }
+        });
+    };
+
+    data = AeroGear.isArray( data ) ? data : [ data ];
+
+    database.transaction( function( transaction ) {
+        if( options.reset ) {
+            transaction.executeSql( "DROP TABLE " + storeName );
+            transaction.executeSql( "CREATE TABLE IF NOT EXISTS " + storeName + " ( " + recordId + " REAL UNIQUE, json)" );
+        }
+        data.forEach( function( value ) {
+            transaction.executeSql( "INSERT OR REPLACE INTO " + storeName + " ( id, json ) VALUES ( ?, ? ) ", [ value[ recordId ], JSON.stringify( value ) ] );
+        });
+    }, error, success );
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Removes data from the store
+    @param {String|Object|Array} toRemove - A variety of objects can be passed to remove to specify the item or if nothing is provided, all data is removed
+    @param {AeroGear~successCallbackWEBSQL} [options.success] - a callback to be called after successfully removing a record from a WebSQL DB
+    @param {AeroGear~errorCallbackWEBSQL} [options.error] - a callback to be called when there is an error removing a record from a WebSQL DB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "WebSQL"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    // Delete a record
+    dm.stores.newStore.remove( 1, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+    //Remove all data
+    dm.stores.newStore.remove( undefined, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+
+ */
+AeroGear.DataManager.adapters.WebSQL.prototype.remove = function( toRemove, options ) {
+    options = options || {};
+
+    var sql, success, error,
+        that = this,
+        storeName = this.getStoreName(),
+        database = this.getDatabase(),
+        deferred = jQuery.Deferred(),
+        i = 0;
+
+    if( !database ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    error = function( transaction, error ) {
+        deferred.reject( error, "error", options.error );
+    };
+
+    success = function( transaction, result ) {
+        that.read().done( function( result, status ) {
+            if( status === "success" ) {
+                deferred.resolve( result, status, options.success );
+            } else {
+                deferred.reject( result, status, options.error );
+            }
+        });
+    };
+
+    sql = "DELETE FROM " + storeName;
+
+    if( !toRemove ) {
+        //remove all
+        database.transaction( function( transaction ) {
+            transaction.executeSql( sql, [], success, error );
+        });
+    } else {
+        toRemove = AeroGear.isArray( toRemove ) ? toRemove: [ toRemove ];
+        database.transaction( function( transaction ) {
+            for( i; i < toRemove.length; i++ ) {
+                if ( typeof toRemove[ i ] === "string" || typeof toRemove[ i ] === "number" ) {
+                    transaction.executeSql( sql + " WHERE ID = ? ", [ toRemove[ i ] ] );
+                } else if ( toRemove ) {
+                    transaction.executeSql( sql + " WHERE ID = ? ", [ toRemove[ i ][ this.getRecordId() ] ] );
+                } else {
+                    continue;
+                }
+            }
+        }, error, success );
+    }
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Filter the current store's data
+    @param {Object} [filterParameters] - An object containing key value pairs on which to filter the store's data. To filter a single parameter on multiple values, the value can be an object containing a data key with an Array of values to filter on and its own matchAny key that will override the global matchAny for that specific filter parameter.
+    @param {Boolean} [matchAny] - When true, an item is included in the output if any of the filter parameters is matched.
+    @param {AeroGear~successCallbackWEBSQL} [options.success] - a callback to be called after a successful filtering of a WebSQL DB
+    @param {AeroGear~errorCallbackWEBSQL} [options.error] - a callback to be calledd after an error filtering a WebSQL DB
+    @return {Object} A jQuery.Deferred promise
+    @example
+    //Create an empty DataManager
+    var dm = AeroGear.DataManager();
+
+    //Add an IndexedDB store
+    dm.add({
+        name: "newStore",
+        storageType: "WebSQL"
+    });
+
+    dm.stores.newStore.open({
+        success: function() { ... },
+        error: function() { ... }
+    });
+
+    dm.stores.test1.filter( { "name": "Lucas" }, true, {
+        success: function( data ) { ... },
+        error: function( error ) { ... }
+    });
+ */
+AeroGear.DataManager.adapters.WebSQL.prototype.filter = function( filterParameters, matchAny, options ) {
+    options = options || {};
+
+    var that = this,
+        deferred = jQuery.Deferred(),
+        db = this.getDatabase();
+
+    if( !db ) {
+        //hasn't been opened yet
+        throw "Database not opened";
+    }
+
+    this.read().then( function( data, status ) {
+        if( status !== "success" ) {
+            deferred.reject( data, status, options.error );
+            return;
+        }
+
+        AeroGear.DataManager.adapters.Memory.prototype.save.call( that, data, true );
+        AeroGear.DataManager.adapters.Memory.prototype.filter.call( that, filterParameters, matchAny ).then( function( data ) {
+            deferred.resolve( data, "success", options.success );
+        });
+    });
+
+    deferred.always( this.always );
+    return deferred.promise();
+};
+
+/**
+    Validate this adapter and add it to AeroGear.DataManagerCore.adapters if valid
+*/
+AeroGear.DataManager.validateAdapter( "WebSQL", AeroGear.DataManager.adapters.WebSQL );
 
 /**
     The AeroGear.Auth namespace provides an authentication and enrollment API. Through the use of adapters, this library provides common methods like enroll, login and logout that will just work.
@@ -1974,6 +3306,10 @@ AeroGear.Auth.adapters.Rest = function( moduleName, settings ) {
             processedOptions.url = baseURL;
         }
 
+        if( options.xhrFields ) {
+            processedOptions.xhrFields = options.xhrFields;
+        }
+
         return processedOptions;
      };
 };
@@ -1986,6 +3322,7 @@ AeroGear.Auth.adapters.Rest = function( moduleName, settings ) {
     @param {String} [options.baseURL] - defines the base URL to use for an endpoint
     @param {String} [options.contentType] - set the content type for the AJAX request
     @param {String} [options.dataType] - specify the data expected to be returned by the server
+    @param {Object} [options.xhrFields] - specify extra xhr options, like the withCredentials flag
     @param {AeroGear~completeCallbackREST} [options.complete] - a callback to be called when the result of the request to the server is complete, regardless of success
     @param {AeroGear~errorCallbackREST} [options.error] - callback to be executed if the AJAX request results in an error
     @param {AeroGear~successCallbackREST} [options.success] - callback to be executed if the AJAX request results in success
@@ -3133,6 +4470,7 @@ AeroGear.Notifier.adapters.vertx.prototype.unsubscribe = function( channels ) {
     Send a message to a particular channel
     @param {String} channel - the channel to which to send the message
     @param {String|Object} [message=""] - the message object to send
+    @param {Boolean} [publish=false] - tell vert.x if this is a publish to all subscribed clients
     @example
     // Send an empty message to a channel
     notifier.clients.client1.send( "test.address" );
@@ -3143,13 +4481,21 @@ AeroGear.Notifier.adapters.vertx.prototype.unsubscribe = function( channels ) {
     // Send a "Hello" message as an object
     notifier.clients.client1.send( "test.address", { "message": "Hello" } );
 
+    // Send a "Hello" message as an object to all subscribed clients on that channel
+    notifier.clients.client1.send( "test.address", { "message": "Hello" }, true );
+
+
  */
-AeroGear.Notifier.adapters.vertx.prototype.send = function( channel, message ) {
+AeroGear.Notifier.adapters.vertx.prototype.send = function( channel, message, publish ) {
     var bus = this.getBus();
 
+    if ( typeof message === Boolean && !publish ) {
+        publish = message;
+        message = "";
+    }
     message = message || "";
 
-    bus.send( channel, message );
+    bus[ publish ? "publish" : "send" ]( channel, message );
 };
 
 /**
@@ -3589,12 +4935,19 @@ AeroGear.Notifier.adapters.stompws.prototype.send = function( channel, message )
         var metadata = {
             deviceToken: "theDeviceToken",
             alias: "some_username",
-            category: "email",
+            categories: [ "email" ],
             simplePushEndpoint: "http://server.com/simplePushEndpoint"
         };
 
+        var settings = {
+            success: function(){ ... },
+            error: function() { ... }
+        };
+
+        settings.metadata = metadata;
+
         // perform the registration against the UnifiedPush server:
-        client.registerWithPushServer(metadata);
+        client.registerWithPushServer( settings );
 
      */
     AeroGear.UnifiedPushClient = function( variantID, variantSecret, pushServerURL ) {
@@ -3611,28 +4964,33 @@ AeroGear.Notifier.adapters.stompws.prototype.send = function( channel, message )
 
         /**
             Performs a register request against the UnifiedPush Server using the given metadata which represents a client that wants to register with the server.
-            @param {Object} metadata - the metadata for the client
-            @param {String} metadata.deviceToken - identifies the client within its PushNetwork. On Android this is the registrationID, on iOS this is the deviceToken and on SimplePush this is the channelID of the subscribed channel.
-            @param {String} metadata.simplePushEndpoint - the URL of the given SimplePush server/network that is needed in order to trigger a notification to be sent to the SimplePush client.
-            @param {String} [metadata.alias] - Application specific alias to identify users with the system. Common use case would be an email address or a username.
-            @param {String} [metadata.category] - In SimplePush this is the name of the registration endpoint. On Hybrid platforms like Apache Cordova this is used for tagging the registered client.
-            @param {String} [metadata.operatingSystem] - Useful on Hybrid platforms like Apache Cordova to specifiy the underlying operating system.
-            @param {String} [metadata.osVersion] - Useful on Hybrid platforms like Apache Cordova to specify the version of the underlying operating system.
-            @param {String} [metadata.deviceType] - Useful on Hybrid platforms like Apache Cordova to specify the type of the used device, like iPad or Android-Phone.
+            @param {Object} settings The settings to pass in
+            @param {Object} settings.metadata - the metadata for the client
+            @param {String} settings.metadata.deviceToken - identifies the client within its PushNetwork. On Android this is the registrationID, on iOS this is the deviceToken and on SimplePush this is the channelID of the subscribed channel.
+            @param {String} settings.metadata.simplePushEndpoint - the URL of the given SimplePush server/network that is needed in order to trigger a notification to be sent to the SimplePush client.
+            @param {String} [settings.metadata.alias] - Application specific alias to identify users with the system. Common use case would be an email address or a username.
+            @param {Array} [settings.metadata.categories] - In SimplePush this is the name of the registration endpoint. On Hybrid platforms like Apache Cordova this is used for tagging the registered client.
+            @param {String} [settings.metadata.operatingSystem] - Useful on Hybrid platforms like Apache Cordova to specifiy the underlying operating system.
+            @param {String} [settings.metadata.osVersion] - Useful on Hybrid platforms like Apache Cordova to specify the version of the underlying operating system.
+            @param {String} [settings.metadata.deviceType] - Useful on Hybrid platforms like Apache Cordova to specify the type of the used device, like iPad or Android-Phone.
+            @param {AeroGear~completeCallbackREST} [settings.complete] - a callback to be called when the result of the request to the server is complete, regardless of success
+            @param {AeroGear~errorCallbackREST} [settings.error] - callback to be executed if the AJAX request results in an error
+            @param {AeroGear~successCallbackREST} [settings.success] - callback to be executed if the AJAX request results in success
+            @returns {Object} The jqXHR created by jQuery.ajax
          */
-        this.registerWithPushServer = function( metadata ) {
+        this.registerWithPushServer = function( settings ) {
+            settings = settings || {};
+            var metadata = settings.metadata || {};
 
             // we need a deviceToken, registrationID or a channelID:
             if ( !metadata.deviceToken ) {
                 throw "UnifiedPushRegistrationException";
             }
 
-            // if we see a category that is not the (SimplePush) broadcast, we require the alias to be present:
-            if ( metadata.category !== "broadcast" && !metadata.alias ) {
-                throw "UnifiedPushRegistrationException";
-            }
+            // Make sure that settings.metadata.categories is an Array
+            metadata.categories = AeroGear.isArray( metadata.categories ) ? metadata.categories : ( metadata.categories ? [ metadata.categories ] : [] );
 
-            $.ajax({
+            return $.ajax({
                 contentType: "application/json",
                 dataType: "json",
                 type: "POST",
@@ -3640,16 +4998,25 @@ AeroGear.Notifier.adapters.stompws.prototype.send = function( channel, message )
                 headers: {
                     "Authorization": "Basic " + window.btoa(variantID + ":" + variantSecret)
                 },
-                data: JSON.stringify( metadata )
+                data: JSON.stringify( metadata ),
+                success: settings.success,
+                error: settings.error,
+                complete: settings.complete
             });
         };
 
         /**
             Performs an unregister request against the UnifiedPush Server for the given deviceToken. The deviceToken identifies the client within its PushNetwork. On Android this is the registrationID, on iOS this is the deviceToken and on SimplePush this is the channelID of the subscribed channel.
             @param {String} deviceToken - unique String which identifies the client that is being unregistered.
+            @param {Object} [settings = {}] The options to pass in
+            @param {AeroGear~completeCallbackREST} [settings.complete] - a callback to be called when the result of the request to the server is complete, regardless of success
+            @param {AeroGear~errorCallbackREST} [settings.error] - callback to be executed if the AJAX request results in an error
+            @param {AeroGear~successCallbackREST} [settings.success] - callback to be executed if the AJAX request results in success
+            @returns {Object} The jqXHR created by jQuery.ajax
          */
-        this.unregisterWithPushServer = function( deviceToken ) {
-            $.ajax({
+        this.unregisterWithPushServer = function( deviceToken, settings ) {
+            settings = settings || {};
+            return $.ajax({
                 contentType: "application/json",
                 dataType: "json",
                 type: "DELETE",
@@ -3657,9 +5024,9 @@ AeroGear.Notifier.adapters.stompws.prototype.send = function( channel, message )
                 headers: {
                     "Authorization": "Basic " + window.btoa(variantID + ":" + variantSecret)
                 },
-                data: JSON.stringify({
-                    deviceToken: deviceToken
-                })
+                success: settings.success,
+                error: settings.error,
+                complete: settings.complete
             });
         };
     };
@@ -3831,4 +5198,146 @@ AeroGear.Notifier.adapters.stompws.prototype.send = function( channel, message )
         spClient.simpleNotifier.connect( connectOptions );
     };
 })( AeroGear, jQuery );
+
+AeroGear.crypto = {};
+
+// Method to provide key derivation with PBKDF2
+/**
+    Returns the value of the key
+    @status Experimental
+    @param {String} password - master password
+    @return {bitArray} - the derived key
+    @example
+    //Password encryption:
+    AeroGear.crypto.deriveKey( 'mypassword' );
+ */
+AeroGear.crypto.deriveKey = function( password ) {
+    var utf8String = sjcl.codec.utf8String,
+        salt = new Uint32Array( 1 ),
+        count = 2048;
+    crypto.getRandomValues( salt );
+    return sjcl.misc.pbkdf2( password, utf8String.toBits( salt[0] ), count );
+};
+// Method to provide symmetric encryption with GCM by default
+/**
+    Encrypts in GCM mode
+    @status Experimental
+    @param {Object} options - includes IV (Initialization Vector), AAD
+        (Additional Authenticated Data), key (private key for encryption),
+        plainText (data to be encrypted)
+    @return {bitArray} - The encrypted data represented by an array of bytes
+    @example
+    //Data encryption:
+    var options = {
+        IV: myIV,
+        AAD: myAAD,
+        key: mySecretKey,
+        data: message
+    };
+    AeroGear.crypto.encrypt( options );
+ */
+AeroGear.crypto.encrypt = function( options ) {
+    options = options || {};
+    var gcm = sjcl.mode.gcm,
+        key = new sjcl.cipher.aes ( options.key );
+    return gcm.encrypt( key, options.data, options.IV, options.aad, 128 );
+};
+
+// Method to provide symmetric decryption with GCM by default
+/**
+    Decrypts in GCM mode
+    @status Experimental
+    @param {Object} options - includes IV (Initialization Vector), AAD
+        (Additional Authenticated Data), key (private key for encryption),
+        ciphertext (data to be decrypted)
+    @return {bitArray} - The decrypted data
+    @example
+    //Data decryption:
+    var options = {
+        IV: myIV,
+        AAD: myAAD,
+        key: mySecretKey,
+        data: ciphertext
+    };
+    AeroGear.crypto.decrypt( options );
+ */
+AeroGear.crypto.decrypt = function( options ) {
+    options = options || {};
+    var gcm = sjcl.mode.gcm,
+        key = new sjcl.cipher.aes ( options.key );
+    return gcm.decrypt( key, options.data, options.IV, options.aad, 128 );
+};
+
+// Method to provide secure hashing
+/**
+    Generates a hash output based on SHA-256
+    @status Experimental
+    @param {bitArray|String} data to hash.
+    @return {bitArray} - Hash value
+    @example
+    //Data hashing:
+    AeroGear.crypto.hash( options );
+ */
+AeroGear.crypto.hash = function( data ) {
+    return sjcl.hash.sha256.hash( data );
+};
+
+// Method to provide digital signatures
+/**
+    Sign messages with ECDSA
+    @status Experimental
+    @param {Object} options - includes keys (provided keys to sign the message),
+        message (message to be signed)
+    @return {bitArray} - Digital signature
+    @example
+    //Message sign:
+    var options = {
+        keys: providedKey,
+        message: PLAIN_TEXT
+    };
+    AeroGear.crypto.sign( options );
+ */
+AeroGear.crypto.sign = function( options ) {
+    options = options || {};
+    var keys = options.keys || sjcl.ecc.ecdsa.generateKeys( 192 ),
+        hash = sjcl.hash.sha256.hash( options.message );
+    return keys.sec.sign( hash );
+};
+
+// Method to verify digital signatures
+/**
+    Verify signed messages with ECDSA
+    @status Experimental
+    @param {Object} options - includes keys (provided keys to sign the message),
+        message (message to be verified), signature (Digital signature)
+    @return {bitArray} - Signature
+    @example
+    //Message validation
+    var options = {
+        keys: sjcl.ecc.ecdsa.generateKeys(192),
+        signature: signatureToBeVerified
+    };
+    AeroGear.crypto.verify( options );
+ */
+AeroGear.crypto.verify = function ( options ) {
+    options = options || {};
+    var message = sjcl.hash.sha256.hash( options.message );
+    return options.keys.pub.verify( message, options.signature );
+};
+
+AeroGear.crypto.KeyPair = function( privateKey, publicKey ) {
+
+    var keys, pub;
+
+    if ( privateKey && publicKey ) {
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+    } else {
+        keys = sjcl.ecc.elGamal.generateKeys( 192,0 );
+        //kem - key encapsulation mechanism
+        pub = keys.pub.kem();
+        this.publicKey = pub.key;
+        this.privateKey = keys.sec.unkem( pub.tag );
+    }
+};
 })( this );
