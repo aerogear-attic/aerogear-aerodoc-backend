@@ -3,10 +3,6 @@ language: java
 jdk:
   - oraclejdk7
   - openjdk6
-before_install:
-  - git clone git://github.com/aerogear/aerogear-unified-push-java-client.git
-  - cd $PWD/aerogear-unified-push-java-client
-  - mvn install -N --quiet
-  - cd .. 	
+	
 notifications:
   irc: "irc.freenode.org#aerogear"
