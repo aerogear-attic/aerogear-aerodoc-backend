@@ -36,6 +36,18 @@
 <div class="control-group">
 	<div class="controls">
 
+        <div class="row mapholder">
+            <div class="span8">
+                <div id="map"></div>
+            </div>
+            <div class="span4">
+                <div class="controls">
+                    <input type="text" name="location" ng-model="address"/>
+                    <button class="btn" ng-click="search()">Locate</button>
+                </div>
+            </div>
+        </div>
+      
 		<div class="controls">
 			<input id="status" name="status" type="text" ng-model="status"
 				placeholder="Status"></input> <input id="location" name="location"
@@ -43,7 +55,6 @@
 			<button id="searchAgent" name="searchAgent" class="btn"
 				ng-click="searchAgents()">Search Agents</button>
 		</div>
-
 	</div>
 </div>
 <div class="control-group">

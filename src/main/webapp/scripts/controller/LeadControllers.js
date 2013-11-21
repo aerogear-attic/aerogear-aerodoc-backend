@@ -204,6 +204,21 @@ function EditLeadController($scope, $routeParams, $location, dataService) {
 
 function ShowLeadController($scope, $routeParams, $location, $filter,
 		dataService) {
+    var map = new AeroGear.Map();
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            var coordinates = pos.coords,
+                location = new OpenLayers.LonLat(coordinates.longitude, coordinates.latitude)
+                    .transform(
+                        new OpenLayers.Projection("EPSG:4326"),
+                        map.getProjectionObject()
+                );
+
+            map.drawMarker(location);
+            map.map.setCenter(location, 5);
+        }, null, null);
+    }
+    
 	var self = this;
 	$scope.disabled = false;
 	var leadPipe = dataService.leadPipe;
@@ -216,6 +231,45 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
 		}
 	}).pipes.sendleads;
 
+    $scope.search = function () {
+        $.getJSON('http://maps.googleapis.com/maps/api/geocode/json?address=' + $scope.address + '&sensor=false',
+            function (data) {
+                if (data.status === "OK") {
+                    var fromJson = data.results[0].geometry.location, 
+                        location = new OpenLayers.LonLat(fromJson.lng, fromJson.lat)
+                        .transform(
+                            new OpenLayers.Projection("EPSG:4326"),
+                            map.getProjectionObject()
+                        );
+
+                    map.drawGeoFence(location, 1000);
+                    map.addFenceModificationListener(function(center, radius) {
+                        var location = center.transform(
+                            map.getProjectionObject(),
+                            new OpenLayers.Projection("EPSG:4326")
+                        );
+                        var searchAgents = AeroGear.Pipeline({
+                            name : "searchAgents",
+                            settings : {
+                                endpoint : "rest/saleagents/searchAgentsInRange/"
+                            }
+                        }).pipes.searchAgents;
+                        
+                        searchAgents.read({
+                            query : {
+                                latitude : location.lat,
+                                longitude : location.lon,
+                                radius: radius
+                            },
+                            success : function(data) {
+                                $scope.saleAgentFilteredList = data;
+                                $scope.$apply();
+                            }
+                        });
+                    });
+                }
+            });
+    };    
 	$scope.get = function() {
 		leadPipe.read({
 			id : $routeParams.LeadId,
