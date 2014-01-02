@@ -3,3 +3,11 @@
 body {
     padding-top: 40px;
 }
+
+#map {
+    height: 400px;
+}
+
+.mapholder {
+  padding: 30px;
+}
