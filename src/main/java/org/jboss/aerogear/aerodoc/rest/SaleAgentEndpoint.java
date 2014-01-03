@@ -29,21 +29,9 @@ import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -74,9 +62,9 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     }
 
     @DELETE
-    @Path("/{id:[0-9][0-9]*}")
-    public Response deleteById(@PathParam("id") Long id) {
-        SaleAgent entity = em.find(SaleAgent.class, id);
+    @Path("/{id:[0-9a-z\\-]*}")
+    public Response deleteById(@PathParam("id") String id) {
+        SalesAgentEntity entity = em.find(SalesAgentEntity.class, id);
         if (entity == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -85,25 +73,26 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     }
 
     @GET
-    @Path("/{id:[0-9][0-9]*}")
+    @Path("/{id:[0-9a-z\\-]*}")
     @Produces("application/json")
-    public Response findById(@PathParam("id") Long id) {
-        TypedQuery<SaleAgent> findByIdQuery = em.createQuery(
-                "SELECT s FROM SaleAgent s WHERE s.id = :entityId",
-                SaleAgent.class);
+    public Response findById(@PathParam("id") String id) {
+        TypedQuery<SalesAgentEntity> findByIdQuery = em.createQuery(
+                "SELECT s FROM SalesAgentEntity s WHERE s.id = :entityId",
+                SalesAgentEntity.class);
         findByIdQuery.setParameter("entityId", id);
-        SaleAgent entity = findByIdQuery.getSingleResult();
-        if (entity == null) {
-            return Response.status(Status.NOT_FOUND).build();
+        try {
+          SalesAgentEntity entity = findByIdQuery.getSingleResult();
+          return Response.ok(entity).build();
+        } catch (NoResultException e) {
+          return Response.status(Status.NOT_FOUND).build();
         }
-        return Response.ok(entity).build();
     }
 
     @GET
     @Produces("application/json")
-    public List<SaleAgent> listAll() {
-        final List<SaleAgent> results = em.createQuery(
-                "SELECT s FROM SaleAgent s", SaleAgent.class).getResultList();
+    public List<SalesAgentEntity> listAll() {
+        final List<SalesAgentEntity> results = em.createQuery(
+                "SELECT s FROM SalesAgentEntity s", SalesAgentEntity.class).getResultList();
         return results;
     }
 
@@ -134,16 +123,12 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
                 .createIdentityQuery(SaleAgent.class);
 
         if (!status.isEmpty()) {
-            query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("status"),
-                    new Object[]{status});
+            query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("status"), status);
         }
         if (!location.isEmpty()) {
-            query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("location"),
-                    new Object[]{location});
+            query.setParameter(IdentityType.QUERY_ATTRIBUTE.byName("location"), location);
         }
-        List<SaleAgent> users = query.getResultList();
-        return users;
-
+        return query.getResultList();
     }
 
     @GET
