@@ -94,7 +94,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
         findByIdQuery.setParameter("entityId", id);
         SaleAgent entity = findByIdQuery.getSingleResult();
         if (entity == null) {
-            return Response.status(Status.NOT_FOUND).build();
+          return Response.status(Status.NOT_FOUND).build();
         }
         return Response.ok(entity).build();
     }
@@ -113,12 +113,14 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity,
             @Context HttpServletRequest request) {
-    	SaleAgent user; 
+    	SaleAgent user;
     	List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
 	                .setParameter(SaleAgent.LOGIN_NAME, entity.getLoginName()).getResultList();
     	user = list.get(0);
     	user.setLocation(entity.getLocation());
     	user.setStatus(entity.getStatus());
+        user.setLatitude(entity.getLatitude());
+        user.setLongitude(entity.getLongitude());
         identityManager.update(user);
         return appendAllowOriginHeader(Response.noContent(), request);
     }
