@@ -46,6 +46,8 @@ public class LeadSender {
     }
 
     public void sendLeads(List<String> users, Lead lead) {
+        System.setProperty("jsse.enableSNIExtension", "false");
+
         if (getActivePushConfig() != null) {
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
