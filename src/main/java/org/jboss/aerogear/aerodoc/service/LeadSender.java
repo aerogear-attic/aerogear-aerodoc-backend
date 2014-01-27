@@ -17,9 +17,8 @@
 package org.jboss.aerogear.aerodoc.service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -29,6 +28,7 @@ import org.jboss.aerogear.aerodoc.model.PushConfig;
 import org.jboss.aerogear.aerodoc.rest.PushConfigEndpoint;
 import org.jboss.aerogear.unifiedpush.JavaSender;
 import org.jboss.aerogear.unifiedpush.SenderClient;
+import org.jboss.aerogear.unifiedpush.message.MessageResponseCallback;
 import org.jboss.aerogear.unifiedpush.message.UnifiedMessage;
 
 public class LeadSender {
@@ -62,7 +62,9 @@ public class LeadSender {
                     .attribute("phone", lead.getPhoneNumber()).sound("default")
                     .alert("A new lead has been created").build();
             ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
-            javaSender.send(unifiedMessage);
+
+            javaSender.send(unifiedMessage, new LeadSenderMessageResponseCallback());
+
         } else {
             logger.severe("not PushConfig configured, can not send message");
         }
@@ -82,7 +84,9 @@ public class LeadSender {
                     .attribute("messageType", "accepted_lead").sound("default")
                     .alert("A new lead has been accepted").build();
             ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
-            javaSender.send(unifiedMessage);
+
+            javaSender.send(unifiedMessage, new LeadSenderMessageResponseCallback());
+
         } else {
             logger.severe("not PushConfig configured, can not send message");
         }
@@ -101,5 +105,24 @@ public class LeadSender {
         return pushConfig;
 
     }
+
+
+    /**
+     * Simple, stateless innerclass, that implements logger for the callbacks of the
+     * MessageResponseCallback class.
+     */
+    private static class LeadSenderMessageResponseCallback implements MessageResponseCallback {
+        @Override
+        public void onComplete(int statusCode) {
+            logger.info("Message submitted");
+        }
+
+        @Override
+        public void onError(Throwable throwable) {
+            logger.log(Level.SEVERE, "An error occurred", throwable);
+        }
+
+    }
+
 
 }
