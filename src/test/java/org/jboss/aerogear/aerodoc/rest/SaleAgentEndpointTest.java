@@ -23,7 +23,6 @@ import org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.UsingDataSet;
-import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -48,7 +47,7 @@ import static junit.framework.Assert.assertNotNull;
 public class SaleAgentEndpointTest {
 
   @Deployment
-  public static Archive<?> createDeployment() {
+  public static WebArchive createDeployment() {
     return ShrinkWrap.create(WebArchive.class, "test.war")
         .addPackage(SalesAgentEntity.class.getPackage())
         .addClass(AerodocBaseEndpoint.class)
@@ -79,7 +78,6 @@ public class SaleAgentEndpointTest {
         SalesAgentEntity.class).getResultList();
 
     for (SalesAgentEntity entity : entities) {
-      System.out.println("entity = " + entity.getId());
       fullText.index(entity);
     }
 
