@@ -46,7 +46,8 @@ var AeroGear = AeroGear || {};
                 new OpenLayers.Layer.OSM("OpenStreetMap", null, {
                     transitionEffect: 'resize'
                 })
-            ]
+            ],
+            units: 'km'
         });
 
         this.vector = new OpenLayers.Layer.Vector('vector');
@@ -194,12 +195,24 @@ var AeroGear = AeroGear || {};
             }
         );
 
+        var vertexStyle = {
+            strokeColor: "#ff0000",
+            fillColor: "#ffaa00",
+            strokeOpacity: 1,
+            strokeWidth: 2,
+            pointRadius: 5
+        }
 
-        layer = new OpenLayers.Layer.Vector('fence');
+        var styleMap = new OpenLayers.StyleMap({
+            "default": OpenLayers.Feature.Vector.style['default'],
+            "vertex": vertexStyle
+        }, {extendDefault: false});
+
+        layer = new OpenLayers.Layer.Vector('fence', {styleMap: styleMap});
         this.map.addLayer(layer);
         layer.addFeatures(circle);
 
-        modifyControl = new OpenLayers.Control.ModifyFeature(layer);
+        modifyControl = new OpenLayers.Control.ModifyFeature(layer, {vertexRenderIntent: "vertex"});
         modifyControl.mode = OpenLayers.Control.ModifyFeature.RESIZE;
 
         this.map.addControls([modifyControl]);

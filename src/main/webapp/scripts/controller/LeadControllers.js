@@ -230,7 +230,7 @@ function ShowLeadController($scope, $routeParams, $location, $filter,
             query: {
                 latitude: location.lat,
                 longitude: location.lon,
-                radius: radius
+                radius: radius / 1000
             },
             success: function (data) {
                 $scope.saleAgentFilteredList = data;
