@@ -56,7 +56,7 @@ import java.util.List;
  */
 @Stateless
 @Path("/saleagents")
-@Secure("admin")
+@Secure("simple")
 public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @Inject
@@ -67,6 +67,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @POST
     @Consumes("application/json")
+    @Secure("admin")
     public Response create(SaleAgent entity) {
         em.persist(entity);
         return Response.created(
@@ -76,6 +77,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @DELETE
     @Path("/{id:[0-9a-z\\-]*}")
+    @Secure("admin")
     public Response deleteById(@PathParam("id") String id) {
         SalesAgentEntity entity = em.find(SalesAgentEntity.class, id);
         if (entity == null) {
@@ -88,6 +90,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @GET
     @Path("/{id:[0-9a-z\\-]*}")
     @Produces("application/json")
+    @Secure("admin")
     public Response findById(@PathParam("id") String id) {
         TypedQuery<SalesAgentEntity> findByIdQuery = em.createQuery(
                 "SELECT s FROM SalesAgentEntity s WHERE s.id = :entityId",
@@ -103,6 +106,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @GET
     @Produces("application/json")
+    @Secure("admin")
     public List<SalesAgentEntity> listAll() {
         final List<SalesAgentEntity> results = em.createQuery(
                 "SELECT s FROM SalesAgentEntity s", SalesAgentEntity.class).getResultList();
@@ -112,7 +116,6 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @PUT
     @Path("/{id}")
     @Consumes("application/json")
-    @Secure("simple")
     public Response update(@PathParam("id") String id, SaleAgent entity,
             @Context HttpServletRequest request) {
     	SaleAgent user;
@@ -130,6 +133,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @GET
     @Path("/searchAgents")
     @Produces("application/json")
+    @Secure("admin")
     public List<SaleAgent> listByCriteria(
             @DefaultValue("") @QueryParam("status") String status,
             @DefaultValue("") @QueryParam("location") String location) {
@@ -149,6 +153,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @GET
     @Path("/searchAgentsInRange")
     @Produces("application/json")
+    @Secure("admin")
     @SuppressWarnings("unchecked")
     public List<SaleAgent> listByCriteria(@QueryParam("latitude") Double latitude,
             @QueryParam("longitude") Double longitude, @QueryParam("radius") Double radius) {
