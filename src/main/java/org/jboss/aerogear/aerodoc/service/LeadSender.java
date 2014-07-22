@@ -41,17 +41,18 @@ public class LeadSender {
     private JavaSender javaSender;
 
     public LeadSender() {
-        javaSender = new SenderClient.Builder(getActivePushConfig().getServerURL()).build();
+
     }
 
     public void sendLeads(List<String> users, Lead lead) {
         System.setProperty("jsse.enableSNIExtension", "false");
-
+        javaSender = new SenderClient.Builder(getActivePushConfig().getServerURL()).build();
         if (getActivePushConfig() != null) {
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
                     .masterSecret(getActivePushConfig().getMasterSecret())
                     .categories("lead")
+                    .actionCategory("acceptLead")
                     .aliases(users)
                     .simplePush("version=" + new Date().getTime())
                     .attribute("id", lead.getId().toString())
@@ -69,6 +70,7 @@ public class LeadSender {
     }
 
     public void sendBroadCast(Lead lead) {
+        javaSender = new SenderClient.Builder(getActivePushConfig().getServerURL()).build();
         if (getActivePushConfig() != null) {
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
