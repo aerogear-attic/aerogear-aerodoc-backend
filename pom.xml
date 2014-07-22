@@ -98,25 +98,19 @@
     </dependency>
     <dependency>
       <groupId>org.jboss.aerogear</groupId>
-      <artifactId>aerogear-security</artifactId>
-      <version>${aerogear.security.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.aerogear</groupId>
-      <artifactId>aerogear-security-picketlink</artifactId>
-      <version>${aerogear.security.picketlink.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.picketlink</groupId>
-          <artifactId>picketlink-idm-simple-schema</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.aerogear</groupId>
       <artifactId>unifiedpush-java-client</artifactId>
       <version>${aerogear.unifiedpush.sender.version}</version>
     </dependency>
+      <dependency>
+          <groupId>org.picketlink</groupId>
+          <artifactId>picketlink</artifactId>
+          <version>${version.picketlink}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.picketlink</groupId>
+          <artifactId>picketlink-idm-simple-schema</artifactId>
+          <version>${version.picketlink}</version>
+      </dependency>
     <dependency> 
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jaxrs</artifactId>
@@ -269,9 +263,7 @@
   </profiles>
 
   <properties>
-    <aerogear.security.version>1.2.1</aerogear.security.version>
-    <aerogear.security.picketlink.version>1.2.2</aerogear.security.picketlink.version>
-    <aerogear.controller.version>1.0.1</aerogear.controller.version>
-    <aerogear.unifiedpush.sender.version>0.4.0</aerogear.unifiedpush.sender.version>
+    <aerogear.unifiedpush.sender.version>0.8.0-SNAPSHOT</aerogear.unifiedpush.sender.version>
+    <version.picketlink>2.6.1.Final</version.picketlink>
   </properties>
 </project>

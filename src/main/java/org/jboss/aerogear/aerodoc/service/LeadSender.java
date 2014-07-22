@@ -41,8 +41,7 @@ public class LeadSender {
     private JavaSender javaSender;
 
     public LeadSender() {
-        //TODO using a dummy value, will be removed with the non-arg constructor in the next release
-        javaSender = new SenderClient("http://localhost:8080/ag-push");
+        javaSender = new SenderClient.Builder(getActivePushConfig().getServerURL()).build();
     }
 
     public void sendLeads(List<String> users, Lead lead) {
@@ -61,7 +60,6 @@ public class LeadSender {
                     .attribute("location", lead.getLocation())
                     .attribute("phone", lead.getPhoneNumber()).sound("default")
                     .alert("A new lead has been created").build();
-            ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
 
             javaSender.send(unifiedMessage, new LeadSenderMessageResponseCallback());
 
@@ -83,7 +81,6 @@ public class LeadSender {
                     .attribute("phone", lead.getPhoneNumber())
                     .attribute("messageType", "accepted_lead").sound("default")
                     .alert("A new lead has been accepted").build();
-            ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
 
             javaSender.send(unifiedMessage, new LeadSenderMessageResponseCallback());
 

@@ -36,8 +36,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import org.jboss.aerogear.aerodoc.config.RequiresAccount;
 import org.jboss.aerogear.aerodoc.model.PushConfig;
-import org.jboss.aerogear.security.authz.Secure;
+
 
 @Stateless
 @Path("/pushconfig")
@@ -48,7 +49,7 @@ public class PushConfigEndpoint {
 
     @POST
     @Consumes("application/json")
-    @Secure("admin")
+    @RequiresAccount
     public Response create(PushConfig entity) {
         updateActiveState(entity);
         em.persist(entity);
@@ -69,7 +70,7 @@ public class PushConfigEndpoint {
 
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
-    @Secure("admin")
+    @RequiresAccount
     public Response deleteById(@PathParam("id") Long id) {
         PushConfig entity = em.find(PushConfig.class, id);
         if (entity == null) {
@@ -82,6 +83,7 @@ public class PushConfigEndpoint {
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces("application/json")
+    @RequiresAccount
     public Response findById(@PathParam("id") Long id) {
         TypedQuery<PushConfig> findByIdQuery = em.createQuery(
                 "SELECT p FROM PushConfig p WHERE p.id = :entityId",
@@ -108,6 +110,7 @@ public class PushConfigEndpoint {
 
     @GET
     @Produces("application/json")
+    @RequiresAccount
     public List<PushConfig> listAll() {
         final List<PushConfig> results = em.createQuery(
                 "SELECT p FROM PushConfig p", PushConfig.class).getResultList();
@@ -117,7 +120,7 @@ public class PushConfigEndpoint {
     @PUT
     @Path("/{id:[0-9][0-9]*}")
     @Consumes("application/json")
-    @Secure("admin")
+    @RequiresAccount
     public Response update(@PathParam("id") Long id, PushConfig entity) {
         updateActiveState(entity);
 

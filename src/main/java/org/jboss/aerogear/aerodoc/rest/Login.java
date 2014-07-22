@@ -16,8 +16,8 @@
  */
 package org.jboss.aerogear.aerodoc.rest;
 
+import org.jboss.aerogear.aerodoc.config.RequiresAccount;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
-import org.jboss.aerogear.security.auth.AuthenticationManager;
 import org.picketlink.Identity;
 import org.picketlink.Identity.AuthenticationResult;
 import org.picketlink.credential.DefaultLoginCredentials;
@@ -50,9 +50,6 @@ public class Login extends AerodocBaseEndpoint {
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class
 			.getSimpleName());
-
-	@Inject
-	private AuthenticationManager authenticationManager;
 
 	@Inject
 	private IdentityManager identityManager;
@@ -93,9 +90,10 @@ public class Login extends AerodocBaseEndpoint {
 
 	@POST
 	@Path("/logout")
+    @RequiresAccount
 	public void logout() {
 		LOGGER.info("User logout!");
-		authenticationManager.logout();
+		identity.logout();
 	}
 
 	@OPTIONS

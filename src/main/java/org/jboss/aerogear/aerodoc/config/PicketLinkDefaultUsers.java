@@ -30,6 +30,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import java.util.List;
+import static org.picketlink.idm.model.basic.BasicModel.grantRole;
 
 @Singleton
 @Startup
@@ -96,15 +97,13 @@ public class PicketLinkDefaultUsers {
 
             Role admin = new Role("admin");
             this.identityManager.add(admin);
+            RelationshipManager relationshipManager = this.partitionManager.createRelationshipManager();
 
-            Role simple = new Role("simple");
-            this.identityManager.add(simple);
-            grantRoles(john, admin);
-            grantRoles(john, simple);
+            grantRole(relationshipManager, john, admin);
+            grantRole(relationshipManager, bob, admin);
+            grantRole(relationshipManager, maria, admin);
+            grantRole(relationshipManager, jake, admin);
 
-            grantRoles(bob, simple);
-            grantRoles(maria, simple);
-            grantRoles(jake, simple);
         }
     }
 
@@ -112,10 +111,6 @@ public class PicketLinkDefaultUsers {
         List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
                 .setParameter(SaleAgent.LOGIN_NAME, username).getResultList();
         return list.isEmpty() ? null : list.get(0);
-    }
-
-    private void grantRoles(Agent agent, Role role) {
-        BasicModel.grantRole(relationshipManager, agent, role);
     }
 
 }
