@@ -261,9 +261,14 @@
     </build>
   </profile>
   </profiles>
-
+  <repositories>
+      <repository>
+          <id>java sender staging repo</id>
+          <url>http://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-3597/</url>
+      </repository>
+  </repositories>
   <properties>
-    <aerogear.unifiedpush.sender.version>0.8.0-SNAPSHOT</aerogear.unifiedpush.sender.version>
+    <aerogear.unifiedpush.sender.version>0.8.0</aerogear.unifiedpush.sender.version>
     <version.picketlink>2.6.1.Final</version.picketlink>
   </properties>
 </project>
