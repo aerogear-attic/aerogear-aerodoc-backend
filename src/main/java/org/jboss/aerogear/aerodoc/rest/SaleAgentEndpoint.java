@@ -56,7 +56,7 @@ import java.util.List;
  */
 @Stateless
 @Path("/saleagents")
-public class SaleAgentEndpoint extends AerodocBaseEndpoint {
+public class SaleAgentEndpoint {
 
     @Inject
     private IdentityManager identityManager;
@@ -125,7 +125,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
         user.setLatitude(entity.getLatitude());
         user.setLongitude(entity.getLongitude());
         em.merge(user);
-        return appendAllowOriginHeader(Response.noContent(), request);
+        return Response.noContent().build();
     }
 
     @GET

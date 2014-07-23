@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 
 @Stateless
 @Path("/")
-public class Login extends AerodocBaseEndpoint {
+public class Login {
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class
 			.getSimpleName());
@@ -85,7 +85,7 @@ public class Login extends AerodocBaseEndpoint {
 			throw new RuntimeException("Authentication failed");
 		}
 
-		return appendAllowOriginHeader(Response.ok(saleAgent), request);
+		return Response.ok(saleAgent).build();
 	}
 
 	@POST
@@ -96,11 +96,6 @@ public class Login extends AerodocBaseEndpoint {
 		identity.logout();
 	}
 
-	@OPTIONS
-	@Path("/login")
-	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-		return appendPreflightResponseHeaders(headers, Response.ok()).build();
 
-	}
 
 }
