@@ -10,8 +10,8 @@ import org.jboss.aerogear.aerodoc.model.entity.RelationshipIdentityTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.RelationshipTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.RoleTypeEntity;
 import org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity;
-import org.picketlink.IdentityConfigurationEvent;
 import org.picketlink.annotations.PicketLink;
+import org.picketlink.event.IdentityConfigurationEvent;
 import org.picketlink.idm.config.IdentityConfigurationBuilder;
 import org.picketlink.internal.EEJPAContextInitializer;
 

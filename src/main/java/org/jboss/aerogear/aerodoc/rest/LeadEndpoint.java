@@ -42,10 +42,9 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import org.jboss.aerogear.aerodoc.config.RequiresAccount;
 import org.jboss.aerogear.aerodoc.model.Lead;
 import org.jboss.aerogear.aerodoc.service.LeadSender;
-import org.jboss.aerogear.security.authz.Secure;
-import org.picketlink.idm.IdentityManager;
 
 /**
  * 
@@ -54,8 +53,6 @@ import org.picketlink.idm.IdentityManager;
 @Path("/leads")
 public class LeadEndpoint {
 
-    @Inject
-    private IdentityManager identityManager;
 
     @Inject
     private LeadSender leadSender;
@@ -81,7 +78,7 @@ public class LeadEndpoint {
 
     @POST
     @Consumes("application/json")
-    @Secure("admin")
+    @RequiresAccount
     public Response create(Lead entity) {
       	em.persist(entity);
         return Response.created(
@@ -91,7 +88,7 @@ public class LeadEndpoint {
 
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
-    @Secure("admin")
+    @RequiresAccount
     public Response deleteById(@PathParam("id") Long id) {
         Lead entity = em.find(Lead.class, id);
         if (entity == null) {
@@ -104,7 +101,7 @@ public class LeadEndpoint {
     @GET
     @Path("/{id:[0-9][0-9]*}")
     @Produces("application/json")
-    @Secure("simple")
+    @RequiresAccount
     public Response findById(@PathParam("id") Long id, @Context HttpServletRequest request) {
         TypedQuery<Lead> findByIdQuery = em
                 .createQuery(
@@ -120,7 +117,7 @@ public class LeadEndpoint {
 
     @GET
     @Produces("application/json")
-    @Secure("simple")
+    @RequiresAccount
     public Response listAll(@Context HttpServletRequest request) {
         final List<Lead> results = em.createQuery(
                 "SELECT l FROM Lead l where l.saleAgent = null", Lead.class)
@@ -131,7 +128,7 @@ public class LeadEndpoint {
     @PUT
     @Path("/{id:[0-9][0-9]*}")
     @Consumes("application/json")
-    @Secure("simple")
+    @RequiresAccount
     public Response update(@PathParam("id") Long id, Lead entity, @Context HttpServletRequest request) {
         entity.setId(id);
         entity = em.merge(entity);
@@ -142,7 +139,7 @@ public class LeadEndpoint {
 
     @POST
     @Path("/sendleads/{id:[0-9][0-9]*}")
-    @Secure("simple")
+    @RequiresAccount
     public void sendLead(@PathParam("id") Long id, List<LinkedHashMap> agents) {
         TypedQuery<Lead> findByIdQuery = em
                 .createQuery(

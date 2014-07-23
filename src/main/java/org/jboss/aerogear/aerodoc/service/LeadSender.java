@@ -41,18 +41,18 @@ public class LeadSender {
     private JavaSender javaSender;
 
     public LeadSender() {
-        //TODO using a dummy value, will be removed with the non-arg constructor in the next release
-        javaSender = new SenderClient("http://localhost:8080/ag-push");
+
     }
 
     public void sendLeads(List<String> users, Lead lead) {
         System.setProperty("jsse.enableSNIExtension", "false");
-
+        javaSender = new SenderClient.Builder(getActivePushConfig().getServerURL()).build();
         if (getActivePushConfig() != null) {
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
                     .masterSecret(getActivePushConfig().getMasterSecret())
                     .categories("lead")
+                    .actionCategory("acceptLead")
                     .aliases(users)
                     .simplePush("version=" + new Date().getTime())
                     .attribute("id", lead.getId().toString())
@@ -61,7 +61,6 @@ public class LeadSender {
                     .attribute("location", lead.getLocation())
                     .attribute("phone", lead.getPhoneNumber()).sound("default")
                     .alert("A new lead has been created").build();
-            ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
 
             javaSender.send(unifiedMessage, new LeadSenderMessageResponseCallback());
 
@@ -71,6 +70,7 @@ public class LeadSender {
     }
 
     public void sendBroadCast(Lead lead) {
+        javaSender = new SenderClient.Builder(getActivePushConfig().getServerURL()).build();
         if (getActivePushConfig() != null) {
             UnifiedMessage unifiedMessage = new UnifiedMessage.Builder()
                     .pushApplicationId(getActivePushConfig().getPushApplicationId())
@@ -83,7 +83,6 @@ public class LeadSender {
                     .attribute("phone", lead.getPhoneNumber())
                     .attribute("messageType", "accepted_lead").sound("default")
                     .alert("A new lead has been accepted").build();
-            ((SenderClient) javaSender).setServerURL(getActivePushConfig().getServerURL());
 
             javaSender.send(unifiedMessage, new LeadSenderMessageResponseCallback());
 

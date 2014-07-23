@@ -20,9 +20,9 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.search.query.dsl.Unit;
+import org.jboss.aerogear.aerodoc.config.RequiresAccount;
 import org.jboss.aerogear.aerodoc.model.SaleAgent;
 import org.jboss.aerogear.aerodoc.model.entity.SalesAgentEntity;
-import org.jboss.aerogear.security.authz.Secure;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.IdentityType;
 import org.picketlink.idm.query.IdentityQuery;
@@ -56,7 +56,6 @@ import java.util.List;
  */
 @Stateless
 @Path("/saleagents")
-@Secure("simple")
 public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @Inject
@@ -67,7 +66,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @POST
     @Consumes("application/json")
-    @Secure("admin")
+    @RequiresAccount
     public Response create(SaleAgent entity) {
         em.persist(entity);
         return Response.created(
@@ -77,7 +76,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
 
     @DELETE
     @Path("/{id:[0-9a-z\\-]*}")
-    @Secure("admin")
+    @RequiresAccount
     public Response deleteById(@PathParam("id") String id) {
         SalesAgentEntity entity = em.find(SalesAgentEntity.class, id);
         if (entity == null) {
@@ -90,7 +89,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @GET
     @Path("/{id:[0-9a-z\\-]*}")
     @Produces("application/json")
-    @Secure("admin")
+    @RequiresAccount
     public Response findById(@PathParam("id") String id) {
         TypedQuery<SalesAgentEntity> findByIdQuery = em.createQuery(
                 "SELECT s FROM SalesAgentEntity s WHERE s.id = :entityId",
@@ -104,18 +103,20 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
         }
     }
 
+
     @GET
     @Produces("application/json")
-    @Secure("admin")
-    public List<SalesAgentEntity> listAll() {
+    @RequiresAccount
+    public Response listAll() {
         final List<SalesAgentEntity> results = em.createQuery(
                 "SELECT s FROM SalesAgentEntity s", SalesAgentEntity.class).getResultList();
-        return results;
+        return Response.ok(results).build();
     }
 
     @PUT
     @Path("/{id}")
     @Consumes("application/json")
+    @RequiresAccount
     public Response update(@PathParam("id") String id, SaleAgent entity,
             @Context HttpServletRequest request) {
     	SalesAgentEntity user = em.find(SalesAgentEntity.class, id);
@@ -130,7 +131,7 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @GET
     @Path("/searchAgents")
     @Produces("application/json")
-    @Secure("admin")
+    @RequiresAccount
     public List<SaleAgent> listByCriteria(
             @DefaultValue("") @QueryParam("status") String status,
             @DefaultValue("") @QueryParam("location") String location) {
@@ -150,8 +151,8 @@ public class SaleAgentEndpoint extends AerodocBaseEndpoint {
     @GET
     @Path("/searchAgentsInRange")
     @Produces("application/json")
-    @Secure("admin")
     @SuppressWarnings("unchecked")
+    @RequiresAccount
     public List<SaleAgent> listByCriteria(@QueryParam("latitude") Double latitude,
             @QueryParam("longitude") Double longitude, @QueryParam("radius") Double radius) {
 
