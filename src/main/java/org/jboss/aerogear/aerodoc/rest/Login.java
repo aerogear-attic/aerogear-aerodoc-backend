@@ -90,7 +90,7 @@ public class Login extends AerodocBaseEndpoint {
 
 	@POST
 	@Path("/logout")
-    @RequiresAccount
+	@RequiresAccount
 	public void logout() {
 		LOGGER.info("User logout!");
 		identity.logout();
