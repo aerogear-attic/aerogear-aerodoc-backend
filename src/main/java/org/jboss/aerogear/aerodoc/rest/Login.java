@@ -22,25 +22,17 @@ import org.picketlink.Identity;
 import org.picketlink.Identity.AuthenticationResult;
 import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.IdentityType;
-import org.picketlink.idm.model.basic.Agent;
-import org.picketlink.idm.model.basic.BasicModel;
-import org.picketlink.idm.model.basic.User;
-import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -77,6 +69,7 @@ public class Login {
 				 List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
 			                .setParameter(SaleAgent.LOGIN_NAME, user.getLoginName()).getResultList();
 				saleAgent = list.get(0);
+                return Response.ok(saleAgent).build();
 			}
 			else {
 				LOGGER.severe("Login failed !");
@@ -85,7 +78,7 @@ public class Login {
 			throw new RuntimeException("Authentication failed");
 		}
 
-		return Response.ok(saleAgent).build();
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@POST
