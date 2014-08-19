@@ -81,7 +81,7 @@ For all these aliases the password is ``` 123 ```
 
 ``` mvn clean install jboss-as:deploy ```
 
-Use the wildfly profile to build and deploy to wildfly.
+Use the wildfly profile to build and deploy to wildfly. This will skip the tests, because our arquillian tests are run on jboss7.
 
 There is also a lucene index created with the location of sales agents default location is '.' you can change to a more permanent location in the persistence.xml
 
