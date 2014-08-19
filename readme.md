@@ -79,9 +79,9 @@ For all these aliases the password is ``` 123 ```
 
 # Deploying the app
 
-``` mvn clean install jboss-as:deploy -Pwildfly ```
+``` mvn clean install jboss-as:deploy ```
 
-Use the wildfly profile to build and deploy to wildfly and jboss7 for jboss as 7.
+Use the wildfly profile to build and deploy to wildfly.
 
 There is also a lucene index created with the location of sales agents default location is '.' you can change to a more permanent location in the persistence.xml
 
