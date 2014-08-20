@@ -22,34 +22,23 @@ import org.picketlink.Identity;
 import org.picketlink.Identity.AuthenticationResult;
 import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.IdentityType;
-import org.picketlink.idm.model.basic.Agent;
-import org.picketlink.idm.model.basic.BasicModel;
-import org.picketlink.idm.model.basic.User;
-import org.picketlink.idm.query.IdentityQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.util.List;
 import java.util.logging.Logger;
 
 @Stateless
 @Path("/")
-public class Login extends AerodocBaseEndpoint {
+public class Login {
 
-	private static final Logger LOGGER = Logger.getLogger(Login.class
-			.getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(Login.class.getSimpleName());
 
 	@Inject
 	private IdentityManager identityManager;
@@ -64,28 +53,26 @@ public class Login extends AerodocBaseEndpoint {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response login(final SaleAgent user,
-			@Context HttpServletRequest request) {
-		SaleAgent saleAgent = null;
-		String id = user.getLoginName();
-		if (!this.identity.isLoggedIn()) {
-			this.credentials.setUserId(user.getLoginName());
-			this.credentials.setPassword(user.getPassword());
-			AuthenticationResult result = this.identity.login();
-			LOGGER.info("Login result : " + result);
-			if(result==AuthenticationResult.SUCCESS){
-				 List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
-			                .setParameter(SaleAgent.LOGIN_NAME, user.getLoginName()).getResultList();
-				saleAgent = list.get(0);
-			}
-			else {
-				LOGGER.severe("Login failed !");
-			}
-		} else {
-			throw new RuntimeException("Authentication failed");
-		}
+	public Response login(final SaleAgent user) {
+        if (!identity.isLoggedIn()) {
+            credentials.setUserId(user.getLoginName());
+            credentials.setPassword(user.getPassword());
 
-		return appendAllowOriginHeader(Response.ok(saleAgent), request);
+            AuthenticationResult result = identity.login();
+            LOGGER.info("Login result : " + result);
+
+            if (result == AuthenticationResult.SUCCESS){
+                 List<SaleAgent> list = identityManager.createIdentityQuery(SaleAgent.class)
+                            .setParameter(SaleAgent.LOGIN_NAME, user.getLoginName()).getResultList();
+              return Response.ok(list.get(0)).build();
+            } else {
+                LOGGER.severe("Login failed !");
+            }
+        } else {
+            throw new RuntimeException("Authentication failed");
+        }
+
+        return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 	@POST
@@ -95,12 +82,4 @@ public class Login extends AerodocBaseEndpoint {
 		LOGGER.info("User logout!");
 		identity.logout();
 	}
-
-	@OPTIONS
-	@Path("/login")
-	public Response crossOriginForInstallations(@Context HttpHeaders headers) {
-		return appendPreflightResponseHeaders(headers, Response.ok()).build();
-
-	}
-
 }

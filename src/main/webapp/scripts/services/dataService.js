@@ -23,6 +23,7 @@ aerodoc.factory("dataService", function() {
 			name : "auth",
 			settings : {
 				agAuth : true,
+                contentType : "application/json",
 				endpoints : {
 					enroll : endpoint + "register",
 					login :  endpoint + "login",

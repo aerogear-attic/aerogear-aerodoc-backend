@@ -50,15 +50,14 @@ public class SaleAgentEndpointTest {
   public static WebArchive createDeployment() {
     return ShrinkWrap.create(WebArchive.class, "test.war")
         .addPackage(SalesAgentEntity.class.getPackage())
-        .addClass(AerodocBaseEndpoint.class)
         .addClass(SaleAgentEndpoint.class)
         .addClass(SaleAgent.class)
         .addAsLibraries(
             Maven.resolver()
-                .loadPomFromFile("pom.xml").resolve(
-                "org.picketlink:picketlink-impl:2.5.2.Final",
-                "org.picketlink:picketlink-idm-simple-schema:2.5.2.Final",
-                "org.hibernate:hibernate-search"
+                .resolve(
+                "org.picketlink:picketlink:2.6.1.Final",
+                "org.picketlink:picketlink-idm-simple-schema:2.6.1.Final",
+                "org.hibernate:hibernate-search:4.3.0.Final"
             ).withTransitivity().asFile()
         )
         .addAsResource("persistence-test.xml", "META-INF/persistence.xml")
